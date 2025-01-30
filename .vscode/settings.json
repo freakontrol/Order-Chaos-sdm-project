@@ -1,6 +1,0 @@
-{
-    "terminal.integrated.env.linux": {
-        "GRADLE_HOME": "{workspaceFolder}/../gradle-8.12.1",
-        "PATH": "${env:PATH}:${workspaceFolder}/../gradle-8.12.1/bin"
-    }
-}
