@@ -28,8 +28,9 @@ public class Mark {
     @Override
     public String toString() {
         return "Mark{" +
-                position.toString() +
-                ", Mark=" +
+                "position=" + position.toString() +
+                ", type=" + type.toString() +
                 '}';
     }
 }
+
