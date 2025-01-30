@@ -24,4 +24,12 @@ public class Mark {
     public void setType(Type type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "Mark{" +
+                position.toString() +
+                ", Mark=" +
+                '}';
+    }
 }
