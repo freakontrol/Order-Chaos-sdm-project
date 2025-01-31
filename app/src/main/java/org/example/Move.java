@@ -1,0 +1,35 @@
+package org.example;
+
+public class Move {
+    private Mark mark;
+    private Player player;
+
+    public Move(Mark mark, Player player) {
+        this.mark = mark;
+        this.player = player;
+    }
+
+    public Mark getMark() {
+        return mark;
+    }
+
+    public void setMark(Mark mark) {
+        this.mark = mark;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    @Override
+    public String toString() {
+        return "Move{" +
+                "mark=" + mark.toString() +
+                ", player=" + player.toString() +
+                '}';
+    }
+}
