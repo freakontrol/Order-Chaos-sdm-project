@@ -22,6 +22,20 @@ public class Board {
         moves.clear();
     }
 
+    public boolean isOccupied(Position position) {
+        for (Move move : moves) {
+            if (move.getMark().getPosition().equals(position)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasFiveInARow(int row, int col, char symbol) {
+        // placeholder for win condition
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Board{moves=" + moves.toString() +
