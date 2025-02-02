@@ -15,9 +15,8 @@ public class MoveTest {
 
     @BeforeEach
     public void setUp() {
-        // Initialize objects before each test
         position = new Position(10, 20);
-        type = new Type("CROSS");
+        type = Type.X;
         mark = new Mark(position, type);
 
         role = Role.ORDER;
@@ -39,7 +38,7 @@ public class MoveTest {
     @Test
     public void testSetMark() {
         Position newPosition = new Position(30, 40);
-        Type newType = new Type("CIRCLE");
+        Type newType = Type.O;
         Mark newMark = new Mark(newPosition, newType);
 
         move.setMark(newMark);
@@ -62,7 +61,7 @@ public class MoveTest {
 
     @Test
     public void testToString() {
-        String expected = "Move{mark=Mark{position=Position{row=10, column=20}, type=Type{name='CROSS'}}, player=Player{role=ORDER, name='John Doe'}}";
+        String expected = "Move{mark=Mark{position=Position{row=10, column=20}, type=Type{name='X'}}, player=Player{role=ORDER, name='John Doe'}}";
         assertEquals(expected, move.toString());
     }
 }

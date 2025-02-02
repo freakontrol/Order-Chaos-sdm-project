@@ -46,7 +46,7 @@ public class Game {
 
     public boolean makeMove(int row, int col, char symbol) {
         Position position = new Position(row, col);
-        Type type = new Type(Character.toString(symbol));
+        Type type = Type.valueOf(Character.toString(symbol).toUpperCase());
         Mark mark = new Mark(position, type);
         Move move = new Move(mark, currentPlayer);
 

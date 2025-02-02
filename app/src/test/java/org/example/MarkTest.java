@@ -14,7 +14,7 @@ public class MarkTest {
     @BeforeEach
     public void setUp() {
         position = new Position(1, 2);
-        type = new Type("CROSS");
+        type = Type.X;
         mark = new Mark(position, type);
     }
 
@@ -42,7 +42,7 @@ public class MarkTest {
 
     @Test
     public void testSetType() {
-        Type newType = new Type("CIRCLE");
+        Type newType = Type.O;
         mark.setType(newType);
         assertEquals(newType, mark.getType());
     }

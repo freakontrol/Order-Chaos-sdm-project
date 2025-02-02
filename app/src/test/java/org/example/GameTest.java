@@ -39,7 +39,7 @@ public class GameTest {
     public void testIsDraw() {
         for (int i = 0; i < 36; i++) { // Fill the board with moves
             Position position = new Position(i / 6, i % 6);
-            Type type = new Type("X");
+            Type type = Type.X;
             Mark mark = new Mark(position, type);
             Move move = new Move(mark, game.getCurrentPlayer());
             game.getGameBoard().addMove(move);
