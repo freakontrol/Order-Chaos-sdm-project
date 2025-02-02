@@ -31,5 +31,9 @@ public class Game {
         }
     }
 
+    public void startGame() {
+        this.gameBoard = new Board();
+        this.currentPlayer = new Player(Role.ORDER, "ORDER");
+    }
 
 }

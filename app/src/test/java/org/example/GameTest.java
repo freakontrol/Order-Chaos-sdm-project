@@ -49,7 +49,8 @@ public class GameTest {
 
     @Test
     public void testStartGame() {
-        // this test will fail because startGame is not implemented yet
+        // the test passes
         game.startGame();
+        assertFalse(game.isDraw());
     }
 }
