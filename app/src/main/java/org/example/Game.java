@@ -3,10 +3,17 @@ package org.example;
 public class Game {
     private Board gameBoard;
     private Player currentPlayer;
+    private GameStatus status;
 
     public Game() {
         this.gameBoard = new Board();
         this.currentPlayer = new Player(Role.ORDER, "ORDER");
+        this.status = GameStatus.IN_PROGRESS;
+    }
+
+    // getter for gameStatus
+    public GameStatus getGameStatus() {
+        return status;
     }
 
     // getter for gameBoard
@@ -34,6 +41,34 @@ public class Game {
     public void startGame() {
         this.gameBoard = new Board();
         this.currentPlayer = new Player(Role.ORDER, "ORDER");
+        this.status = GameStatus.IN_PROGRESS;
+    }
+
+    public boolean makeMove(int row, int col, char symbol) {
+        Position position = new Position(row, col);
+        Type type = new Type(Character.toString(symbol));
+        Mark mark = new Mark(position, type);
+        Move move = new Move(mark, currentPlayer);
+
+        if (gameBoard.isOccupied(position)) {
+            return false; // can't place a piece where one already exists
+        }
+
+        gameBoard.addMove(move);
+        
+        if (checkWin(row, col, symbol)) {
+            status = GameStatus.ORDER_WINS;
+        } else if (isDraw()) {
+            status = GameStatus.CHAOS_WINS;
+        } else {
+            switchPlayer();
+        }
+        
+        return true;
+    }
+
+    private boolean checkWin(int row, int col, char symbol) {
+        return gameBoard.hasFiveInARow(row, col, symbol);
     }
 
 }

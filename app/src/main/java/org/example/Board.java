@@ -4,14 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
+    private char[][] grid;
     private List<Move> moves;
 
     public Board() {
         this.moves = new ArrayList<>();
+        this.grid = new char[6][6];
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                grid[i][j] = ' '; // empty board
+            }
+        }
     }
 
     public void addMove(Move move) {
         moves.add(move);
+        Position pos = move.getMark().getPosition();
+        char symbol = move.getMark().getType().getName().charAt(0);
+        grid[pos.getRow()][pos.getColumn()] = symbol;
     }
 
     public List<Move> getMoves() {
@@ -20,25 +30,61 @@ public class Board {
 
     public void clearBoard() {
         moves.clear();
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                grid[i][j] = ' ';
+            }
+        }
     }
 
     public boolean isOccupied(Position position) {
-        for (Move move : moves) {
-            if (move.getMark().getPosition().equals(position)) {
-                return true;
-            }
-        }
-        return false;
+        return grid[position.getRow()][position.getColumn()] != ' ';
     }
 
     public boolean hasFiveInARow(int row, int col, char symbol) {
-        // placeholder for win condition
-        return false;
+        return checkDirection(row, col, symbol, 1, 0) || // horizontal
+               checkDirection(row, col, symbol, 0, 1) || // vertical
+               checkDirection(row, col, symbol, 1, 1) || // diagonal /
+               checkDirection(row, col, symbol, 1, -1);  // diagonal \
+    }
+
+    private boolean checkDirection(int row, int col, char symbol, int dRow, int dCol) {
+        int count = 0;
+
+        // forward
+        for (int i = 1; i < 5; i++) {
+            int r = row + i * dRow;
+            int c = col + i * dCol;
+            if (r >= 0 && r < 6 && c >= 0 && c < 6 && grid[r][c] == symbol) {
+                count++;
+            } else {
+                break;
+            }
+        }
+
+        // backward
+        for (int i = 1; i < 5; i++) {
+            int r = row - i * dRow;
+            int c = col - i * dCol;
+            if (r >= 0 && r < 6 && c >= 0 && c < 6 && grid[r][c] == symbol) {
+                count++;
+            } else {
+                break;
+            }
+        }
+
+        return count + 1 == 5; // include the initial position
     }
 
     @Override
     public String toString() {
-        return "Board{moves=" + moves.toString() +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                sb.append(grid[i][j]).append(" ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

@@ -49,8 +49,15 @@ public class GameTest {
 
     @Test
     public void testStartGame() {
-        // the test passes
         game.startGame();
         assertFalse(game.isDraw());
     }
+
+    @Test
+public void testMakeMove() {
+    assertTrue(game.makeMove(2, 3, 'X')); // Valid move
+    assertFalse(game.makeMove(2, 3, 'O')); // Same spot, should fail
+    assertTrue(game.makeMove(0, 0, 'O')); // Another valid move
+}
+
 }
