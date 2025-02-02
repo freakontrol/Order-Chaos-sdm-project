@@ -56,7 +56,7 @@ public class Game {
 
         gameBoard.addMove(move);
         
-        if (checkWin(row, col, symbol)) {
+        if (GameLogic.checkForWin(gameBoard, currentPlayer)) {
             status = GameStatus.ORDER_WINS;
         } else if (isDraw()) {
             status = GameStatus.CHAOS_WINS;
@@ -65,10 +65,6 @@ public class Game {
         }
         
         return true;
-    }
-
-    private boolean checkWin(int row, int col, char symbol) {
-        return gameBoard.hasFiveInARow(row, col, symbol);
     }
 
 }
