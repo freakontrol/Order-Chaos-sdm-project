@@ -25,7 +25,7 @@ public class Board {
     }
 
     public List<Move> getMoves() {
-        return new ArrayList<>(moves); 
+        return new ArrayList<>(moves);
     }
 
     public void clearBoard() {
@@ -73,7 +73,7 @@ public class Board {
             }
         }
 
-        return count + 1 == 5; // include the initial position
+        return count + 1 == 5;
     }
 
     @Override
@@ -85,6 +85,6 @@ public class Board {
             }
             sb.append("\n");
         }
-        return sb.toString();
+        return sb.toString().trim();
     }
 }
