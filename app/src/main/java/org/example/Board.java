@@ -85,6 +85,6 @@ public class Board {
             }
             sb.append("\n");
         }
-        return sb.toString().trim();
+        return sb.toString();
     }
 }

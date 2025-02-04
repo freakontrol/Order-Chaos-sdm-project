@@ -1,66 +1,86 @@
-// package org.example;
+package org.example;
 
-// import static org.junit.jupiter.api.Assertions.*;
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-// public class BoardTest {
+import java.util.List;
 
-//     private Board board;
-//     private Position position;
-//     private Type type;
-//     private Mark mark;
-//     private Move move;
-//     private Player playerOrder;
+public class BoardTest {
 
-//     @BeforeEach
-//     public void setUp() {
-//         position = new Position(10, 20);
-//         type = Type.X;
-//         mark = new Mark(position, type);
+    private Board board;
+    private Position position1;
+    private Type typeX;
+    private Mark markX;
+    private Player playerOrder;
+    private Move moveX;
 
-//         role = Role.ORDER;
-//         player = new Player(role, "John Doe");
+    @BeforeEach
+    public void setUp() {
+        board = new Board();
+        position1 = new Position(0, 1);
+        typeX = Type.X;
+        markX = new Mark(position1, typeX);
+        playerOrder = new Player(Role.ORDER, "ORDER");
+        moveX = new Move(markX, playerOrder);
+    }
+  
+    @Test
+    public void testAddMove() {
+        board.addMove(moveX);
+        assertEquals(1, board.getMoves().size());
+        assertTrue(board.getMoves().contains(moveX));
+    }
 
-//         move = new Move(mark, player);
+    @Test
+    public void testGetMoves() {
+        board.addMove(moveX);
+        List<Move> moves = board.getMoves();
+        assertEquals(1, moves.size());
+        assertTrue(moves.contains(moveX));
+    }
 
-//         // board = new Board();
-//         // position1 = new Position(2, 3);
-//         // typeX = Type.X;
-//         // markX = new Mark(position1, typeX);
-//         // playerOrder = new Player(Role.ORDER, "ORDER");
-//         // moveX = new Move(markX, playerOrder);
-//     }
+    @Test
+    public void testClearBoard() {
+        board.addMove(moveX);
+        board.clearBoard();
+        assertTrue(board.getMoves().isEmpty());
+    }
 
-//     // @Test
-//     // public void testAddMove() {
-//     //     board.addMove(move);
-//     //     assertEquals(1, board.getMoves().size());
-//     //     assertTrue(board.getMoves().contains(move));
-//     // }
+    @Test
+    public void testIsOccupied() {
+        assertFalse(board.isOccupied(new Position(0, 1)));
+        board.addMove(moveX);
+        assertTrue(board.isOccupied(new Position(0, 1)));
+    }
 
-//     // @Test
-//     // public void testGetMoves() {
-//     //     board.addMove(move);
-//     //     List<Move> moves = board.getMoves();
-//     //     assertEquals(1, moves.size());
-//     //     assertTrue(moves.contains(move));
-//     // }
+        public void testToString() {
+        String expected = "   \n" +
+                          "   \n" +
+                          "   \n" +
+                          "   \n" +
+                          "   \n" +
+                          "   \n";
+        assertEquals(expected, board.toString());
+        board.addMove(moveX);
+        expected = "  X \n" +
+                   "     \n" +
+                   "     \n" +
+                   "     \n" +
+                   "     \n" +
+                   "     \n";
+        assertEquals(expected, board.toString());
 
-//     // @Test
-//     // public void testClearBoard() {
-//     //     board.addMove(move);
-//     //     board.clearBoard();
-//     //     assertTrue(board.getMoves().isEmpty());
-//     // }
-
-//     // @Test
-//     // public void testToString() {
-//     //     String expected = "Board{moves=[]}";
-//     //     assertEquals(expected, board.toString());
-
-//     //     board.addMove(move);
-//     //     expected = "Board{moves=[Move{mark=Mark{position=Position{row=10, column=20}, type=Type{name='CROSS'}}, player=Player{role=ORDER, name='John Doe'}}]}";
-//     //     assertEquals(expected, board.toString());
-//     // }
-// }
+        board.clearBoard();
+        board.addMove(new Move(new Mark(new Position(0, 1), Type.X), playerOrder));
+        board.addMove(new Move(new Mark(new Position(1, 2), Type.X), playerOrder));
+        expected = "  X \n" +
+                   "   X \n" +
+                   "     \n" +
+                   "     \n" +
+                   "     \n" +
+                   "     \n";
+        assertEquals(expected, board.toString());
+    }
+   
+}
