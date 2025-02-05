@@ -54,7 +54,44 @@ public class BoardTest {
         assertTrue(board.isOccupied(new Position(0, 1)));
     }
 
-        public void testToString() {
+    @Test
+    public void testHasFiveInARow() {
+        //horizontal
+        for (int i = 0; i < 5; i++) {
+            board.addMove(new Move(new Mark(new Position(0, i), Type.X), playerOrder));
+        }
+        assertTrue(board.hasFiveInARow(0, 4, 'X'));
+
+        //vertical
+        board.clearBoard();
+        for (int i = 0; i < 5; i++) {
+            board.addMove(new Move(new Mark(new Position(i, 0), Type.X), playerOrder));
+        }
+        assertTrue(board.hasFiveInARow(4, 0, 'X'));
+
+        //diagonal /
+        board.clearBoard();
+        for (int i = 0; i < 5; i++) {
+            board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerOrder));
+        }
+        assertTrue(board.hasFiveInARow(4, 4, 'X'));
+
+        //diagonal \
+        board.clearBoard();
+        for (int i = 0; i < 5; i++) {
+            board.addMove(new Move(new Mark(new Position(i, 4 - i), Type.X), playerOrder));
+        }
+        assertFalse(board.hasFiveInARow(4, 1, 'X'));
+
+        //no five in a row
+        board.clearBoard();
+        for (int i = 0; i < 5; i++) {
+            board.addMove(new Move(new Mark(new Position(i, i % 2), Type.X), playerOrder));
+        }
+        assertFalse(board.hasFiveInARow(4, 1, 'X'));
+    }
+
+    public void testToString() {
         String expected = "   \n" +
                           "   \n" +
                           "   \n" +
