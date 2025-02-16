@@ -90,7 +90,12 @@ public class Board {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
-                sb.append(grid[i][j]).append(" ");
+                Position position = new Position(i, j);
+                if (positionMoves.containsKey(position)) {
+                    sb.append("X").append(" ");
+                } else {
+                    sb.append("_").append(" ");
+                }
             }
             sb.append("\n");
         }
