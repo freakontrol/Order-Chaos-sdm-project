@@ -55,4 +55,25 @@ public class PositionTest {
             position.setColumn(-1);
         });
     }
+
+    @Test
+    public void testEquals() {
+        Position pos1 = new Position(1, 2);
+        Position pos2 = new Position(1, 2);
+        Position pos3 = new Position(2, 3);
+
+        assertTrue(pos1.equals(pos2));
+        assertFalse(pos1.equals(pos3));
+        assertFalse(pos1.equals(null));
+    }
+
+    @Test
+    public void testHashCode() {
+        Position pos1 = new Position(1, 2);
+        Position pos2 = new Position(1, 2);
+        Position pos3 = new Position(2, 3);
+
+        assertEquals(pos1.hashCode(), pos2.hashCode());
+        assertNotEquals(pos1.hashCode(), pos3.hashCode());
+    }
 }
