@@ -1,14 +1,19 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Board {
     private char[][] grid;
     private List<Move> moves;
+    private HashMap<Position, Move> positionMoves;
+
 
     public Board() {
         this.moves = new ArrayList<>();
+        this.positionMoves = new HashMap<>();
+
         this.grid = new char[6][6];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
@@ -19,9 +24,13 @@ public class Board {
 
     public void addMove(Move move) {
         moves.add(move);
-        Position pos = move.getMark().getPosition();
+        Position position = move.getMark().getPosition(); // TODO: use getter
+        if (!positionMoves.containsKey(position)) {
+            positionMoves.put(position, move);
+        }
+
         char symbol = move.getMark().getType().getName().charAt(0);
-        grid[pos.getRow()][pos.getColumn()] = symbol;
+        grid[position.getRow()][position.getColumn()] = symbol;
     }
 
     public List<Move> getMoves() {
