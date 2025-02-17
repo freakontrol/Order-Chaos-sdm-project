@@ -32,4 +32,8 @@ public class Move {
                 ", player=" + player.toString() +
                 '}';
     }
+
+    public boolean isMarkTypeEqual(Move other) {
+        return this.mark.getType().equals(other.getMark().getType());
+    }
 }
