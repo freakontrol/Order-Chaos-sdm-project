@@ -17,6 +17,31 @@ public class Position {
         this.maxRows = 6;
         this.maxColumns = 6;
     }
+    public boolean isOnLeftEdge() {
+        if (this.row == 0 && this.column > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isOnRightEdge() {
+        if (this.row == maxRows - 1 && this.column < maxColumns - 1) {
+            return true;
+        }
+        return false;
+    }
+    public boolean isOnTopEdge() {
+        if (this.row > 0 && this.column == 0) {
+            return true;
+        }
+        return false;
+    }
+    public boolean isOnBottomEdge() {
+        if (this.row < maxRows - 1 && this.column == maxColumns - 1) {
+            return true;
+        }
+        return false;
+    }
 
     public int getRow() {
         return row;
@@ -32,6 +57,7 @@ public class Position {
     public int getColumn() {
         return column;
     }
+
 
     public void setColumn(int column) {
         if (column < 0) {

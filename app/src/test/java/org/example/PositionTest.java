@@ -172,4 +172,48 @@ public class PositionTest {
             new Position(6, 6).getDownRight();
         });
     }
+
+    @Test
+    public void testIsOnLeftEdge() {
+        Position position = new Position(0, 1);
+        assertTrue(position.isOnLeftEdge());
+        position.setColumn(0);
+        assertFalse(position.isOnLeftEdge());
+
+        position.setRow(5);
+        assertFalse(position.isOnLeftEdge());
+    }
+
+    @Test
+    public void testIsOnRightEdge() {
+        Position position = new Position(5, 5);
+        assertTrue(position.isOnRightEdge());
+        position.setColumn(4);
+        assertFalse(position.isOnRightEdge());
+
+        position.setRow(0);
+        assertFalse(position.isOnRightEdge());
+    }
+
+    @Test
+    public void testIsOnTopEdge() {
+        Position position = new Position(1, 0);
+        assertTrue(position.isOnTopEdge());
+        position.setColumn(1);
+        assertFalse(position.isOnTopEdge());
+
+        position.setRow(5);
+        assertFalse(position.isOnTopEdge());
+    }
+
+    @Test
+    public void testIsOnBottomEdge() {
+        Position position = new Position(4, 6);
+        assertTrue(position.isOnBottomEdge());
+        position.setColumn(5);
+        assertFalse(position.isOnBottomEdge());
+
+        position.setRow(0);
+        assertFalse(position.isOnBottomEdge());
+    }
 }
