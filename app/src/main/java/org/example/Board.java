@@ -20,56 +20,75 @@ public class Board {
         if (!positionMoves.containsKey(position)) {
             positionMoves.put(position, move);
 
-            checkAdjacentMoves(position, move);
+            fiveInLineFound = false; // Reset the flag before checking
+            checkAllDirections(position, move);
+
+            // Check all directions for 5 consecutive moves
+            boolean isFiveInRow = checkDirection(position, move, Position::getLeft, Position::getRight);
+            boolean isFiveInColumn = checkDirection(position, move, Position::getUp, Position::getDown);
+            boolean isFiveInDiag1 = checkDirection(position, move, Position::getUpLeft, Position::getDownRight);
+            boolean isFiveInDiag2 = checkDirection(position, move, Position::getUpRight, Position::getDownLeft);
+
+            fiveInLineFound = isFiveInRow || isFiveInColumn || isFiveInDiag1 || isFiveInDiag2;
         } else {
             throw new IllegalArgumentException("Multiple moves to same position are not allowed");
         }
     }
 
-    private void checkAdjacentMoves(Position position, Move move) {
-        Position adjPosUpLeft = null;
-        Position adjPosDownRight = null;
+    private boolean checkDirection(Position position, Move move,
+                                  GetPosition getPrevious, GetPosition getNext) {
+        int count = 0;
 
-        if (!position.isOnLeftEdge() && !position.isOnTopEdge()) {
-            adjPosUpLeft = position.getUpLeft();
-        }
-        if (!position.isOnRightEdge() && !position.isOnBottomEdge()) {
-            adjPosDownRight = position.getDownRight();
-        }
-
-        int countUpLeft = 0;
-        int countDownRight = 0;
-
-        if (adjPosUpLeft != null) {
-            Move adjMoveUpLeft = positionMoves.get(adjPosUpLeft);
-            while (adjMoveUpLeft != null && adjMoveUpLeft.isMarkTypeEqual(move)) {
-                countUpLeft++;
-                Position nextPosition = adjMoveUpLeft.getMark().getPosition();
-                if (!nextPosition.isOnLeftEdge() && !nextPosition.isOnTopEdge()) {
-                    adjMoveUpLeft = positionMoves.get(nextPosition.getUpLeft());
+        // Check in the negative direction
+        Position current = position;
+        while (true) {
+            try {
+                current = getPrevious.get(current);
+                if (positionMoves.containsKey(current)) {
+                    Move adjMove = positionMoves.get(current);
+                    if (adjMove.isMarkTypeEqual(move)) {
+                        count++;
+                    } else {
+                        break;
+                    }
                 } else {
                     break;
                 }
+            } catch (IllegalArgumentException e) {
+                break;
             }
         }
 
-        if (adjPosDownRight != null) {
-            Move adjMoveDownRight = positionMoves.get(adjPosDownRight);
-            while (adjMoveDownRight != null && adjMoveDownRight.isMarkTypeEqual(move)) {
-                countDownRight++;
-                Position nextPosition = adjMoveDownRight.getMark().getPosition();
-                if (!nextPosition.isOnRightEdge() && !nextPosition.isOnBottomEdge()) {
-                    adjMoveDownRight = positionMoves.get(nextPosition.getDownRight());
+        // Check in the positive direction
+        current = position;
+        while (true) {
+            try {
+                current = getNext.get(current);
+                if (positionMoves.containsKey(current)) {
+                    Move adjMove = positionMoves.get(current);
+                    if (adjMove.isMarkTypeEqual(move)) {
+                        count++;
+                    } else {
+                        break;
+                    }
                 } else {
                     break;
                 }
+            } catch (IllegalArgumentException e) {
+                break;
             }
         }
 
-        // Check if the total count of consecutive same-mark moves is exactly 5
-        if (countUpLeft + countDownRight == 4) { // 4 because we are counting from the current move position
-            fiveInLineFound = true;
-        }
+        // Total consecutive moves including the current one
+        return count >= 4; // 4 more means total of 5 including the current move
+    }
+
+    private void checkAllDirections(Position position, Move move) {
+        // Check all four directions
+        checkDirection(position, move, Position::getLeft, Position::getRight);
+        checkDirection(position, move, Position::getUp, Position::getDown);
+        checkDirection(position, move, Position::getUpLeft, Position::getDownRight);
+        checkDirection(position, move, Position::getUpRight, Position::getDownLeft);
     }
 
     public void clearBoard() {
@@ -101,5 +120,10 @@ public class Board {
 
     public boolean isFiveInLineFound() {
         return fiveInLineFound;
+    }
+
+    @FunctionalInterface
+    private interface GetPosition {
+        Position get(Position position) throws IllegalArgumentException;
     }
 }
