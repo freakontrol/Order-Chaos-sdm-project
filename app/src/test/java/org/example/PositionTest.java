@@ -190,9 +190,6 @@ public class PositionTest {
         assertTrue(position.isOnRightEdge());
         position.setColumn(4);
         assertFalse(position.isOnRightEdge());
-
-        // position.setRow(0);
-        // assertFalse(position.isOnRightEdge());
     }
 
     @Test
@@ -210,9 +207,6 @@ public class PositionTest {
     public void testIsOnBottomEdge() {
         Position position = new Position(5, 5);
         assertTrue(position.isOnBottomEdge());
-        // position.setColumn(6);
-        // assertFalse(position.isOnBottomEdge());
-
         position.setRow(0);
         assertFalse(position.isOnBottomEdge());
     }
