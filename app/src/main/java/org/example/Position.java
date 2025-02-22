@@ -25,7 +25,7 @@ public class Position {
     }
 
     public boolean isOnRightEdge() {
-        if (this.row == maxRows - 1 && this.column < maxColumns - 1) {
+        if (this.column == maxColumns - 1) {
             return true;
         }
         return false;
@@ -37,7 +37,7 @@ public class Position {
         return false;
     }
     public boolean isOnBottomEdge() {
-        if (this.row < maxRows - 1 && this.column == maxColumns - 1) {
+        if (this.row == maxRows - 1) {
             return true;
         }
         return false;

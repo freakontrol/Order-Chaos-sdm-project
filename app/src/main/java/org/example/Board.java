@@ -14,14 +14,12 @@ public class Board {
         this.positionMoves = new HashMap<>();
     }
 
+    //Adds a move to the board and checks for winning conditions
     public void addMove(Move move) {
-        moves.add(move);
-        Position position = move.getMark().getPosition(); // TODO: move getters
+        Position position = move.getMark().getPosition(); 
         if (!positionMoves.containsKey(position)) {
+            moves.add(move);
             positionMoves.put(position, move);
-
-            fiveInLineFound = false; // Reset the flag before checking
-            checkAllDirections(position, move);
 
             // Check all directions for 5 consecutive moves
             boolean isFiveInRow = checkDirection(position, move, Position::getLeft, Position::getRight);
@@ -35,6 +33,7 @@ public class Board {
         }
     }
 
+    //Checks a specific direction for 5 consecutive moves
     private boolean checkDirection(Position position, Move move,
                                   GetPosition getPrevious, GetPosition getNext) {
         int count = 0;
@@ -79,18 +78,10 @@ public class Board {
             }
         }
 
-        // Total consecutive moves including the current one
         return count >= 4; // 4 more means total of 5 including the current move
     }
 
-    private void checkAllDirections(Position position, Move move) {
-        // Check all four directions
-        checkDirection(position, move, Position::getLeft, Position::getRight);
-        checkDirection(position, move, Position::getUp, Position::getDown);
-        checkDirection(position, move, Position::getUpLeft, Position::getDownRight);
-        checkDirection(position, move, Position::getUpRight, Position::getDownLeft);
-    }
-
+    
     public void clearBoard() {
         moves.clear();
         positionMoves.clear();
@@ -118,6 +109,7 @@ public class Board {
         return sb.toString();
     }
 
+    //Checks if a winning condition has been found, returns True if winning condition is found, false otherwise
     public boolean isFiveInLineFound() {
         return fiveInLineFound;
     }
