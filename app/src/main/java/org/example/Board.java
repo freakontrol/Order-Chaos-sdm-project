@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class Board {
 
     //Checks a specific direction for 5 consecutive moves
     private boolean checkDirection(Position position, Move move,
-                                  GetPosition getPrevious, GetPosition getNext) {
+                                   GetPosition getPrevious, GetPosition getNext) {
         int count = 0;
 
         // Check in the negative direction
@@ -99,7 +100,8 @@ public class Board {
             for (int j = 0; j < 6; j++) {
                 Position position = new Position(i, j);
                 if (positionMoves.containsKey(position)) {
-                    sb.append("X").append(" ");
+                    Move move = positionMoves.get(position);
+                    sb.append(move.getMark().getType().getName()).append(" ");
                 } else {
                     sb.append("_").append(" ");
                 }
@@ -112,6 +114,20 @@ public class Board {
     //Checks if a winning condition has been found, returns True if winning condition is found, false otherwise
     public boolean isFiveInLineFound() {
         return fiveInLineFound;
+    }
+
+    //Returns an unmodifiable view of the list of moves made on the board.
+
+    public List<Move> getMoves() {
+        return Collections.unmodifiableList(moves);
+    }
+
+    // public List<Move> getMoves() {
+    //     return new ArrayList<>(moves);
+    // }
+
+    public void printBoard() {
+        System.out.println(this.toString());
     }
 
     @FunctionalInterface

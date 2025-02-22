@@ -5,6 +5,9 @@ public class Move {
     private Player player;
 
     public Move(Mark mark, Player player) {
+        if (mark == null || player == null) {
+            throw new IllegalArgumentException("Mark and player must not be null.");
+        }
         this.mark = mark;
         this.player = player;
     }
