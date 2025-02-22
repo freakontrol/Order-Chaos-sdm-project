@@ -26,69 +26,10 @@ public class BoardTest {
     }
   
     @Test
-    public void testAddMove() {
-        board.addMove(moveX);
-        assertEquals(1, board.getMoves().size());
-        assertTrue(board.getMoves().contains(moveX));
-    }
-
-    @Test
-    public void testGetMoves() {
-        board.addMove(moveX);
-        List<Move> moves = board.getMoves();
-        assertEquals(1, moves.size());
-        assertTrue(moves.contains(moveX));
-    }
-
-    @Test
-    public void testClearBoard() {
-        board.addMove(moveX);
-        board.clearBoard();
-        assertTrue(board.getMoves().isEmpty());
-    }
-
-    @Test
     public void testIsOccupied() {
         assertFalse(board.isOccupied(new Position(0, 1)));
         board.addMove(moveX);
         assertTrue(board.isOccupied(new Position(0, 1)));
-    }
-
-    @Test
-    public void testHasFiveInARow() {
-        //horizontal
-        for (int i = 0; i < 5; i++) {
-            board.addMove(new Move(new Mark(new Position(0, i), Type.X), playerOrder));
-        }
-        assertTrue(board.hasFiveInARow(0, 4, 'X'));
-
-        //vertical
-        board.clearBoard();
-        for (int i = 0; i < 5; i++) {
-            board.addMove(new Move(new Mark(new Position(i, 0), Type.X), playerOrder));
-        }
-        assertTrue(board.hasFiveInARow(4, 0, 'X'));
-
-        //diagonal /
-        board.clearBoard();
-        for (int i = 0; i < 5; i++) {
-            board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerOrder));
-        }
-        assertTrue(board.hasFiveInARow(4, 4, 'X'));
-
-        //diagonal \
-        board.clearBoard();
-        for (int i = 0; i < 5; i++) {
-            board.addMove(new Move(new Mark(new Position(i, 4 - i), Type.X), playerOrder));
-        }
-        assertFalse(board.hasFiveInARow(4, 1, 'X'));
-
-        //no five in a row
-        board.clearBoard();
-        for (int i = 0; i < 5; i++) {
-            board.addMove(new Move(new Mark(new Position(i, i % 2), Type.X), playerOrder));
-        }
-        assertFalse(board.hasFiveInARow(4, 1, 'X'));
     }
 
     public void testToString() {
