@@ -22,7 +22,9 @@ public class Main {
         Position[] chaosPositions = {
             new Position(5, 0),
             new Position(4, 1),
-            new Position(3, 2)
+            new Position(3, 2),
+            new Position(2, 3),
+            new Position(1, 4)
         };
 
         // ORDER's turn
@@ -34,14 +36,16 @@ public class Main {
 
             board.addMove(moveX);
 
+            // Print the board state after each move
+            board.printBoard();
+
             // Check for winning condition after each move
             if (board.isFiveInLineFound()) {
                 System.out.println("Winning condition found! Player " + playerOrder.getName() + " wins!");
                 break;
             }
 
-            // Print the board state after each move
-            board.printBoard();
+
         }
 
         // CHAOS's turn
@@ -53,14 +57,15 @@ public class Main {
 
             board.addMove(moveO);
 
+            // Print the board state after each move
+            board.printBoard();
+
             // Check for winning condition after each move
             if (board.isFiveInLineFound()) {
                 System.out.println("Winning condition found! Player " + playerChaos.getName() + " wins!");
                 break;
             }
 
-            // Print the board state after each move
-            board.printBoard();
         }
 
         // Print all moves on the board
