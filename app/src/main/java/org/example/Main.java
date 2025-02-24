@@ -16,7 +16,9 @@ public class Main {
         Position[] orderPositions = {
             new Position(0, 2),
             new Position(1, 3),
-            new Position(2, 4)
+            new Position(2, 4),
+            new Position(0, 0),
+            new Position(5, 5)
         };
 
         Position[] chaosPositions = {
@@ -27,12 +29,11 @@ public class Main {
             new Position(1, 4)
         };
 
-        // ORDER's turn
-        for (Position position : orderPositions) {
-            Mark markX = new Mark(position, Type.X);
+        // Alternate moves between ORDER and CHAOS
+        for (int i = 0; i < orderPositions.length + chaosPositions.length; i++) {
+            if (i % 2 == 0) { // ORDER's turn
+                Mark markX = new Mark(orderPositions[i / 2], Type.X);
             Move moveX = new Move(markX, playerOrder);
-
-            //System.out.println("Adding move: " + move.toString());
 
             board.addMove(moveX);
 
@@ -44,16 +45,9 @@ public class Main {
                 System.out.println("Winning condition found! Player " + playerOrder.getName() + " wins!");
                 break;
             }
-
-
-        }
-
-        // CHAOS's turn
-        for (Position position : chaosPositions) {
-            Mark markO = new Mark(position, Type.O);
+            } else { // CHAOS's turn
+                Mark markO = new Mark(chaosPositions[i / 2], Type.O);
             Move moveO = new Move(markO, playerChaos);
-
-            //System.out.println("Adding move: " + move.toString());
 
             board.addMove(moveO);
 
@@ -65,7 +59,7 @@ public class Main {
                 System.out.println("Winning condition found! Player " + playerChaos.getName() + " wins!");
                 break;
             }
-
+        }
         }
 
         // Print all moves on the board
@@ -74,7 +68,7 @@ public class Main {
             System.out.println(m.toString());
         }
 
-        //Clear the board and print it to verify clearing
+        // Clear the board and print it to verify clearing
         board.clearBoard();
 
         System.out.println("Board after clearing: " + board);

@@ -17,7 +17,13 @@ public class Board {
 
     //Adds a move to the board and checks for winning conditions
     public void addMove(Move move) {
-        Position position = move.getMark().getPosition(); 
+        Position position = move.getMark().getPosition();
+        Player currentPlayer = move.getPlayer();
+
+        if (!moves.isEmpty() && moves.get(moves.size() - 1).getPlayer().equals(currentPlayer)) {
+            throw new IllegalArgumentException("Two subsequent moves from the same player are not allowed");
+        }
+
         if (!positionMoves.containsKey(position)) {
             moves.add(move);
             positionMoves.put(position, move);
