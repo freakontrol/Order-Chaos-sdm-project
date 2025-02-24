@@ -171,4 +171,50 @@ public class BoardTest {
             board.addMove(new Move(new Mark(new Position(2, 4), Type.O), playerChaos)); // CHAOS tries to move again
         });
     }
+        
+    @Test
+    public void testSixInLineNotWinning() {
+        // Place six consecutive marks in a row with alternating players
+        for (int i = 0; i < 6; i++) {
+            if (i % 2 == 0) {
+                board.addMove(new Move(new Mark(new Position(i, 2), Type.X), playerOrder));
+            } else {
+                board.addMove(new Move(new Mark(new Position(i, 2), Type.O), playerChaos));
+            }
+        }
+        assertFalse(board.isFiveInLineFound());
+
+        // Reset the board and place six consecutive marks in a column with alternating players
+        board.clearBoard();
+        for (int i = 0; i < 6; i++) {
+            if (i % 2 == 0) {
+                board.addMove(new Move(new Mark(new Position(2, i), Type.X), playerOrder));
+            } else {
+                board.addMove(new Move(new Mark(new Position(2, i), Type.O), playerChaos));
+            }
+        }
+        assertFalse(board.isFiveInLineFound());
+
+        // Reset the board and place six consecutive marks in a diagonal line (top-left to bottom-right) with alternating players
+        board.clearBoard();
+        for (int i = 0; i < 6; i++) {
+            if (i % 2 == 0) {
+                board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerOrder));
+            } else {
+                board.addMove(new Move(new Mark(new Position(i, i), Type.O), playerChaos));
+            }
+        }
+        assertFalse(board.isFiveInLineFound());
+
+        // Reset the board and place six consecutive marks in a diagonal line (top-right to bottom-left) with alternating players
+        board.clearBoard();
+        for (int i = 0; i < 6; i++) {
+            if (i % 2 == 0) {
+                board.addMove(new Move(new Mark(new Position(i, 5 - i), Type.X), playerOrder));
+            } else {
+                board.addMove(new Move(new Mark(new Position(i, 5 - i), Type.O), playerChaos));
+            }
+        }
+        assertFalse(board.isFiveInLineFound());
+    }
 }

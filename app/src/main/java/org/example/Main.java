@@ -18,7 +18,8 @@ public class Main {
             new Position(1, 3),
             new Position(2, 4),
             new Position(0, 0),
-            new Position(5, 5)
+            new Position(5, 5),
+            new Position(4, 4)
         };
 
         Position[] chaosPositions = {
@@ -26,6 +27,7 @@ public class Main {
             new Position(4, 1),
             new Position(3, 2),
             new Position(2, 3),
+            new Position(0, 5),
             new Position(1, 4)
         };
 

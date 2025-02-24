@@ -85,7 +85,7 @@ public class Board {
             }
         }
 
-        return count >= 4; // 4 more means total of 5 including the current move
+        return count == 4; // Exactly 4 more means total of 5 including the current move
     }
 
     
