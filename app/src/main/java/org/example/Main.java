@@ -1,78 +1,95 @@
 package org.example;
 
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
     public static void main(String[] args) {
-        Player playerOrder = new Player(Role.ORDER, "John Doe");
-        Player playerChaos = new Player(Role.CHAOS, "Jane Doe");
-
-        System.out.println("Player Name: " + playerOrder.getName() + ", Role: " + playerOrder.getRole());
-        System.out.println("Player Name: " + playerChaos.getName() + ", Role: " + playerChaos.getRole());
+        Player playerOrder = new Player(Role.ORDER, "Player Order");
+        Player playerChaos = new Player(Role.CHAOS, "Player Chaos");
 
         Board board = new Board();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        
+        boolean isGameOver = false;
+        Player currentPlayer = playerOrder; // Start with Order's turn
 
-        // Define positions for ORDER and CHAOS to form diagonals
-        Position[] orderPositions = {
-            new Position(0, 2),
-            new Position(1, 3),
-            new Position(2, 4),
-            new Position(0, 0),
-            new Position(5, 5),
-            new Position(4, 4)
-        };
-
-        Position[] chaosPositions = {
-            new Position(5, 0),
-            new Position(4, 1),
-            new Position(3, 2),
-            new Position(2, 3),
-            new Position(0, 5),
-            new Position(1, 4)
-        };
-
-        // Alternate moves between ORDER and CHAOS
-        for (int i = 0; i < orderPositions.length + chaosPositions.length; i++) {
-            if (i % 2 == 0) { // ORDER's turn
-                Mark markX = new Mark(orderPositions[i / 2], Type.X);
-            Move moveX = new Move(markX, playerOrder);
-
-            board.addMove(moveX);
-
-            // Print the board state after each move
+        while (!isGameOver) {
+            System.out.println("\nCurrent Board:");
             board.printBoard();
 
-            // Check for winning condition after each move
+            Position position = null;
+            do {
+                try {
+                    System.out.print(currentPlayer.getName() + ", enter your move (row column): ");
+                    
+                    String inputLine = reader.readLine();
+                    if (inputLine == null) { 
+                        // Exit gracefully if input stream is closed
+                        System.out.println("Input stream closed unexpectedly. Exiting.");
+                        return;
+                    }
+                    
+                    String[] parts = inputLine.split(" ");
+
+                    if (parts.length != 2) {
+                        System.out.println("Please provide exactly two numbers separated by space.");
+                        continue;
+                    }
+
+                    int row, col;
+
+                    try {
+                        row = Integer.parseInt(parts[0]);
+                        col = Integer.parseInt(parts[1]);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Row and column must be integers. Try again.");
+                        continue;
+                    }
+
+                    position = new Position(row, col);
+
+                    // Validate coordinates within 0-5
+                    if (row < 0 || row >=6 || col <0 || col >=6) {
+                        System.out.println("Row and column must be between 0 and 5. Try again.");
+                        continue;
+                    }
+
+                    // Check if the position is already occupied
+                    if (board.isOccupied(position)) {
+                        System.out.println("Position " + position + " is taken. Choose another spot.");
+                        continue;
+                    }
+
+                    // Create mark based on current player's role
+                    Type markType = currentPlayer.getRole() == Role.ORDER ? Type.O : Type.X;
+                    Mark mark = new Mark(position, markType);
+                    Move move = new Move(mark, currentPlayer);
+
+                    board.addMove(move); // Add to the board
+
+                    break; // Valid move processed successfully
+                } catch (IOException e) {
+                    System.out.println("Error reading input: " + e.getMessage());
+                    return; // Exit on any other I/O error
+                }
+            } while(true);
+
+            // Check win condition after move is added
             if (board.isFiveInLineFound()) {
-                System.out.println("Winning condition found! Player " + playerOrder.getName() + " wins!");
-                break;
+                isGameOver = true;
+                System.out.println("\n" + currentPlayer.getName() + " wins with five in a row! Game Over.");
             }
-            } else { // CHAOS's turn
-                Mark markO = new Mark(chaosPositions[i / 2], Type.O);
-            Move moveO = new Move(markO, playerChaos);
 
-            board.addMove(moveO);
-
-            // Print the board state after each move
-            board.printBoard();
-
-            // Check for winning condition after each move
-            if (board.isFiveInLineFound()) {
-                System.out.println("Winning condition found! Player " + playerChaos.getName() + " wins!");
-                break;
-            }
-        }
+            // Switch to other player for next turn
+            currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
         }
 
-        // Print all moves on the board
-        List<Move> moves = board.getMoves();
-        for (Move m : moves) {
-            System.out.println(m.toString());
+        try {
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Error closing input stream: " + e.getMessage());
         }
-
-        // Clear the board and print it to verify clearing
-        board.clearBoard();
-
-        System.out.println("Board after clearing: " + board);
     }
 }
