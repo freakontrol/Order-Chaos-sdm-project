@@ -11,7 +11,7 @@ public class Main {
 
         Board board = new Board();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        
+
         boolean isGameOver = false;
         Player currentPlayer = playerOrder; // Start with Order's turn
 
@@ -20,21 +20,22 @@ public class Main {
             board.printBoard();
 
             Position position = null;
+            Type markType = null;
             do {
                 try {
-                    System.out.print(currentPlayer.getName() + ", enter your move (row column): ");
-                    
+                    System.out.print(currentPlayer.getName() + ", enter your move (row column mark): ");
+
                     String inputLine = reader.readLine();
-                    if (inputLine == null) { 
+                    if (inputLine == null) {
                         // Exit gracefully if input stream is closed
                         System.out.println("Input stream closed unexpectedly. Exiting.");
                         return;
                     }
-                    
+
                     String[] parts = inputLine.split(" ");
 
-                    if (parts.length != 2) {
-                        System.out.println("Please provide exactly two numbers separated by space.");
+                    if (parts.length != 3) {
+                        System.out.println("Please provide exactly three values separated by space: row, column, and mark type.");
                         continue;
                     }
 
@@ -62,8 +63,21 @@ public class Main {
                         continue;
                     }
 
-                    // Create mark based on current player's role
-                    Type markType = currentPlayer.getRole() == Role.ORDER ? Type.O : Type.X;
+                    // Validate mark type
+                    String markInput = parts[2].toUpperCase();
+                    switch (markInput) {
+                        case "X":
+                            markType = Type.X;
+                            break;
+                        case "O":
+                            markType = Type.O;
+                            break;
+                        default:
+                            System.out.println("Invalid mark type. Please enter X or O.");
+                            continue;
+                    }
+
+                    // Create mark based on user input
                     Mark mark = new Mark(position, markType);
                     Move move = new Move(mark, currentPlayer);
 
@@ -80,6 +94,9 @@ public class Main {
             if (board.isFiveInLineFound()) {
                 isGameOver = true;
                 System.out.println("\n" + currentPlayer.getName() + " wins with five in a row! Game Over.");
+            } else if (board.isBoardFull()){
+                isGameOver = true;
+                System.out.println("\n" + "Player Chaos wins! Game Over.");
             }
 
             // Switch to other player for next turn

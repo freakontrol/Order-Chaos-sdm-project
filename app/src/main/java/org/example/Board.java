@@ -122,6 +122,10 @@ public class Board {
         return fiveInLineFound;
     }
 
+    public boolean isBoardFull() {
+        return this.moves.size() == 36;
+    }
+
     //Returns an unmodifiable view of the list of moves made on the board.
 
     public List<Move> getMoves() {
