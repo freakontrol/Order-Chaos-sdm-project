@@ -5,8 +5,8 @@ import java.util.Objects;
 public class Position {
     private int row;
     private int column;
-    private int maxRows;
-    private int maxColumns;
+    private final int maxRows = 6;
+    private final int maxColumns = 6;
 
     public Position(int row, int column) {
         if (row < 0 || column < 0) {
@@ -14,8 +14,6 @@ public class Position {
         }
         this.row = row;
         this.column = column;
-        this.maxRows = 6;
-        this.maxColumns = 6;
     }
     public boolean isOnLeftEdge() {
         if (this.row == 0 && this.column > 0) {
