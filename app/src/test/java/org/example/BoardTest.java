@@ -132,7 +132,7 @@ public class BoardTest {
 
     @Test
     public void testGetMoves() {
-        Move moveY = new Move(new Mark(new Position(1, 2), Type.O), playerOrder);
+        // Move moveY = new Move(new Mark(new Position(1, 2), Type.O), playerOrder);
         board.addMove(moveX);
         board.addMove(moveO);
 
@@ -144,7 +144,7 @@ public class BoardTest {
 
     @Test
     public void testAddMove() {
-        Move moveY = new Move(new Mark(new Position(1, 2), Type.O), playerOrder);
+        // Move moveY = new Move(new Mark(new Position(1, 2), Type.O), playerOrder);
         board.addMove(moveX);
         board.addMove(moveO);
 
