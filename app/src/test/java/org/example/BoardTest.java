@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BoardTest {
@@ -217,4 +218,57 @@ public class BoardTest {
         }
         assertFalse(board.isFiveInLineFound());
     }
+
+    // @Test
+    // public void testIsBoardFull() {
+    //     // Arrange
+    //     board.clearBoard();
+
+    //     // Act
+    //     for (int row = 0; row < 6; row++) {
+    //         for (int col = 0; col < 6; col++) {
+    //             board.addMove(new Move(new Mark(new Position(row, col), Type.X), playerOrder));
+    //         }
+    //     }
+
+    //     // Assert
+    //     assertTrue(board.isBoardFull(),
+    //         "isBoardFull() should return true after 36 moves");
+
+    //     assertEquals(36, board.getMoves().size(),
+    //         "Move list size should be exactly 36 when board is full");
+    // }
+
+    @Test
+    public void testIsBoardFull() {
+        // Create a list to hold all positions on the 6x6 board
+        List<Position> allPositions = new ArrayList<>();
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 6; col++) {
+                allPositions.add(new Position(row, col));
+            }
+        }
+
+        // Fill the board completely with alternating X and O marks
+        try {
+            for (int i = 0; i < allPositions.size(); i++) {
+                Player currentPlayer = (i % 2 == 0) ? playerOrder : playerChaos;
+                Type markType = (i % 2 == 0) ? typeX : Type.O;
+                Position position = allPositions.get(i);
+                Mark mark = new Mark(position, markType);
+                Move move = new Move(mark, currentPlayer);
+                board.addMove(move);
+            }
+        } catch (IllegalArgumentException e) {
+            fail("Unexpected exception while adding moves: " + e.getMessage());
+        }
+
+        // Assert
+        assertTrue(board.isBoardFull(),
+            "isBoardFull() should return true after 36 moves");
+
+        assertEquals(36, board.getMoves().size(),
+            "Move list size should be exactly 36 when board is full");
+    }
+
 }

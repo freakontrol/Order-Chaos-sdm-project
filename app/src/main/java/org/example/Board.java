@@ -132,10 +132,7 @@ public class Board {
         return Collections.unmodifiableList(moves);
     }
 
-    // public List<Move> getMoves() {
-    //     return new ArrayList<>(moves);
-    // }
-
+   
     public void printBoard() {
         System.out.println(this.toString());
     }
