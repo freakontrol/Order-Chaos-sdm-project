@@ -93,27 +93,20 @@ public class MoveTest {
     @Test
     public void Gigi() {
         // Creazione di un player immutabile e una move
-        Player player1 = new Player(Role.ORDER, "Alice");
+        Player player1 = new Player(Role.ORDER, "Dylan");
         Mark mark1 = new Mark(new Position(2, 3), Type.X);
         Move move = new Move(mark1, player1);
   
-        // Controlliamo il Player originale
+        // Checking the originals
         System.out.println("Player originale: " + move.getPlayer().getName());
-  
-        // Controlliamo che il Mark originale sia rimasto invariato
         System.out.println("Mark originale: " + move.getMark().getType());
   
-        // Verifica che il player e il mark non siano cambiati
-        assertEquals("Alice", move.getPlayer().getName());
+        // make sure they are the same
+        assertEquals("Dylan", move.getPlayer().getName());
         assertEquals(Type.X, move.getMark().getType());
-        
-        // Tentiamo di creare una modifica e verifichiamo che non funzioni
-        // Poiché non è possibile modificare le variabili, non eseguiremo alcuna modifica
-        // Invece, verifichiamo semplicemente che i valori siano ancora corretti
+
         assertNotEquals("Bob", move.getPlayer().getName());
         assertNotEquals(Type.O, move.getMark().getType());
-        
-        System.out.println("Test completato: le variabili non sono modificabili.");
     }
     
 }
