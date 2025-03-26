@@ -1,114 +1,124 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.swing.*;
+import java.awt.event.*;
+
+// import java.io.BufferedReader;
+// import java.io.IOException;
+// import java.io.InputStreamReader;
+
+// import java.awt.*;
+// import java.util.HashMap;
+// import java.util.Map;
 
 public class Main {
+    private static Board board;
+    private static BoardGUI gui;
+    private static Player playerOrder;
+    private static Player playerChaos;
+    private static Player currentPlayer;
+
     public static void main(String[] args) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+       
+        // Initialize the game when the application starts
+        initializeGame();
+    }
 
-        while (true) { // Loop Games
-            Player playerOrder = new Player(Role.ORDER, "Player Order");
-            Player playerChaos = new Player(Role.CHAOS, "Player Chaos");
-            Board board = new Board();
-            boolean isGameOver = false;
-            Player currentPlayer = playerOrder; // Start with Order's turn
+    private static void initializeGame() {
+        
+        // Set the graphical look and feel of the GUI
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
-            while (!isGameOver) {
-                System.out.println("\nCurrent Board:");
-                board.printBoard();
+        // Initialize the game board and GUI
+        board = new Board();
+        gui = new BoardGUI(board);
 
-                Position position = null;
-                do {
-                    try {
-                        System.out.print(currentPlayer.getName() + ", enter your move (row column): ");
-                        
-                        String inputLine = reader.readLine();
-                        if (inputLine == null) { 
-                            // Exit gracefully if input stream is closed
-                            System.out.println("Input stream closed unexpectedly. Exiting.");
-                            return;
-                        }
-                        
-                        String[] parts = inputLine.split(" ");
+        // Create players for ORDER and CHAOS roles
+        playerOrder = new Player(Role.ORDER, "ORDER");
+        playerChaos = new Player(Role.CHAOS, "CHAOS");
 
-                        if (parts.length != 2) {
-                            System.out.println("Please provide exactly two numbers separated by space.");
-                            continue;
-                        }
+        // Ask the user which player starts the game
+        Object[] options = {"ORDER", "CHAOS"};
+        int choice = JOptionPane.showOptionDialog(null, "Who starts?", "Initial Choice",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-                        int row, col;
+        // If the dialog is closed, exit the program
+        if (choice == JOptionPane.CLOSED_OPTION) {
+            System.exit(0);
+        }
 
-                        try {
-                            row = Integer.parseInt(parts[0]);
-                            col = Integer.parseInt(parts[1]);
-                        } catch (NumberFormatException e) {
-                            System.out.println("Row and column must be integers. Try again.");
-                            continue;
-                        }
+        // Set the current player based on the chosen option
+        currentPlayer = (choice == 0) ? playerOrder : playerChaos;
+        gui.setCurrentPlayer(currentPlayer);
 
-                        position = new Position(row, col);
+        // Set up a listener to handle player moves
+        gui.setMoveListener(new MoveListener());
+    }
 
-                        // Validate coordinates within 0-5
-                        if (row < 0 || row >=6 || col <0 || col >=6) {
-                            System.out.println("Row and column must be between 0 and 5. Try again.");
-                            continue;
-                        }
+    // Inner class to handle player moves
+    private static class MoveListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Get the button that was clicked
+            JButton button = (JButton) e.getSource();
+            int row = (int) button.getClientProperty("row");
+            int col = (int) button.getClientProperty("col");
 
-                        // Check if the position is already occupied
-                        if (board.isOccupied(position)) {
-                            System.out.println("Position " + position + " is taken. Choose another spot.");
-                            continue;
-                        }
+            // Check if the selected position is not already occupied
+            if (!board.isOccupied(new Position(row, col))) {
+                // Prompt the player to choose between X and O
+                String[] options = {"X", "O"};
+                String choice = (String) JOptionPane.showInputDialog(gui.getFrame(),
+                        "Do you place X or O? :", "Move",
+                        JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
-                        // Create mark based on current player's role
-                        Type markType = currentPlayer.getRole() == Role.ORDER ? Type.O : Type.X;
-                        Mark mark = new Mark(position, markType);
-                        Move move = new Move(mark, currentPlayer);
+                // If a valid choice is made, place the mark on the board
+                if (choice != null) {
+                    Type markType = choice.equals("X") ? Type.X : Type.O;
+                    Mark mark = new Mark(new Position(row, col), markType);
+                    Move move = new Move(mark, currentPlayer);
+                    board.addMove(move);
+                    gui.updateButton(row, col, markType.getName());
 
-                        board.addMove(move); // Add to the board
-
-                        break; // Valid move processed successfully
-                    } catch (IOException e) {
-                        System.out.println("Error reading input: " + e.getMessage());
-                        return; // Exit on any other I/O error
+                    // Check if the ORDER player has won
+                    if (board.isFiveInLineFound()) {
+                        JOptionPane.showMessageDialog(gui.getFrame(), "Player ORDER wins!");
+                        askForNewGame(); // Ask if the player wants to start a new game
+                        return;
                     }
-                } while(true);
 
-                // Check win condition after move is added
-                if (board.isFiveInLineFound()) {
-                    System.out.println("\nCurrent Board:");
-                    board.printBoard(); // Print the final board state when a winner is found
-                    isGameOver = true;
-                    System.out.println("\n" + currentPlayer.getName() + " wins with five in a row! Game Over.");
+                    // Check if the board is full, resulting in a win for CHAOS
+                    if (board.getMoves().size() == 36) {
+                        JOptionPane.showMessageDialog(gui.getFrame(), "Player CHAOS wins!");
+                        askForNewGame(); // Ask if the player wants to start a new game
+                        return;
+                    }
+
+                    // Switch to the other player for the next move
+                    currentPlayer = (currentPlayer.getRole() == Role.ORDER) ? playerChaos : playerOrder;
+                    gui.setCurrentPlayer(currentPlayer);
                 }
-
-                // Switch to other player for next turn
-                currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
-            }
-
-            // Ask players for a new game
-            try {
-                System.out.print("Do you want to play again? (yes/no): ");
-                String response = reader.readLine().trim().toLowerCase();
-                if (response.equals("no")) {
-                    System.out.println("Thanks for playing!");
-                    break; // Exit the game
-                } else if (!response.equals("yes")) {
-                    System.out.println("Invalid input. Exiting game.");
-                    break; // Exit on invalid input
-                }
-            } catch (IOException e) {
-                System.out.println("Error reading input: " + e.getMessage());
-                break; // Exit on I/O error
             }
         }
 
-        try {
-            reader.close();
-        } catch (IOException e) {
-            System.out.println("Error closing input stream: " + e.getMessage());
+        // Method to prompt the user to start a new game or exit
+        private void askForNewGame() {
+            int restart = JOptionPane.showConfirmDialog(gui.getFrame(), "Do you want to play a new game?", "New Game",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (restart == JOptionPane.YES_OPTION) {
+                // Restart the game if the player chooses "Yes"
+                gui.dispose();
+                initializeGame();
+            } else {
+                // Exit the application if the player chooses "No"
+                gui.dispose();
+                System.exit(0);
+            }
         }
     }
 }
