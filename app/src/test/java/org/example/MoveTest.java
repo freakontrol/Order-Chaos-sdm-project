@@ -51,29 +51,29 @@ public class MoveTest {
         assertEquals(markX, moveX.getMark());
     }
 
-    @Test
-    public void testSetMark() {
-        Position newPosition = new Position(30, 40);
-        Type newType = Type.O;
-        Mark newMark = new Mark(newPosition, newType);
+//    @Test
+//    public void testSetMark() {
+//        Position newPosition = new Position(30, 40);
+//        Type newType = Type.O;
+//        Mark newMark = new Mark(newPosition, newType);
 
-        moveX.setMark(newMark);
-        assertEquals(newMark, moveX.getMark());
-    }
+//        moveX.setMark(newMark);
+//        assertEquals(newMark, moveX.getMark());
+//    }
 
     @Test
     public void testGetPlayer() {
         assertEquals(playerOrder, moveX.getPlayer());
     }
 
-    @Test
-    public void testSetPlayer() {
-        Role newRole = Role.CHAOS;
-        Player newPlayer = new Player(newRole, "Jane Smith");
+//    @Test
+//    public void testSetPlayer() {
+//        Role newRole = Role.CHAOS;
+//        Player newPlayer = new Player(newRole, "Jane Smith");
 
-        moveX.setPlayer(newPlayer);
-        assertEquals(newPlayer, moveX.getPlayer());
-    }
+//        moveX.setPlayer(newPlayer);
+//        assertEquals(newPlayer, moveX.getPlayer());
+//    }
 
     @Test
     public void testToString() {
@@ -90,4 +90,24 @@ public class MoveTest {
         // Test with different mark types
         assertFalse(moveX.isMarkTypeEqual(moveO));
     }
+    @Test
+    public void Gigi() {
+        // Creazione di un player immutabile e una move
+        Player player1 = new Player(Role.ORDER, "Dylan");
+        Mark mark1 = new Mark(new Position(2, 3), Type.X);
+        Move move = new Move(mark1, player1);
+  
+        // Checking the originals
+        System.out.println("Player originale: " + move.getPlayer().getName());
+        System.out.println("Mark originale: " + move.getMark().getType());
+  
+        // make sure they are the same
+        assertEquals("Dylan", move.getPlayer().getName());
+        assertEquals(Type.X, move.getMark().getType());
+
+        assertNotEquals("Bob", move.getPlayer().getName());
+        assertNotEquals(Type.O, move.getMark().getType());
+    }
+    
 }
+
