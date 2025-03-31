@@ -15,6 +15,7 @@ public class BoardGUI {
         frame.setSize(550, 600);
         frame.setResizable(false);
         
+        JOptionPane.showMessageDialog(frame, "Player ORDER is your round", "BEFORE WE START", JOptionPane.INFORMATION_MESSAGE);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel gridPanel = new JPanel(new GridLayout(6, 6));
@@ -34,10 +35,10 @@ public class BoardGUI {
             }
         }
 
-        playerLabel = new JLabel(" shift of: ");
-        playerLabel.setFont(new Font("Ubuntu", Font.BOLD, 20));
-        mainPanel.add(playerLabel, BorderLayout.NORTH);
-        mainPanel.add(gridPanel, BorderLayout.CENTER);
+       playerLabel = new JLabel("shift of:", SwingConstants.CENTER);
+       playerLabel.setFont(new Font("Ubuntu", Font.BOLD, 18));
+       mainPanel.add(playerLabel, BorderLayout.NORTH);
+       mainPanel.add(gridPanel, BorderLayout.CENTER);
         
 
         frame.add(mainPanel);
@@ -45,7 +46,7 @@ public class BoardGUI {
     }
 
     public void setCurrentPlayer(Player player) {
-        playerLabel.setText(" shift of:   " + player.getName());
+        playerLabel.setText("shift of:   " + player.getName());
     }
 
     public void setMoveListener(ActionListener listener) {

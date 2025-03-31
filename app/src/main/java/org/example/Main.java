@@ -3,8 +3,8 @@ package org.example;
 import javax.swing.*;
 import java.awt.event.*;
 
-import javax.swing.*;
-import java.awt.event.*;
+// import javax.swing.*;
+// import java.awt.event.*;
 
 // import java.io.BufferedReader;
 // import java.io.IOException;
@@ -45,17 +45,20 @@ public class Main {
         playerChaos = new Player(Role.CHAOS, "CHAOS");
 
         // Ask the user which player starts the game
-        Object[] options = {"ORDER", "CHAOS"};
-        int choice = JOptionPane.showOptionDialog(null, "Who starts?", "Initial Choice",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        //bject[] options = {"ORDER", "CHAOS"};
+        //int choice = JOptionPane.showOptionDialog(null, "Who starts?", "Initial Choice",
+                //JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
         // If the dialog is closed, exit the program
-        if (choice == JOptionPane.CLOSED_OPTION) {
-            System.exit(0);
-        }
+        //if (choice == JOptionPane.CLOSED_OPTION) {
+            //System.exit(0);
+       // }
 
+        
+       
         // Set the current player based on the chosen option
-        currentPlayer = (choice == 0) ? playerOrder : playerChaos;
+        //currentPlayer = (choice == 0) ? playerOrder : playerChaos;
+        currentPlayer = playerOrder;
         gui.setCurrentPlayer(currentPlayer);
 
         // Set up a listener to handle player moves
@@ -66,6 +69,7 @@ public class Main {
     private static class MoveListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+
             // Get the button that was clicked
             JButton button = (JButton) e.getSource();
             int row = (int) button.getClientProperty("row");
@@ -110,7 +114,7 @@ public class Main {
 
         // Method to prompt the user to start a new game or exit
         private void askForNewGame() {
-            int restart = JOptionPane.showConfirmDialog(gui.getFrame(), "Do you want to play a new game?", "New Game",
+            int restart = JOptionPane.showConfirmDialog(gui.getFrame(), "Do you want to play a new game?", "NEW GAME",
                     JOptionPane.YES_NO_OPTION);
 
             if (restart == JOptionPane.YES_OPTION) {

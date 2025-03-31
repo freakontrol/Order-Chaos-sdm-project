@@ -43,7 +43,7 @@ public class Board {
     //Checks a specific direction for 5 consecutive moves
     private boolean checkDirection(Position position, Move move,
                                     GetPosition getPrevious, GetPosition getNext) {
-        int count = 0;
+        int count = 1; // Start from 1 to include the current move
         Position current = position;
 
         while (true) {
@@ -73,7 +73,7 @@ public class Board {
             }
         }
 
-        return count == 4; // Exactly 4 more means total of 5 including the current move
+        return count >= 5; // Ensure there are at least 5 in a row
     }
 
     public void clearBoard() {
