@@ -1,7 +1,10 @@
 package org.example;
 
-import javax.swing.*;
+// import javax.swing.*;
 import java.awt.event.*;
+
+
+import javax.swing.UIManager;
 
 // import javax.swing.*;
 // import java.awt.event.*;
@@ -28,13 +31,6 @@ public class Main {
     }
 
     private static void initializeGame() {
-        
-        // Set the graphical look and feel of the GUI
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
 
         // Initialize the game board and GUI
         board = new Board();
@@ -71,38 +67,41 @@ public class Main {
         public void actionPerformed(ActionEvent e) {
 
             // Get the button that was clicked
-            JButton button = (JButton) e.getSource();
-            int row = (int) button.getClientProperty("row");
-            int col = (int) button.getClientProperty("col");
+            Position position = gui.getButtonPosition(e);
 
             // Check if the selected position is not already occupied
-            if (!board.isOccupied(new Position(row, col))) {
-                // Prompt the player to choose between X and O
-                String[] options = {"X", "O"};
-                String choice = (String) JOptionPane.showInputDialog(gui.getFrame(),
-                        "Do you place X or O? :", "Move",
-                        JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+            if (!board.isOccupied(position)) {
+                String choice = gui.askForSymbol();
 
-                // If a valid choice is made, place the mark on the board
                 if (choice != null) {
                     Type markType = choice.equals("X") ? Type.X : Type.O;
-                    Mark mark = new Mark(new Position(row, col), markType);
+                    Mark mark = new Mark(position, markType);
                     Move move = new Move(mark, currentPlayer);
                     board.addMove(move);
-                    gui.updateButton(row, col, markType.getName());
+                    gui.updateButton(position.getRow(), position.getColumn(), markType.getName());
 
                     // Check if the ORDER player has won
                     if (board.isFiveInLineFound()) {
-                        JOptionPane.showMessageDialog(gui.getFrame(), "Player ORDER wins!");
-                        askForNewGame(); // Ask if the player wants to start a new game
-                        return;
+                        gui.showWinnerMessage("Player ORDER wins!");
+                        if (gui.askForNewGame()) {// Ask if the player wants to start a new game
+                            restartGame();
+                        } else {
+                            gui.dispose();
+                            System.exit(0);
+                        }
+                        return; 
                     }
 
                     // Check if the board is full, resulting in a win for CHAOS
                     if (board.getMoves().size() == 36) {
-                        JOptionPane.showMessageDialog(gui.getFrame(), "Player CHAOS wins!");
-                        askForNewGame(); // Ask if the player wants to start a new game
-                        return;
+                        gui.showWinnerMessage("Player CHAOS wins!");
+                        if (gui.askForNewGame()) {// Ask if the player wants to start a new game
+                            restartGame();
+                        } else {
+                            gui.dispose();
+                            System.exit(0);
+                        }
+                        return; 
                     }
 
                     // Switch to the other player for the next move
@@ -113,19 +112,9 @@ public class Main {
         }
 
         // Method to prompt the user to start a new game or exit
-        private void askForNewGame() {
-            int restart = JOptionPane.showConfirmDialog(gui.getFrame(), "Do you want to play a new game?", "NEW GAME",
-                    JOptionPane.YES_NO_OPTION);
-
-            if (restart == JOptionPane.YES_OPTION) {
-                // Restart the game if the player chooses "Yes"
-                gui.dispose();
-                initializeGame();
-            } else {
-                // Exit the application if the player chooses "No"
-                gui.dispose();
-                System.exit(0);
-            }
+        private static void restartGame() {
+            gui.dispose();
+            initializeGame();
         }
     }
 }

@@ -2,7 +2,8 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
+// import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class BoardGUI {
     private JFrame frame;
@@ -10,32 +11,38 @@ public class BoardGUI {
     private JLabel playerLabel;
 
     public BoardGUI(Board board) {
+        
+        // Set the graphical look and feel of the GUI
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         frame = new JFrame("Order & Chaos Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(550, 600);
         frame.setResizable(false);
         
-        JOptionPane.showMessageDialog(frame, "Player ORDER is your round", "BEFORE WE START", JOptionPane.INFORMATION_MESSAGE);
-
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel gridPanel = new JPanel(new GridLayout(6, 6));
 
         buttons = new JButton[6][6];
 
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                buttons[i][j] = new JButton();                
-                buttons[i][j].setFont(new Font("Ubuntu", Font.BOLD, 40));
-                buttons[i][j].putClientProperty("row", i);
-                buttons[i][j].putClientProperty("col", j);
-                buttons[i][j].setBackground(Color.WHITE);
-                buttons[i][j].setForeground(Color.BLACK);
-                buttons[i][j].setFocusPainted(false); 
-                gridPanel.add(buttons[i][j]);
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 6; col++) {
+                buttons[row][col] = new JButton("");                
+                buttons[row][col].setFont(new Font("Ubuntu", Font.BOLD, 40));
+                buttons[row][col].putClientProperty("row", row);
+                buttons[row][col].putClientProperty("col", col);
+                buttons[row][col].setBackground(Color.WHITE);
+                buttons[row][col].setForeground(Color.BLACK);
+                buttons[row][col].setFocusPainted(false); 
+                gridPanel.add(buttons[row][col]);
             }
         }
 
-       playerLabel = new JLabel("shift of:", SwingConstants.CENTER);
+       playerLabel = new JLabel("shift of: ", SwingConstants.CENTER);
        playerLabel.setFont(new Font("Ubuntu", Font.BOLD, 18));
        mainPanel.add(playerLabel, BorderLayout.NORTH);
        mainPanel.add(gridPanel, BorderLayout.CENTER);
@@ -46,20 +53,30 @@ public class BoardGUI {
     }
 
     public void setCurrentPlayer(Player player) {
-        playerLabel.setText("shift of:   " + player.getName());
+        playerLabel.setText("shift of: " + player.getName());
     }
 
     public void setMoveListener(ActionListener listener) {
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                buttons[i][j].addActionListener(listener);
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 6; col++) {
+                buttons[row][col].addActionListener(listener);
             }
         }
     }
 
     public void updateButton(int row, int col, String symbol) {
-        buttons[row][col].setText(symbol);
-        buttons[row][col].setEnabled(false);
+        if (buttons[row][col].getText().isEmpty()) { // Make sure the button is empty before updating
+            buttons[row][col].setText(symbol);
+            buttons[row][col].setEnabled(false);
+        }
+    }
+
+    // Prompt the player to choose between X and 0
+    public String askForSymbol() {
+        String[] options = {"X", "O"};
+        return (String) JOptionPane.showInputDialog(frame,
+                "Do you place X or O? :", "Move",
+                JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
     }
 
     public JFrame getFrame() {
@@ -76,7 +93,25 @@ public class BoardGUI {
         }
         return buttons[row][col];
     }
+    
     public JLabel getPlayerLabel() {
         return playerLabel;
+    }
+
+    public void showWinnerMessage(String message) {
+        JOptionPane.showMessageDialog(frame, message);
+    }
+
+    public boolean askForNewGame() {
+        int restart = JOptionPane.showConfirmDialog(frame, "Do you want to play a new game?", "NEW GAME",
+                JOptionPane.YES_NO_OPTION);
+        return restart == JOptionPane.YES_OPTION;
+    }
+
+    public Position getButtonPosition(ActionEvent e) {
+        JButton button = (JButton) e.getSource();
+        Integer row = (Integer) button.getClientProperty("row");
+        Integer col = (Integer) button.getClientProperty("col");
+        return (row != null && col != null) ? new Position(row, col) : null;
     }
 }
