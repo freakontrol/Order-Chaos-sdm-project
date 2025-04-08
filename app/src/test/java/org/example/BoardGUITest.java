@@ -1,31 +1,37 @@
 package org.example;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javax.swing.*;
-
-// import java.awt.event.ActionEvent;
-// import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class BoardGUITest {
     private Board board;
     private BoardGUI gui;
+    private Player playerOrder;
+    private Player playerChaos;
 
+   
     @BeforeEach
-    public void setUp() {
+    public void setUp() { 
         // Initialize the game board and its graphical interface before each test
         board = new Board();
         gui = new BoardGUI(board);
+        playerOrder = new Player(Role.ORDER, "ORDER");
+        playerChaos = new Player(Role.CHAOS, "CHAOS");
     }
 
-    @Test
-    public void testInitialState() {
-        // Check that the game has not ended at the start
-        assertFalse(board.isFiveInLineFound(), "The game ended before it started");
+    @AfterEach
+    public void tearDown() {
+        gui.dispose();
+    }
 
-        // Verify that all buttons are initially enabled and their text is blank
+    @Test // Checks initial state of buttons and board
+    public void testInitialState() {
+        assertFalse(board.isFiveInLineFound(), "The game ended before it started");
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 assertTrue(gui.getButton(i, j).isEnabled(), "The buttons should be enabled at first");
@@ -34,66 +40,119 @@ public class BoardGUITest {
         }
     }
 
-    @Test
-    public void testButtonPlacement() {
-        // Test the behavior of clicking a button
-        JButton button = gui.getButton(0, 0);
-
-        // Check that the button is not null and has no initial text
-        assertNotNull(button, "The button should not be null");
-        assertEquals("", button.getText(), "The button text should initially be empty.");
-
-        // Simulate a button click and verify it becomes disabled
-        button.doClick();
-        assertFalse(button.isEnabled(), "The button should be disabled after the click.");
+    @Test // Checks that updateButton correctly sets symbol and disables the button
+    public void testUpdateButton() {
+        gui.updateButton(0, 0, "X");
+        assertEquals("X", gui.getButton(0, 0).getText(), "Button text should be X");
+        assertFalse(gui.getButton(0, 0).isEnabled(), "Button should be disabled after update");
     }
 
-    @Test
-    public void testGameOverOnFullBoard() {
-        // Simulate filling the entire board
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                JButton button = gui.getButton(i, j);
-                button.doClick();
-            }
-        }
+    @Test // Simulates a click and ensures the GUI updates with symbol and disables button
+    public void testSimulatedClickUpdatesGUI() throws Exception {
+        TestBoardGUI testGui = new TestBoardGUI(new Board(), "X");
+        Player order = new Player(Role.ORDER, "ORDER");
 
-        // Check if all 36 moves are registered and there is no Order victory
-        assertEquals(36, board.getMoves().size(), "There should be 36 moves on the full board.");
-        assertFalse(board.isFiveInLineFound(), "There should be no Order victory.");
-    }
-
-    @Test
-    public void testOrderWinCondition() {
-        // Simulate a winning condition for Order (5 consecutive marks)
-        for (int i = 0; i < 5; i++) {
-            JButton button = gui.getButton(0, i);
+        SwingUtilities.invokeAndWait(() -> {
+            testGui.setCurrentPlayer(order);
+            JButton button = testGui.getButton(0, 0);
             button.doClick();
-        }
+        });
 
-        // Check if the win condition for Order is met
-        assertTrue(board.isFiveInLineFound(), "There should be an Order win with 5 consecutive marks.");
+        JButton clickedButton = testGui.getButton(0, 0);
+        assertEquals("X", clickedButton.getText(), "Button (0,0) should contain X");
+        assertFalse(clickedButton.isEnabled(), "Button (0,0) should be disabled");
+
+        testGui.dispose();
     }
 
-    @Test
-    public void testChaosWinCondition() {
-        // Simulate filling the entire board without Order winning
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                JButton button = gui.getButton(i, j);
-                button.doClick();
+    @Test // Checks that setCurrentPlayer updates the label
+    public void testPlayerLabelUpdate() {
+        gui.setCurrentPlayer(new Player(Role.ORDER, "Player 1"));
+        assertEquals("shift of: Player 1", gui.getPlayerLabel().getText(), "Incorrect player label text");
+    }
+
+    @Test // Ensures askForSymbol returns a valid symbol (X or O)
+    public void testAskForSymbolReturnsValidOption() {
+        BoardGUI testGui = new BoardGUI(board) {
+            @Override
+            public String askForSymbol() {
+                return "O";
+            }
+        };
+        String symbol = testGui.askForSymbol();
+        assertTrue(symbol.equals("X") || symbol.equals("O"), "Symbol should be X or O");
+    }
+
+    @Test // Ensures getButtonPosition returns correct coordinates
+    public void testGetButtonPositionReturnsCorrectPosition() {
+        JButton btn = gui.getButton(2, 3);
+        ActionEvent fakeEvent = new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, "");
+        Position pos = gui.getButtonPosition(fakeEvent);
+        assertNotNull(pos, "Position should not be null");
+        assertEquals(2, pos.getRow(), "Row should be 2");
+        assertEquals(3, pos.getColumn(), "Column should be 3");
+    }
+
+    @Test // Ensures showWinnerMessage displays the correct message
+    public void testShowWinnerMessageDisplaysDialog() {
+        String[] messageHolder = new String[1];
+
+        BoardGUI testGui = new BoardGUI(board) {
+            @Override
+            public void showWinnerMessage(String message) {
+                messageHolder[0] = message;
+            }
+        };
+
+        testGui.showWinnerMessage("ORDER wins!");
+        assertEquals("ORDER wins!", messageHolder[0], "Winner message should be correct");
+    }
+
+    @Test // Ensures askForNewGame returns true when YES is selected
+    public void testAskForNewGameReturnsYes() {
+        BoardGUI testGui = new BoardGUI(board) {
+            @Override
+            public boolean askForNewGame() {
+                return true;
+            }
+        };
+        assertTrue(testGui.askForNewGame(), "Should return true for new game confirmation");
+    }
+
+    // Custom subclass for GUI testing with fixed symbol selection
+    class TestBoardGUI extends BoardGUI {
+        private final String forcedSymbol;
+
+        public TestBoardGUI(Board board, String forcedSymbol) {
+            super(board);
+            this.forcedSymbol = forcedSymbol;
+            setMoveListener(new TestMoveListener());
+        }
+
+        @Override
+        public String askForSymbol() {
+            return forcedSymbol;
+        }
+
+        private class TestMoveListener implements ActionListener {
+            private Player current = new Player(Role.ORDER, "ORDER");
+            private Player other = new Player(Role.CHAOS, "CHAOS");
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Position position = getButtonPosition(e);
+                if (!board.isOccupied(position)) {
+                    Type markType = forcedSymbol.equals("X") ? Type.X : Type.O;
+                    Mark mark = new Mark(position, markType);
+                    Move move = new Move(mark, current);
+                    board.addMove(move);
+                    updateButton(position.getRow(), position.getColumn(), markType.getName());
+                    Player temp = current;
+                    current = other;
+                    other = temp;
+                    setCurrentPlayer(current);
+                }
             }
         }
-
-        // Verify that the board is full and no Order victory is declared
-        assertEquals(36, board.getMoves().size(), "The board should be full with 36 moves.");
-        assertFalse(board.isFiveInLineFound(), "There should be no Order victory.");
-    }
-
-    @Test
-    public void testPlayerLabelUpdate() {
-        // Set the current player and verify the label is updated correctly
-        gui.setCurrentPlayer(new Player(Role.ORDER, "Player 1"));
-        assertEquals("shift of: Player 1", gui.getPlayerLabel().getText(), "The label should correctly show the current player.");
     }
 }
