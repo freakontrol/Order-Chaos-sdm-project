@@ -2,7 +2,6 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
-// import java.awt.event.ActionListener;
 import java.awt.event.*;
 
 public class BoardGUI {
@@ -12,7 +11,6 @@ public class BoardGUI {
 
     public BoardGUI(Board board) {
         
-        // Set the graphical look and feel of the GUI
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e) {
@@ -65,13 +63,12 @@ public class BoardGUI {
     }
 
     public void updateButton(int row, int col, String symbol) {
-        if (buttons[row][col].getText().isEmpty()) { // Make sure the button is empty before updating
+        if (buttons[row][col].getText().isEmpty()) { 
             buttons[row][col].setText(symbol);
             buttons[row][col].setEnabled(false);
         }
     }
 
-    // Prompt the player to choose between X and 0
     public String askForSymbol() {
         String[] options = {"X", "O"};
         return (String) JOptionPane.showInputDialog(frame,

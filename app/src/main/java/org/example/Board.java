@@ -43,7 +43,7 @@ public class Board {
     //Checks a specific direction for 5 consecutive moves
     private boolean checkDirection(Position position, Move move,
                                     GetPosition getPrevious, GetPosition getNext) {
-        int count = 1; // Start from 1 to include the current move
+        int count = 0;
         Position current = position;
 
         while (true) {
@@ -73,7 +73,7 @@ public class Board {
             }
         }
 
-        return count >= 5; // Ensure there are at least 5 in a row
+        return count == 4;
     }
 
     public void clearBoard() {
@@ -86,6 +86,24 @@ public class Board {
         return positionMoves.containsKey(position);
     }
     
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                Position position = new Position(i, j);
+                if (positionMoves.containsKey(position)) {
+                    Move move = positionMoves.get(position);
+                    sb.append(move.getMark().getType().getName()).append(" ");
+                } else {
+                    sb.append("_").append(" ");
+                }
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
     //Checks if a winning condition has been found, returns True if winning condition is found, false otherwise
     public boolean isFiveInLineFound() {
         return fiveInLineFound;

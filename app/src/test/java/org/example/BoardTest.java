@@ -13,7 +13,7 @@ public class BoardTest {
     private Position position1;
     private Type typeX;
     private Mark markX;
-    private Player playerOrder;    
+    private Player playerOrder;
     private Move moveX;
     private Player playerChaos;
     private Move moveO;
@@ -25,12 +25,10 @@ public class BoardTest {
         typeX = Type.X;
         markX = new Mark(position1, typeX);
         playerOrder = new Player(Role.ORDER, "ORDER");
-
         moveX = new Move(markX, playerOrder);
 
         position1 = new Position(1, 3);
         markX = new Mark(position1, typeX);
-
         playerChaos = new Player(Role.CHAOS, "CHAOS");
         moveO = new Move(new Mark(new Position(1, 2), Type.O), playerChaos);
     }
@@ -42,38 +40,87 @@ public class BoardTest {
         assertTrue(board.isOccupied(new Position(0, 2)));
     }
 
+    @Test
+    public void testToString() {
+        String expected = "_ _ _ _ _ _ \n" +
+                          "_ _ _ _ _ _ \n" +
+                          "_ _ _ _ _ _ \n" +
+                          "_ _ _ _ _ _ \n" +
+                          "_ _ _ _ _ _ \n" +
+                          "_ _ _ _ _ _ \n";
+        assertEquals(expected, board.toString());
 
-    
+        board.addMove(moveX);
+        expected = "_ _ X _ _ _ \n" +
+                   "_ _ _ _ _ _ \n" +
+                   "_ _ _ _ _ _ \n" +
+                   "_ _ _ _ _ _ \n" +
+                   "_ _ _ _ _ _ \n" +
+                   "_ _ _ _ _ _ \n";
+        assertEquals(expected, board.toString());
+
+        board.clearBoard();
+        board.addMove(new Move(new Mark(new Position(0, 2), Type.X), playerOrder));
+        board.addMove(moveO);
+        expected = "_ _ X _ _ _ \n" +
+                   "_ _ O _ _ _ \n" +
+                   "_ _ _ _ _ _ \n" +
+                   "_ _ _ _ _ _ \n" +
+                   "_ _ _ _ _ _ \n" +
+                   "_ _ _ _ _ _ \n";
+        assertEquals(expected, board.toString());
+    }
 
     @Test
-    public void testFiveInLineNonConsecutive() {
-        
-        // Five X marks arranged in a vertical line inserted non-consecutively
-        board.addMove(new Move(new Mark(new Position(0, 1), Type.X), playerOrder));
-        board.addMove(new Move(new Mark(new Position(5, 1), Type.X), playerChaos));
-        board.addMove(new Move(new Mark(new Position(2, 1), Type.X), playerOrder));
-        board.addMove(new Move(new Mark(new Position(4, 1), Type.X), playerChaos));
-        board.addMove(new Move(new Mark(new Position(3, 1), Type.X), playerOrder));
-        board.addMove(new Move(new Mark(new Position(1, 1), Type.X), playerChaos));
-        
-        assertTrue(board.isFiveInLineFound(), "The game should detect five X marks in a vertical line even if they are not placed consecutively.");
-        
-        
-        // Clear the  bord
-        board.clearBoard();
- 
-        // Five X marks arranged in a diagonal line inserted non-consecutively
-        board.addMove(new Move(new Mark(new Position(0, 0), Type.O), playerOrder));
-        board.addMove(new Move(new Mark(new Position(5, 5), Type.O), playerChaos));
-        board.addMove(new Move(new Mark(new Position(1, 1), Type.O), playerOrder));
-        board.addMove(new Move(new Mark(new Position(3, 3), Type.O), playerChaos));
-        board.addMove(new Move(new Mark(new Position(4, 4), Type.O), playerOrder));
-        board.addMove(new Move(new Mark(new Position(2, 2), Type.O), playerChaos));
+    public void testIsFiveInLineFound() {
+        // Test horizontal line with alternating players
+        for (int i = 0; i < 5; i++) {
+            if (i % 2 == 0) {
+                board.addMove(new Move(new Mark(new Position(i, 2), Type.X), playerOrder));
+            } else {
+                board.addMove(new Move(new Mark(new Position(i, 2), Type.X), playerChaos));
+            }
+        }
+        assertTrue(board.isFiveInLineFound());
 
-        assertTrue(board.isFiveInLineFound(), "The game should detect five O marks in a diagonal line even if they are not placed consecutively.");
-        
-     
+        // Reset the board
         board.clearBoard();
+
+        // Test vertical line with alternating players
+        for (int i = 0; i < 5; i++) {
+            if (i % 2 == 0) {
+                board.addMove(new Move(new Mark(new Position(2, i), Type.O), playerOrder));
+            } else {
+                board.addMove(new Move(new Mark(new Position(2, i), Type.O), playerChaos));
+            }
+        }
+        assertTrue(board.isFiveInLineFound());
+
+        // Reset the board
+        board.clearBoard();
+
+        // Test diagonal line (top-left to bottom-right) with alternating players
+        for (int i = 0; i < 5; i++) {
+            if (i % 2 == 0) {
+                board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerOrder));
+            } else {
+                board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerChaos));
+            }
+        }
+        assertTrue(board.isFiveInLineFound());
+
+        // Reset the board
+        board.clearBoard();
+
+        // Test diagonal line (top-right to bottom-left) with alternating players
+        for (int i = 0; i < 5; i++) {
+            if (i % 2 == 0) {
+                board.addMove(new Move(new Mark(new Position(i, 4 - i), Type.O), playerOrder));
+            } else {
+                board.addMove(new Move(new Mark(new Position(i, 4 - i), Type.O), playerChaos));
+            }
+        }
+        assertTrue(board.isFiveInLineFound());
     }
 
     @Test
@@ -86,7 +133,6 @@ public class BoardTest {
 
     @Test
     public void testGetMoves() {
-        // Move moveY = new Move(new Mark(new Position(1, 2), Type.O), playerOrder);
         board.addMove(moveX);
         board.addMove(moveO);
 
@@ -98,7 +144,6 @@ public class BoardTest {
 
     @Test
     public void testAddMove() {
-        // Move moveY = new Move(new Mark(new Position(1, 2), Type.O), playerOrder);
         board.addMove(moveX);
         board.addMove(moveO);
 
@@ -172,26 +217,6 @@ public class BoardTest {
         assertFalse(board.isFiveInLineFound());
     }
 
-    // @Test
-    // public void testIsBoardFull() {
-    //     // Arrange
-    //     board.clearBoard();
-
-    //     // Act
-    //     for (int row = 0; row < 6; row++) {
-    //         for (int col = 0; col < 6; col++) {
-    //             board.addMove(new Move(new Mark(new Position(row, col), Type.X), playerOrder));
-    //         }
-    //     }
-
-    //     // Assert
-    //     assertTrue(board.isBoardFull(),
-    //         "isBoardFull() should return true after 36 moves");
-
-    //     assertEquals(36, board.getMoves().size(),
-    //         "Move list size should be exactly 36 when board is full");
-    // }
-
     @Test
     public void testIsBoardFull() {
         // Create a list to hold all positions on the 6x6 board
@@ -223,4 +248,5 @@ public class BoardTest {
         assertEquals(36, board.getMoves().size(),
             "Move list size should be exactly 36 when board is full");
     }
+
 }
