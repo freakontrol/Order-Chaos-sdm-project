@@ -39,24 +39,18 @@ public class Board {
             throw new IllegalArgumentException("Multiple moves to same position are not allowed");
         }
     }
-
+    
     //Checks a specific direction for 5 consecutive moves
     private boolean checkDirection(Position position, Move move,
-                                   GetPosition getPrevious, GetPosition getNext) {
+                                    GetPosition getPrevious, GetPosition getNext) {
         int count = 0;
-
-        // Check in the negative direction
         Position current = position;
+
         while (true) {
             try {
                 current = getPrevious.get(current);
-                if (positionMoves.containsKey(current)) {
-                    Move adjMove = positionMoves.get(current);
-                    if (adjMove.isMarkTypeEqual(move)) {
-                        count++;
-                    } else {
-                        break;
-                    }
+                if (positionMoves.containsKey(current) && positionMoves.get(current).isMarkTypeEqual(move)) {
+                    count++;
                 } else {
                     break;
                 }
@@ -65,18 +59,12 @@ public class Board {
             }
         }
 
-        // Check in the positive direction
         current = position;
         while (true) {
             try {
                 current = getNext.get(current);
-                if (positionMoves.containsKey(current)) {
-                    Move adjMove = positionMoves.get(current);
-                    if (adjMove.isMarkTypeEqual(move)) {
-                        count++;
-                    } else {
-                        break;
-                    }
+                if (positionMoves.containsKey(current) && positionMoves.get(current).isMarkTypeEqual(move)) {
+                    count++;
                 } else {
                     break;
                 }
@@ -85,10 +73,9 @@ public class Board {
             }
         }
 
-        return count == 4; // Exactly 4 more means total of 5 including the current move
+        return count == 4;
     }
 
-    
     public void clearBoard() {
         moves.clear();
         positionMoves.clear();
@@ -98,7 +85,7 @@ public class Board {
     public boolean isOccupied(Position position) {
         return positionMoves.containsKey(position);
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -133,7 +133,6 @@ public class BoardTest {
 
     @Test
     public void testGetMoves() {
-        Move moveY = new Move(new Mark(new Position(1, 2), Type.O), playerOrder);
         board.addMove(moveX);
         board.addMove(moveO);
 
@@ -145,7 +144,6 @@ public class BoardTest {
 
     @Test
     public void testAddMove() {
-        Move moveY = new Move(new Mark(new Position(1, 2), Type.O), playerOrder);
         board.addMove(moveX);
         board.addMove(moveO);
 
@@ -218,26 +216,6 @@ public class BoardTest {
         }
         assertFalse(board.isFiveInLineFound());
     }
-
-    // @Test
-    // public void testIsBoardFull() {
-    //     // Arrange
-    //     board.clearBoard();
-
-    //     // Act
-    //     for (int row = 0; row < 6; row++) {
-    //         for (int col = 0; col < 6; col++) {
-    //             board.addMove(new Move(new Mark(new Position(row, col), Type.X), playerOrder));
-    //         }
-    //     }
-
-    //     // Assert
-    //     assertTrue(board.isBoardFull(),
-    //         "isBoardFull() should return true after 36 moves");
-
-    //     assertEquals(36, board.getMoves().size(),
-    //         "Move list size should be exactly 36 when board is full");
-    // }
 
     @Test
     public void testIsBoardFull() {

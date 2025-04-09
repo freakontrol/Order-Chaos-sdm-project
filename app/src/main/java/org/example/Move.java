@@ -1,8 +1,9 @@
 package org.example;
 
 public class Move {
-    private Mark mark;
-    private Player player;
+    private final Mark mark;
+    private final Player player;
+
 
     public Move(Mark mark, Player player) {
         if (mark == null || player == null) {
@@ -16,16 +17,8 @@ public class Move {
         return mark;
     }
 
-    public void setMark(Mark mark) {
-        this.mark = mark;
-    }
-
     public Player getPlayer() {
         return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
     }
 
     @Override
