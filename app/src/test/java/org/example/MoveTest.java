@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class MoveTest {
+class MoveTest {
 
     private Position position1;
     private Type typeX;
@@ -21,7 +21,7 @@ public class MoveTest {
     private Move moveO;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Setup for the first move with X type
         position1 = new Position(10, 20);
         typeX = Type.X;
@@ -42,28 +42,28 @@ public class MoveTest {
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertNotNull(moveX);
     }
 
     @Test
-    public void testGetMark() {
+    void testGetMark() {
         assertEquals(markX, moveX.getMark());
     }
 
     @Test
-    public void testGetPlayer() {
+    void testGetPlayer() {
         assertEquals(playerOrder, moveX.getPlayer());
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         String expected = "Move{mark=Mark{position=Position{row=10, column=20}, type=Type{name='X'}}, player=Player{role=ORDER, name='John Doe'}}";
         assertEquals(expected, moveX.toString());
     }
 
     @Test
-    public void testIsMarkTypeEqual() {
+    void testIsMarkTypeEqual() {
         // Test with the same mark type
         Move anotherMoveX = new Move(markX, playerChaos);
         assertTrue(moveX.isMarkTypeEqual(anotherMoveX));
@@ -73,7 +73,7 @@ public class MoveTest {
     }
     @Test
 
-    public void PlayerAndMarkCorrectlyAssigned() {
+    void PlayerAndMarkCorrectlyAssigned() {
     Player player1 = new Player(Role.ORDER, "Dylan");
     Mark mark1 = new Mark(new Position(2, 3), Type.X);
     Move move = new Move(mark1, player1);

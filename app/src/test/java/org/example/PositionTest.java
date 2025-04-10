@@ -3,38 +3,38 @@ package org.example;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-public class PositionTest {
+class PositionTest {
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         Position position = new Position(1, 2);
         assertEquals(1, position.getRow());
         assertEquals(2, position.getColumn());
     }
 
     @Test
-    public void testConstructorWithNegativeRow() {
+    void testConstructorWithNegativeRow() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Position(-1, 2);
         });
     }
 
     @Test
-    public void testConstructorWithNegativeColumn() {
+    void testConstructorWithNegativeColumn() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Position(1, -2);
         });
     }
 
     @Test
-    public void testSetRow() {
+    void testSetRow() {
         Position position = new Position(0, 0);
         position.setRow(5);
         assertEquals(5, position.getRow());
     }
 
     @Test
-    public void testSetRowWithNegativeValue() {
+    void testSetRowWithNegativeValue() {
         Position position = new Position(0, 0);
         assertThrows(IllegalArgumentException.class, () -> {
             position.setRow(-1);
@@ -42,14 +42,14 @@ public class PositionTest {
     }
 
     @Test
-    public void testSetColumn() {
+    void testSetColumn() {
         Position position = new Position(0, 0);
         position.setColumn(5);
         assertEquals(5, position.getColumn());
     }
 
     @Test
-    public void testSetColumnWithNegativeValue() {
+    void testSetColumnWithNegativeValue() {
         Position position = new Position(0, 0);
         assertThrows(IllegalArgumentException.class, () -> {
             position.setColumn(-1);
@@ -57,18 +57,18 @@ public class PositionTest {
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         Position pos1 = new Position(1, 2);
         Position pos2 = new Position(1, 2);
         Position pos3 = new Position(2, 3);
 
-        assertTrue(pos1.equals(pos2));
-        assertFalse(pos1.equals(pos3));
-        assertFalse(pos1.equals(null));
+        assertEquals(pos1, pos2);
+        assertNotEquals(pos1, pos3);
+        assertNotEquals(null, pos1);
     }
 
     @Test
-    public void testHashCode() {
+    void testHashCode() {
         Position pos1 = new Position(1, 2);
         Position pos2 = new Position(1, 2);
         Position pos3 = new Position(2, 3);
@@ -78,103 +78,103 @@ public class PositionTest {
     }
 
     @Test
-    public void testGetUp() {
+    void testGetUp() {
         Position position = new Position(5, 2);
         Position upPosition = position.getUp();
         assertEquals(4, upPosition.getRow());
         assertEquals(2, upPosition.getColumn());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Position(0, 2).getUp();
-        });
+        Position newPosition = new Position(0, 2);
+
+        assertThrows(IllegalArgumentException.class, newPosition::getUp);
     }
 
     @Test
-    public void testGetDown() {
+    void testGetDown() {
         Position position = new Position(5, 2);
         Position downPosition = position.getDown();
         assertEquals(6, downPosition.getRow());
         assertEquals(2, downPosition.getColumn());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Position(6, 2).getDown();
-        });
+        Position newPosition = new Position(6, 2);
+
+        assertThrows(IllegalArgumentException.class, newPosition::getDown);
     }
 
     @Test
-    public void testGetLeft() {
+    void testGetLeft() {
         Position position = new Position(5, 2);
         Position leftPosition = position.getLeft();
         assertEquals(5, leftPosition.getRow());
         assertEquals(1, leftPosition.getColumn());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Position(5, 0).getLeft();
-        });
+        Position newPosition = new Position(5, 0);
+
+        assertThrows(IllegalArgumentException.class, newPosition::getLeft);
     }
 
     @Test
-    public void testGetRight() {
+    void testGetRight() {
         Position position = new Position(5, 2);
         Position rightPosition = position.getRight();
         assertEquals(5, rightPosition.getRow());
         assertEquals(3, rightPosition.getColumn());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Position(5, 6).getRight();
-        });
+        Position newPosition = new Position(5, 6);
+
+        assertThrows(IllegalArgumentException.class, newPosition::getRight);
     }
 
     @Test
-    public void testGetUpLeft() {
+    void testGetUpLeft() {
         Position position = new Position(5, 2);
         Position upLeftPosition = position.getUpLeft();
         assertEquals(4, upLeftPosition.getRow());
         assertEquals(1, upLeftPosition.getColumn());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Position(0, 2).getUpLeft();
-        });
+        Position newPosition = new Position(0, 2);
+
+        assertThrows(IllegalArgumentException.class, newPosition::getUpLeft);
     }
 
     @Test
-    public void testGetUpRight() {
+    void testGetUpRight() {
         Position position = new Position(5, 2);
         Position upRightPosition = position.getUpRight();
         assertEquals(4, upRightPosition.getRow());
         assertEquals(3, upRightPosition.getColumn());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Position(0, 6).getUpRight();
-        });
+        Position newPosition = new Position(0, 6);
+
+        assertThrows(IllegalArgumentException.class, newPosition::getUpRight);
     }
 
     @Test
-    public void testGetDownLeft() {
+    void testGetDownLeft() {
         Position position = new Position(5, 2);
         Position downLeftPosition = position.getDownLeft();
         assertEquals(6, downLeftPosition.getRow());
         assertEquals(1, downLeftPosition.getColumn());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Position(6, 0).getDownLeft();
-        });
+        Position newPosition = new Position(6, 0);
+
+        assertThrows(IllegalArgumentException.class, newPosition::getDownLeft);
     }
 
     @Test
-    public void testGetDownRight() {
+    void testGetDownRight() {
         Position position = new Position(5, 2);
         Position downRightPosition = position.getDownRight();
         assertEquals(6, downRightPosition.getRow());
         assertEquals(3, downRightPosition.getColumn());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Position(6, 6).getDownRight();
-        });
+        Position newPosition = new Position(6, 6);
+
+        assertThrows(IllegalArgumentException.class, newPosition::getDownRight);
     }
 
     @Test
-    public void testIsOnLeftEdge() {
+    void testIsOnLeftEdge() {
         Position position = new Position(0, 1);
         assertTrue(position.isOnLeftEdge());
         position.setColumn(0);
@@ -185,7 +185,7 @@ public class PositionTest {
     }
 
     @Test
-    public void testIsOnRightEdge() {
+    void testIsOnRightEdge() {
         Position position = new Position(5, 5);
         assertTrue(position.isOnRightEdge());
         position.setColumn(4);
@@ -193,7 +193,7 @@ public class PositionTest {
     }
 
     @Test
-    public void testIsOnTopEdge() {
+    void testIsOnTopEdge() {
         Position position = new Position(1, 0);
         assertTrue(position.isOnTopEdge());
         position.setColumn(1);
@@ -204,7 +204,7 @@ public class PositionTest {
     }
 
     @Test
-    public void testIsOnBottomEdge() {
+    void testIsOnBottomEdge() {
         Position position = new Position(5, 5);
         assertTrue(position.isOnBottomEdge());
         position.setRow(0);

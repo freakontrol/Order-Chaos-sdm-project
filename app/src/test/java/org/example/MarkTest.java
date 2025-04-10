@@ -6,42 +6,42 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class MarkTest {
+class MarkTest {
     private Position position;
     private Type type;
     private Mark mark;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         position = new Position(1, 2);
         type = Type.X;
         mark = new Mark(position, type);
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertNotNull(mark);
     }
 
     @Test
-    public void testGetPosition() {
+    void testGetPosition() {
         assertEquals(position, mark.getPosition());
     }
 
     @Test
-    public void testSetPosition() {
+    void testSetPosition() {
         Position newPosition = new Position(3, 4);
         mark.setPosition(newPosition);
         assertEquals(newPosition, mark.getPosition());
     }
 
     @Test
-    public void testGetType() {
+    void testGetType() {
         assertEquals(type, mark.getType());
     }
 
     @Test
-    public void testSetType() {
+    void testSetType() {
         Type newType = Type.O;
         mark.setType(newType);
         assertEquals(newType, mark.getType());

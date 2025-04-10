@@ -8,29 +8,24 @@ import static org.junit.jupiter.api.Assertions.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class BoardGUITest {
+class BoardGUITest {
     private Board board;
     private BoardGUI gui;
-    private Player playerOrder;
-    private Player playerChaos;
-
    
     @BeforeEach
-    public void setUp() { 
+    void setUp() { 
         // Initialize the game board and its graphical interface before each test
         board = new Board();
         gui = new BoardGUI(board);
-        playerOrder = new Player(Role.ORDER, "ORDER");
-        playerChaos = new Player(Role.CHAOS, "CHAOS");
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         gui.dispose();
     }
 
     @Test // Checks initial state of buttons and board
-    public void testInitialState() {
+    void testInitialState() {
         assertFalse(board.isFiveInLineFound(), "The game ended before it started");
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
@@ -41,14 +36,14 @@ public class BoardGUITest {
     }
 
     @Test // Checks that updateButton correctly sets symbol and disables the button
-    public void testUpdateButton() {
+    void testUpdateButton() {
         gui.updateButton(0, 0, "X");
         assertEquals("X", gui.getButton(0, 0).getText(), "Button text should be X");
         assertFalse(gui.getButton(0, 0).isEnabled(), "Button should be disabled after update");
     }
 
     @Test // Simulates a click and ensures the GUI updates with symbol and disables button
-    public void testSimulatedClickUpdatesGUI() throws Exception {
+    void testSimulatedClickUpdatesGUI() throws Exception {
         TestBoardGUI testGui = new TestBoardGUI(new Board(), "X");
         Player order = new Player(Role.ORDER, "ORDER");
 
@@ -66,13 +61,13 @@ public class BoardGUITest {
     }
 
     @Test // Checks that setCurrentPlayer updates the label
-    public void testPlayerLabelUpdate() {
+    void testPlayerLabelUpdate() {
         gui.setCurrentPlayer(new Player(Role.ORDER, "Player 1"));
         assertEquals("shift of: Player 1", gui.getPlayerLabel().getText(), "Incorrect player label text");
     }
 
     @Test // Ensures askForSymbol returns a valid symbol (X or O)
-    public void testAskForSymbolReturnsValidOption() {
+    void testAskForSymbolReturnsValidOption() {
         BoardGUI testGui = new BoardGUI(board) {
             @Override
             public String askForSymbol() {
@@ -84,7 +79,7 @@ public class BoardGUITest {
     }
 
     @Test // Ensures getButtonPosition returns correct coordinates
-    public void testGetButtonPositionReturnsCorrectPosition() {
+    void testGetButtonPositionReturnsCorrectPosition() {
         JButton btn = gui.getButton(2, 3);
         ActionEvent fakeEvent = new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, "");
         Position pos = gui.getButtonPosition(fakeEvent);
@@ -94,7 +89,7 @@ public class BoardGUITest {
     }
 
     @Test // Ensures showWinnerMessage displays the correct message
-    public void testShowWinnerMessageDisplaysDialog() {
+    void testShowWinnerMessageDisplaysDialog() {
         String[] messageHolder = new String[1];
 
         BoardGUI testGui = new BoardGUI(board) {
@@ -109,7 +104,7 @@ public class BoardGUITest {
     }
 
     @Test // Ensures askForNewGame returns true when YES is selected
-    public void testAskForNewGameReturnsYes() {
+    void testAskForNewGameReturnsYes() {
         BoardGUI testGui = new BoardGUI(board) {
             @Override
             public boolean askForNewGame() {
