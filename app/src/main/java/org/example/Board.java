@@ -15,7 +15,7 @@ public class Board {
         this.positionMoves = new HashMap<>();
     }
 
-    //Adds a move to the board and checks for winning conditions
+    // Adds a move to the board and checks for winning conditions
     public void addMove(Move move) {
         Position position = move.getMark().getPosition();
         Player currentPlayer = move.getPlayer();
@@ -40,36 +40,38 @@ public class Board {
         }
     }
     
-    //Checks a specific direction for 5 consecutive moves
+    // Checks a specific direction for 5 consecutive moves
     private boolean checkDirection(Position position, Move move,
                                     GetPosition getPrevious, GetPosition getNext) {
         int count = 0;
         Position current = position;
+        boolean stopChecking = false;
 
-        while (true) {
+        while (!stopChecking) {
             try {
                 current = getPrevious.get(current);
                 if (positionMoves.containsKey(current) && positionMoves.get(current).isMarkTypeEqual(move)) {
                     count++;
                 } else {
-                    break;
+                    stopChecking = true;
                 }
             } catch (IllegalArgumentException e) {
-                break;
+                stopChecking = true;
             }
         }
 
         current = position;
-        while (true) {
+        stopChecking = false;
+        while (!stopChecking) {
             try {
                 current = getNext.get(current);
                 if (positionMoves.containsKey(current) && positionMoves.get(current).isMarkTypeEqual(move)) {
                     count++;
                 } else {
-                    break;
+                    stopChecking = true;
                 }
             } catch (IllegalArgumentException e) {
-                break;
+                stopChecking = true;
             }
         }
 
@@ -98,7 +100,7 @@ public class Board {
                 } else {
                     sb.append("_");
                 }
-                if(j!=5){
+                if (j != 5) {
                     sb.append(" ");
                 }
             }
@@ -107,7 +109,7 @@ public class Board {
         return sb.toString();
     }
 
-    //Checks if a winning condition has been found, returns True if winning condition is found, false otherwise
+    // Checks if a winning condition has been found, returns True if winning condition is found, false otherwise
     public boolean isFiveInLineFound() {
         return fiveInLineFound;
     }
@@ -116,13 +118,11 @@ public class Board {
         return this.moves.size() == 36;
     }
 
-    //Returns an unmodifiable view of the list of moves made on the board.
-
+    // Returns an unmodifiable view of the list of moves made on the board.
     public List<Move> getMoves() {
         return Collections.unmodifiableList(moves);
     }
 
-   
     public void printBoard() {
         System.out.println(this.toString());
     }
