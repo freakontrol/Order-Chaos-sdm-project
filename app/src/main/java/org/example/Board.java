@@ -94,9 +94,12 @@ public class Board {
                 Position position = new Position(i, j);
                 if (positionMoves.containsKey(position)) {
                     Move move = positionMoves.get(position);
-                    sb.append(move.getMark().getType().getName()).append(" ");
+                    sb.append(move.getMark().getType().getName());
                 } else {
-                    sb.append("_").append(" ");
+                    sb.append("_");
+                }
+                if(j!=5){
+                    sb.append(" ");
                 }
             }
             sb.append("\n");
