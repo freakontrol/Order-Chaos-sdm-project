@@ -42,32 +42,38 @@ public class BoardTest {
 
     @Test
     public void testToString() {
-        String expected = "_ _ _ _ _ _ \n" +
-                          "_ _ _ _ _ _ \n" +
-                          "_ _ _ _ _ _ \n" +
-                          "_ _ _ _ _ _ \n" +
-                          "_ _ _ _ _ _ \n" +
-                          "_ _ _ _ _ _ \n";
+        String expected = """
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          """;
         assertEquals(expected, board.toString());
 
         board.addMove(moveX);
-        expected = "_ _ X _ _ _ \n" +
-                   "_ _ _ _ _ _ \n" +
-                   "_ _ _ _ _ _ \n" +
-                   "_ _ _ _ _ _ \n" +
-                   "_ _ _ _ _ _ \n" +
-                   "_ _ _ _ _ _ \n";
+        expected = """
+                          _ _ X _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          """;
         assertEquals(expected, board.toString());
 
         board.clearBoard();
         board.addMove(new Move(new Mark(new Position(0, 2), Type.X), playerOrder));
         board.addMove(moveO);
-        expected = "_ _ X _ _ _ \n" +
-                   "_ _ O _ _ _ \n" +
-                   "_ _ _ _ _ _ \n" +
-                   "_ _ _ _ _ _ \n" +
-                   "_ _ _ _ _ _ \n" +
-                   "_ _ _ _ _ _ \n";
+        expected = """
+                          _ _ X _ _ _
+                          _ _ O _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          _ _ _ _ _ _
+                          """;
         assertEquals(expected, board.toString());
     }
 
