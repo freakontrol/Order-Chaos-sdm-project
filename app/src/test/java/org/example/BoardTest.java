@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardTest {
+class BoardTest {
 
     private Board board;
     private Position position1;
@@ -19,7 +19,7 @@ public class BoardTest {
     private Move moveO;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         board = new Board();
         position1 = new Position(0, 2);
         typeX = Type.X;
@@ -34,22 +34,61 @@ public class BoardTest {
     }
 
     @Test
-    public void testIsOccupied() {
+    void testAddDuplicateMove() {
+        board.addMove(moveX);
+        board.addMove(moveO);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            board.addMove(moveX); // Trying to add the same move again
+        });
+    }
+
+    @Test
+    void testAddSamePlayerMove() {
+        board.addMove(moveX);
+        board.addMove(moveO);
+        Move newMove = new Move(new Mark(new Position(1, 2), typeX), playerOrder);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            board.addMove(newMove); // Trying to add a move from the same player subsequently
+        });
+    }
+    @Test
+    void testAlternatePlayers() {
+        board.addMove(moveX); // ORDER moves first
+
+        Move newOrderMove = new Move(new Mark(new Position(1, 3), Type.X), playerOrder);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            board.addMove(newOrderMove); // ORDER tries to move again
+        });
+
+        board.addMove(moveO); // CHAOS moves next
+
+        Move newChaosMove = new Move(new Mark(new Position(2, 4), Type.O), playerChaos);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            board.addMove(newChaosMove); // CHAOS tries to move again
+        });
+    }
+
+    @Test
+    void testIsOccupied() {
         assertFalse(board.isOccupied(new Position(0, 2)));
         board.addMove(moveX);
         assertTrue(board.isOccupied(new Position(0, 2)));
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         String expected = """
-                          _ _ _ _ _ _
-                          _ _ _ _ _ _
-                          _ _ _ _ _ _
-                          _ _ _ _ _ _
-                          _ _ _ _ _ _
-                          _ _ _ _ _ _
-                          """;
+            _ _ _ _ _ _
+            _ _ _ _ _ _
+            _ _ _ _ _ _
+            _ _ _ _ _ _
+            _ _ _ _ _ _
+            _ _ _ _ _ _
+            """;
         assertEquals(expected, board.toString());
 
         board.addMove(moveX);
@@ -78,7 +117,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testIsFiveInLineFound() {
+    void testIsFiveInLineFound() {
         // Test horizontal line with alternating players
         for (int i = 0; i < 5; i++) {
             if (i % 2 == 0) {
@@ -130,7 +169,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testClearBoard() {
+    void testClearBoard() {
         board.addMove(moveX);
         board.clearBoard();
         assertFalse(board.isOccupied(position1));
@@ -138,7 +177,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetMoves() {
+    void testGetMoves() {
         board.addMove(moveX);
         board.addMove(moveO);
 
@@ -147,38 +186,9 @@ public class BoardTest {
         assertTrue(moves.contains(moveX));
         assertTrue(moves.contains(moveO));
     }
-
-    @Test
-    public void testAddMove() {
-        board.addMove(moveX);
-        board.addMove(moveO);
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            board.addMove(moveX); // Trying to add the same move again
-        });
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            board.addMove(new Move(new Mark(new Position(1, 2), Type.X), playerOrder)); // Trying to add a move from the same player subsequently
-        });
-    }
-
-    @Test
-    public void testAlternatePlayers() {
-        board.addMove(moveX); // ORDER moves first
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            board.addMove(new Move(new Mark(new Position(1, 3), Type.X), playerOrder)); // ORDER tries to move again
-        });
-
-        board.addMove(moveO); // CHAOS moves next
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            board.addMove(new Move(new Mark(new Position(2, 4), Type.O), playerChaos)); // CHAOS tries to move again
-        });
-    }
         
     @Test
-    public void testSixInLineNotWinning() {
+    void testSixInLineNotWinning() {
         // Place six consecutive marks in a row with alternating players
         for (int i = 0; i < 6; i++) {
             if (i % 2 == 0) {
@@ -224,7 +234,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testIsBoardFull() {
+    void testIsBoardFull() {
         // Create a list to hold all positions on the 6x6 board
         List<Position> allPositions = new ArrayList<>();
         for (int row = 0; row < 6; row++) {
