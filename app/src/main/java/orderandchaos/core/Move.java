@@ -1,4 +1,4 @@
-package org.example;
+package orderandchaos.core;
 
 public class Move {
     private final Mark mark;

@@ -1,4 +1,4 @@
-package org.example;
+package orderandchaos.core;
 
 public enum Role {
     ORDER,

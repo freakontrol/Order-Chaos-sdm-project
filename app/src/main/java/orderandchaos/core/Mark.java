@@ -1,4 +1,4 @@
-package org.example;
+package orderandchaos.core;
 
 public class Mark {
     private Position position;

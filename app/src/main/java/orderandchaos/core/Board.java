@@ -1,4 +1,4 @@
-package org.example;
+package orderandchaos.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
