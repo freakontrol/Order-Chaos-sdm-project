@@ -1,9 +1,11 @@
-package orderandchaos.core;
+package orderandchaos;
 
 
 import java.awt.event.*;
 
-public class Main {
+import orderandchaos.core.*;
+
+public class GUIMain {
     private static Board board;
     private static BoardGUI gui;
     private static Player playerOrder;
