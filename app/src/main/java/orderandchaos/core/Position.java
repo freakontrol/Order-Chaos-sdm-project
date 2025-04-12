@@ -2,6 +2,8 @@ package orderandchaos.core;
 
 import java.util.Objects;
 
+import orderandchaos.exceptions.OutOfBoundsException;
+
 public class Position {
     private int row;
     private int column;
@@ -10,7 +12,7 @@ public class Position {
 
     public Position(int row, int column) {
         if (row < 0 || column < 0) {
-            throw new IllegalArgumentException("Row and column must be non-negative.");
+            throw new OutOfBoundsException("Row and column must be non-negative.");
         }
         this.row = row;
         this.column = column;
@@ -29,7 +31,7 @@ public class Position {
         }
         return false;
     }
-
+    
     public boolean isOnTopEdge() {
         if (this.row > 0 && this.column == 0) {
             return true;
@@ -49,8 +51,8 @@ public class Position {
     }
 
     public void setRow(int row) {
-        if (row < 0) {
-            throw new IllegalArgumentException("Row must be non-negative.");
+        if (row < 0 || row >= MAX_ROWS) {
+            throw new OutOfBoundsException("Row must be within the bounds of the board.");
         }
         this.row = row;
     }
@@ -60,15 +62,15 @@ public class Position {
     }
 
     public void setColumn(int column) {
-        if (column < 0) {
-            throw new IllegalArgumentException("Column must be non-negative.");
+        if (column < 0 || column >= MAX_COLUMNS) {
+            throw new OutOfBoundsException("Column must be within the bounds of the board.");
         }
         this.column = column;
     }
 
     public Position getUpLeft() {
         if (this.row <= 0 || this.column <= 0) {
-            throw new IllegalArgumentException("Cannot return the Up Left Position, row and column would be negative.");
+            throw new OutOfBoundsException("Cannot return the Up Left Position, row and column would be negative.");
         } else {
             return new Position(this.row - 1, this.column - 1);
         }
@@ -76,15 +78,16 @@ public class Position {
 
     public Position getUp() {
         if (this.row <= 0) {
-            throw new IllegalArgumentException("Cannot return the Up Position, row would be negative.");
+            throw new OutOfBoundsException("Cannot return the Up Position, row would be negative.");
         } else {
         return new Position(this.row - 1, this.column);
         }
     }
+    
 
     public Position getUpRight() {
         if (this.row <= 0 || this.column >= MAX_COLUMNS) {
-            throw new IllegalArgumentException("Cannot return the Up Right Position, row would be negative or column would exceed the maximum columns.");
+            throw new OutOfBoundsException("Cannot return the Up Right Position, row would be negative or column would exceed the maximum columns.");
         } else {
             return new Position(this.row - 1, this.column + 1);
         }
@@ -92,7 +95,7 @@ public class Position {
 
     public Position getLeft() {
         if (this.column <= 0) {
-            throw new IllegalArgumentException("Cannot return the Left Position, column would be negative.");
+            throw new OutOfBoundsException("Cannot return the Left Position, column would be negative.");
         } else {
             return new Position(this.row, this.column - 1);
         }
@@ -100,7 +103,7 @@ public class Position {
 
     public Position getRight() { 
         if (this.column >= MAX_COLUMNS) {
-            throw new IllegalArgumentException("Cannot return the Right Position, column would exceed the maximum columns.");
+            throw new OutOfBoundsException("Cannot return the Right Position, column would exceed the maximum columns.");
         } else {
             return new Position(this.row, this.column + 1);
         }
@@ -108,7 +111,7 @@ public class Position {
 
     public Position getDownLeft() {
         if (this.row >= MAX_ROWS || this.column <= 0) {
-            throw new IllegalArgumentException("Cannot return the Down Left Position, row would exceed the maximum rows or column would be negative.");
+            throw new OutOfBoundsException("Cannot return the Down Left Position, row would exceed the maximum rows or column would be negative.");
         } else {
             return new Position(this.row + 1, this.column - 1);
         }
@@ -116,7 +119,7 @@ public class Position {
 
     public Position getDown() {
         if (this.row >= MAX_ROWS) {
-            throw new IllegalArgumentException("Cannot return the Down Position, row would exceed the maximum rows.");
+            throw new OutOfBoundsException("Cannot return the Down Position, row would exceed the maximum rows.");
         } else {
             return new Position(this.row + 1, this.column);
         }
@@ -124,7 +127,7 @@ public class Position {
 
     public Position getDownRight() {
         if (this.row >= MAX_ROWS || this.column >= MAX_COLUMNS) {
-            throw new IllegalArgumentException("Cannot return the Down Right Position, row or column would exceed the maximum rows or columns.");
+            throw new OutOfBoundsException("Cannot return the Down Right Position, row or column would exceed the maximum rows or columns.");
         } else {
             return new Position(this.row + 1, this.column + 1);
         }

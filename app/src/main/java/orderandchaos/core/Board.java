@@ -7,6 +7,7 @@ import java.util.List;
 
 import orderandchaos.exceptions.InvalidPlayerException;
 import orderandchaos.exceptions.OccupiedPositionException;
+import orderandchaos.exceptions.OutOfBoundsException;
 
 public class Board {
     private List<Move> moves;
@@ -58,7 +59,7 @@ public class Board {
                 } else {
                     stopChecking = true;
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (OutOfBoundsException e) {
                 stopChecking = true;
             }
         }
@@ -73,7 +74,7 @@ public class Board {
                 } else {
                     stopChecking = true;
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (OutOfBoundsException e) {
                 stopChecking = true;
             }
         }

@@ -3,6 +3,8 @@ package orderandchaos.core;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import orderandchaos.exceptions.OutOfBoundsException;
+
 class PositionTest {
 
     @Test
@@ -14,14 +16,14 @@ class PositionTest {
 
     @Test
     void testConstructorWithNegativeRow() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(OutOfBoundsException.class, () -> {
             new Position(-1, 2);
         });
     }
 
     @Test
     void testConstructorWithNegativeColumn() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(OutOfBoundsException.class, () -> {
             new Position(1, -2);
         });
     }
@@ -36,7 +38,7 @@ class PositionTest {
     @Test
     void testSetRowWithNegativeValue() {
         Position position = new Position(0, 0);
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(OutOfBoundsException.class, () -> {
             position.setRow(-1);
         });
     }
@@ -51,7 +53,7 @@ class PositionTest {
     @Test
     void testSetColumnWithNegativeValue() {
         Position position = new Position(0, 0);
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(OutOfBoundsException.class, () -> {
             position.setColumn(-1);
         });
     }
@@ -86,7 +88,7 @@ class PositionTest {
 
         Position newPosition = new Position(0, 2);
 
-        assertThrows(IllegalArgumentException.class, newPosition::getUp);
+        assertThrows(OutOfBoundsException.class, newPosition::getUp);
     }
 
     @Test
@@ -98,7 +100,7 @@ class PositionTest {
 
         Position newPosition = new Position(6, 2);
 
-        assertThrows(IllegalArgumentException.class, newPosition::getDown);
+        assertThrows(OutOfBoundsException.class, newPosition::getDown);
     }
 
     @Test
@@ -110,7 +112,7 @@ class PositionTest {
 
         Position newPosition = new Position(5, 0);
 
-        assertThrows(IllegalArgumentException.class, newPosition::getLeft);
+        assertThrows(OutOfBoundsException.class, newPosition::getLeft);
     }
 
     @Test
@@ -122,7 +124,7 @@ class PositionTest {
 
         Position newPosition = new Position(5, 6);
 
-        assertThrows(IllegalArgumentException.class, newPosition::getRight);
+        assertThrows(OutOfBoundsException.class, newPosition::getRight);
     }
 
     @Test
@@ -134,7 +136,7 @@ class PositionTest {
 
         Position newPosition = new Position(0, 2);
 
-        assertThrows(IllegalArgumentException.class, newPosition::getUpLeft);
+        assertThrows(OutOfBoundsException.class, newPosition::getUpLeft);
     }
 
     @Test
@@ -146,7 +148,7 @@ class PositionTest {
 
         Position newPosition = new Position(0, 6);
 
-        assertThrows(IllegalArgumentException.class, newPosition::getUpRight);
+        assertThrows(OutOfBoundsException.class, newPosition::getUpRight);
     }
 
     @Test
@@ -158,7 +160,7 @@ class PositionTest {
 
         Position newPosition = new Position(6, 0);
 
-        assertThrows(IllegalArgumentException.class, newPosition::getDownLeft);
+        assertThrows(OutOfBoundsException.class, newPosition::getDownLeft);
     }
 
     @Test
@@ -170,7 +172,7 @@ class PositionTest {
 
         Position newPosition = new Position(6, 6);
 
-        assertThrows(IllegalArgumentException.class, newPosition::getDownRight);
+        assertThrows(OutOfBoundsException.class, newPosition::getDownRight);
     }
 
     @Test
