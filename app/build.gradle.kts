@@ -27,7 +27,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "orderandchaos.GUIMain"
+    mainClass = "orderandchaos.ConsoleMain"
 }
 
 tasks.named<Test>("test") {
