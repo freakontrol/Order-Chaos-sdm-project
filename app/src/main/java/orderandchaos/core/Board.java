@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import orderandchaos.exceptions.InvalidPlayerException;
+import orderandchaos.exceptions.OccupiedPositionException;
+
 public class Board {
     private List<Move> moves;
     private HashMap<Position, Move> positionMoves;
@@ -16,12 +19,12 @@ public class Board {
     }
 
     // Adds a move to the board and checks for winning conditions
-    public void addMove(Move move) {
+    public void addMove(Move move) throws InvalidPlayerException, OccupiedPositionException {
         Position position = move.getMark().getPosition();
         Player currentPlayer = move.getPlayer();
 
         if (!moves.isEmpty() && moves.get(moves.size() - 1).getPlayer().equals(currentPlayer)) {
-            throw new IllegalArgumentException("Two subsequent moves from the same player are not allowed");
+            throw new InvalidPlayerException();
         }
 
         if (!positionMoves.containsKey(position)) {
@@ -36,7 +39,7 @@ public class Board {
 
             fiveInLineFound = isFiveInRow || isFiveInColumn || isFiveInDiag1 || isFiveInDiag2;
         } else {
-            throw new IllegalArgumentException("Multiple moves to same position are not allowed");
+            throw new OccupiedPositionException();
         }
     }
     
@@ -132,3 +135,4 @@ public class Board {
         Position get(Position position) throws IllegalArgumentException;
     }
 }
+

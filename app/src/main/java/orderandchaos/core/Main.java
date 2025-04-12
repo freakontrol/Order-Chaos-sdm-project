@@ -3,6 +3,9 @@ package orderandchaos.core;
 
 import java.awt.event.*;
 
+import orderandchaos.exceptions.InvalidPlayerException;
+import orderandchaos.exceptions.OccupiedPositionException;
+
 public class Main {
     private static Board board;
     private static BoardGUI gui;
@@ -41,37 +44,42 @@ public class Main {
                     Type markType = choice.equals("X") ? Type.X : Type.O;
                     Mark mark = new Mark(position, markType);
                     Move move = new Move(mark, currentPlayer);
-                    board.addMove(move);
-                    gui.updateButton(position.getRow(), position.getColumn(), markType.getName());
 
-                    if (board.isFiveInLineFound()) {
-                        gui.showWinnerMessage("Player ORDER wins!");
-                        if (gui.askForNewGame()) {
-                            restartGame();
-                        } else {
-                            gui.dispose();
-                            System.exit(0);
+                    try {
+                        board.addMove(move);
+                        gui.updateButton(position.getRow(), position.getColumn(), markType.getName());
+
+                        if (board.isFiveInLineFound()) {
+                            gui.showWinnerMessage("Player ORDER wins!");
+                            if (gui.askForNewGame()) {
+                                restartGame();
+                            } else {
+                                gui.dispose();
+                                System.exit(0);
+                            }
+                            return;
                         }
-                        return; 
-                    }
 
-                    if (board.getMoves().size() == 36) {
-                        gui.showWinnerMessage("Player CHAOS wins!");
-                        if (gui.askForNewGame()) {
-                            restartGame();
-                        } else {
-                            gui.dispose();
-                            System.exit(0);
+                        if (board.getMoves().size() == 36) {
+                            gui.showWinnerMessage("Player CHAOS wins!");
+                            if (gui.askForNewGame()) {
+                                restartGame();
+                            } else {
+                                gui.dispose();
+                                System.exit(0);
+                            }
+                            return;
                         }
-                        return; 
-                    }
 
-                    currentPlayer = (currentPlayer.getRole() == Role.ORDER) ? playerChaos : playerOrder;
-                    gui.setCurrentPlayer(currentPlayer);
+                        currentPlayer = (currentPlayer.getRole() == Role.ORDER) ? playerChaos : playerOrder;
+                        gui.setCurrentPlayer(currentPlayer);
+                    } catch (InvalidPlayerException | OccupiedPositionException ex) {
+                        ex.printStackTrace();
+                        gui.showErrorMessage(ex.getMessage());
+                    }
                 }
             }
         }
-
         private static void restartGame() {
             gui.dispose();
             initializeGame();

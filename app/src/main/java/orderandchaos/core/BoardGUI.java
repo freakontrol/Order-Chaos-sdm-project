@@ -111,4 +111,8 @@ public class BoardGUI {
         Integer col = (Integer) button.getClientProperty("col");
         return (row != null && col != null) ? new Position(row, col) : null;
     }
+
+    public void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
 }

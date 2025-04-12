@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import orderandchaos.exceptions.InvalidPlayerException;
+import orderandchaos.exceptions.OccupiedPositionException;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -140,14 +142,19 @@ class BoardGUITest {
                     Type markType = forcedSymbol.equals("X") ? Type.X : Type.O;
                     Mark mark = new Mark(position, markType);
                     Move move = new Move(mark, current);
-                    board.addMove(move);
+                    try {
+                        board.addMove(move);
                     updateButton(position.getRow(), position.getColumn(), markType.getName());
                     Player temp = current;
                     current = other;
                     other = temp;
                     setCurrentPlayer(current);
+                    } catch (InvalidPlayerException | OccupiedPositionException ex) {
+                        ex.printStackTrace();
+                        gui.showErrorMessage(ex.getMessage());
                 }
             }
         }
     }
+}
 }

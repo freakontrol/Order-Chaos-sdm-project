@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import orderandchaos.exceptions.InvalidPlayerException;
+import orderandchaos.exceptions.OccupiedPositionException;
+
 class BoardTest {
 
     private Board board;
@@ -35,47 +38,64 @@ class BoardTest {
 
     @Test
     void testAddDuplicateMove() {
-        board.addMove(moveX);
-        board.addMove(moveO);
+        try {
+            board.addMove(moveX);
+            board.addMove(moveO);
+        } catch (InvalidPlayerException | OccupiedPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(OccupiedPositionException.class, () -> {
             board.addMove(moveX); // Trying to add the same move again
         });
     }
 
     @Test
     void testAddSamePlayerMove() {
-        board.addMove(moveX);
-        board.addMove(moveO);
-        Move newMove = new Move(new Mark(new Position(1, 2), typeX), playerOrder);
+        try {
+            board.addMove(moveX);
+        } catch (InvalidPlayerException | OccupiedPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        Move newMove = new Move(new Mark(new Position(2, 2), typeX), playerOrder);
+
+        assertThrows(InvalidPlayerException.class, () -> {
             board.addMove(newMove); // Trying to add a move from the same player subsequently
         });
     }
+
     @Test
     void testAlternatePlayers() {
-        board.addMove(moveX); // ORDER moves first
+        try {
+            board.addMove(moveX); // ORDER moves first
 
-        Move newOrderMove = new Move(new Mark(new Position(1, 3), Type.X), playerOrder);
+            Move newOrderMove = new Move(new Mark(new Position(1, 3), Type.X), playerOrder);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            board.addMove(newOrderMove); // ORDER tries to move again
-        });
+            assertThrows(InvalidPlayerException.class, () -> {
+                board.addMove(newOrderMove); // ORDER tries to move again
+            });
 
-        board.addMove(moveO); // CHAOS moves next
+            board.addMove(moveO); // CHAOS moves next
 
-        Move newChaosMove = new Move(new Mark(new Position(2, 4), Type.O), playerChaos);
+            Move newChaosMove = new Move(new Mark(new Position(2, 4), Type.O), playerChaos);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            board.addMove(newChaosMove); // CHAOS tries to move again
-        });
+            assertThrows(InvalidPlayerException.class, () -> {
+                board.addMove(newChaosMove); // CHAOS tries to move again
+            });
+        } catch (InvalidPlayerException | OccupiedPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
     }
 
     @Test
     void testIsOccupied() {
         assertFalse(board.isOccupied(new Position(0, 2)));
-        board.addMove(moveX);
+        try {
+            board.addMove(moveX);
+        } catch (InvalidPlayerException | OccupiedPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
         assertTrue(board.isOccupied(new Position(0, 2)));
     }
 
@@ -91,7 +111,11 @@ class BoardTest {
             """;
         assertEquals(expected, board.toString());
 
-        board.addMove(moveX);
+        try {
+            board.addMove(moveX);
+        } catch (InvalidPlayerException | OccupiedPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
         expected = """
                           _ _ X _ _ _
                           _ _ _ _ _ _
@@ -103,8 +127,12 @@ class BoardTest {
         assertEquals(expected, board.toString());
 
         board.clearBoard();
-        board.addMove(new Move(new Mark(new Position(0, 2), Type.X), playerOrder));
-        board.addMove(moveO);
+        try {
+            board.addMove(new Move(new Mark(new Position(0, 2), Type.X), playerOrder));
+            board.addMove(moveO);
+        } catch (InvalidPlayerException | OccupiedPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
         expected = """
                           _ _ X _ _ _
                           _ _ O _ _ _
@@ -120,10 +148,14 @@ class BoardTest {
     void testIsFiveInLineFound() {
         // Test horizontal line with alternating players
         for (int i = 0; i < 5; i++) {
-            if (i % 2 == 0) {
-                board.addMove(new Move(new Mark(new Position(i, 2), Type.X), playerOrder));
-            } else {
-                board.addMove(new Move(new Mark(new Position(i, 2), Type.X), playerChaos));
+            try {
+                if (i % 2 == 0) {
+                    board.addMove(new Move(new Mark(new Position(i, 2), Type.X), playerOrder));
+                } else {
+                    board.addMove(new Move(new Mark(new Position(i, 2), Type.X), playerChaos));
+                }
+            } catch (InvalidPlayerException | OccupiedPositionException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
         }
         assertTrue(board.isFiveInLineFound());
@@ -133,10 +165,14 @@ class BoardTest {
 
         // Test vertical line with alternating players
         for (int i = 0; i < 5; i++) {
-            if (i % 2 == 0) {
-                board.addMove(new Move(new Mark(new Position(2, i), Type.O), playerOrder));
-            } else {
-                board.addMove(new Move(new Mark(new Position(2, i), Type.O), playerChaos));
+            try {
+                if (i % 2 == 0) {
+                    board.addMove(new Move(new Mark(new Position(2, i), Type.O), playerOrder));
+                } else {
+                    board.addMove(new Move(new Mark(new Position(2, i), Type.O), playerChaos));
+                }
+            } catch (InvalidPlayerException | OccupiedPositionException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
         }
         assertTrue(board.isFiveInLineFound());
@@ -146,10 +182,14 @@ class BoardTest {
 
         // Test diagonal line (top-left to bottom-right) with alternating players
         for (int i = 0; i < 5; i++) {
-            if (i % 2 == 0) {
-                board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerOrder));
-            } else {
-                board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerChaos));
+            try {
+                if (i % 2 == 0) {
+                    board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerOrder));
+                } else {
+                    board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerChaos));
+                }
+            } catch (InvalidPlayerException | OccupiedPositionException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
         }
         assertTrue(board.isFiveInLineFound());
@@ -159,10 +199,14 @@ class BoardTest {
 
         // Test diagonal line (top-right to bottom-left) with alternating players
         for (int i = 0; i < 5; i++) {
-            if (i % 2 == 0) {
-                board.addMove(new Move(new Mark(new Position(i, 4 - i), Type.O), playerOrder));
-            } else {
-                board.addMove(new Move(new Mark(new Position(i, 4 - i), Type.O), playerChaos));
+            try {
+                if (i % 2 == 0) {
+                    board.addMove(new Move(new Mark(new Position(i, 4 - i), Type.O), playerOrder));
+                } else {
+                    board.addMove(new Move(new Mark(new Position(i, 4 - i), Type.O), playerChaos));
+                }
+            } catch (InvalidPlayerException | OccupiedPositionException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
         }
         assertTrue(board.isFiveInLineFound());
@@ -170,7 +214,11 @@ class BoardTest {
 
     @Test
     void testClearBoard() {
-        board.addMove(moveX);
+        try {
+            board.addMove(moveX);
+        } catch (InvalidPlayerException | OccupiedPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
         board.clearBoard();
         assertFalse(board.isOccupied(position1));
         assertEquals(0, board.getMoves().size());
@@ -178,23 +226,31 @@ class BoardTest {
 
     @Test
     void testGetMoves() {
-        board.addMove(moveX);
-        board.addMove(moveO);
+        try {
+            board.addMove(moveX);
+            board.addMove(moveO);
+        } catch (InvalidPlayerException | OccupiedPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
 
         List<Move> moves = board.getMoves();
         assertEquals(2, moves.size());
         assertTrue(moves.contains(moveX));
         assertTrue(moves.contains(moveO));
     }
-        
+
     @Test
     void testSixInLineNotWinning() {
         // Place six consecutive marks in a row with alternating players
         for (int i = 0; i < 6; i++) {
-            if (i % 2 == 0) {
-                board.addMove(new Move(new Mark(new Position(i, 2), Type.X), playerOrder));
-            } else {
-                board.addMove(new Move(new Mark(new Position(i, 2), Type.O), playerChaos));
+            try {
+                if (i % 2 == 0) {
+                    board.addMove(new Move(new Mark(new Position(i, 2), Type.X), playerOrder));
+                } else {
+                    board.addMove(new Move(new Mark(new Position(i, 2), Type.O), playerChaos));
+                }
+            } catch (InvalidPlayerException | OccupiedPositionException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
         }
         assertFalse(board.isFiveInLineFound());
@@ -202,10 +258,14 @@ class BoardTest {
         // Reset the board and place six consecutive marks in a column with alternating players
         board.clearBoard();
         for (int i = 0; i < 6; i++) {
-            if (i % 2 == 0) {
-                board.addMove(new Move(new Mark(new Position(2, i), Type.X), playerOrder));
-            } else {
-                board.addMove(new Move(new Mark(new Position(2, i), Type.O), playerChaos));
+            try {
+                if (i % 2 == 0) {
+                    board.addMove(new Move(new Mark(new Position(2, i), Type.X), playerOrder));
+                } else {
+                    board.addMove(new Move(new Mark(new Position(2, i), Type.O), playerChaos));
+                }
+            } catch (InvalidPlayerException | OccupiedPositionException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
         }
         assertFalse(board.isFiveInLineFound());
@@ -213,10 +273,14 @@ class BoardTest {
         // Reset the board and place six consecutive marks in a diagonal line (top-left to bottom-right) with alternating players
         board.clearBoard();
         for (int i = 0; i < 6; i++) {
-            if (i % 2 == 0) {
-                board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerOrder));
-            } else {
-                board.addMove(new Move(new Mark(new Position(i, i), Type.O), playerChaos));
+            try {
+                if (i % 2 == 0) {
+                    board.addMove(new Move(new Mark(new Position(i, i), Type.X), playerOrder));
+                } else {
+                    board.addMove(new Move(new Mark(new Position(i, i), Type.O), playerChaos));
+                }
+            } catch (InvalidPlayerException | OccupiedPositionException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
         }
         assertFalse(board.isFiveInLineFound());
@@ -224,10 +288,14 @@ class BoardTest {
         // Reset the board and place six consecutive marks in a diagonal line (top-right to bottom-left) with alternating players
         board.clearBoard();
         for (int i = 0; i < 6; i++) {
-            if (i % 2 == 0) {
-                board.addMove(new Move(new Mark(new Position(i, 5 - i), Type.X), playerOrder));
-            } else {
-                board.addMove(new Move(new Mark(new Position(i, 5 - i), Type.O), playerChaos));
+            try {
+                if (i % 2 == 0) {
+                    board.addMove(new Move(new Mark(new Position(i, 5 - i), Type.X), playerOrder));
+                } else {
+                    board.addMove(new Move(new Mark(new Position(i, 5 - i), Type.O), playerChaos));
+                }
+            } catch (InvalidPlayerException | OccupiedPositionException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
         }
         assertFalse(board.isFiveInLineFound());
@@ -253,7 +321,7 @@ class BoardTest {
                 Move move = new Move(mark, currentPlayer);
                 board.addMove(move);
             }
-        } catch (IllegalArgumentException e) {
+        } catch (InvalidPlayerException | OccupiedPositionException e) {
             fail("Unexpected exception while adding moves: " + e.getMessage());
         }
 
@@ -264,5 +332,4 @@ class BoardTest {
         assertEquals(36, board.getMoves().size(),
             "Move list size should be exactly 36 when board is full");
     }
-
 }
