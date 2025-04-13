@@ -228,4 +228,25 @@ class ConsoleMainTest {
         assertEquals(expectedOutput.trim(), outputStream.toString().trim());
     }
 
+    @Test
+    void testDuplicatePlayerName() {
+        // Simulate input for player names where Chaos tries to use the same name as Order
+        String simulatedInput = "Alice\nAlice\nThomas\n";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+
+        game.initializeGame();
+
+        // Reset the system input and output
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+
+        // Verify the output
+        String expectedOutput = """
+                Enter name for ORDER player: Enter name for CHAOS player: Name is already taken. Choose another.
+                Enter name for CHAOS player:
+                """;
+
+        assertEquals(expectedOutput.trim(), outputStream.toString().trim());
+    }
+
 }
