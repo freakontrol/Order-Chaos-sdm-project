@@ -10,6 +10,7 @@ import java.util.List;
 
 import orderandchaos.exceptions.InvalidPlayerException;
 import orderandchaos.exceptions.OccupiedPositionException;
+import orderandchaos.exceptions.OutOfBoundsException;
 
 class BoardTest {
 
@@ -222,4 +223,13 @@ class BoardTest {
         assertTrue(board.isBoardFull(), "isBoardFull() should return true after 36 moves");
         assertEquals(36, board.getMoves().size(), "Move list size should be exactly 36 when board is full");
     }
+
+
+    @Test
+    void testInvalidPositionCreation() {
+        assertThrows(OutOfBoundsException.class, () -> new Position(-1, 0), "Row -1 should throw an exception");
+        assertThrows(OutOfBoundsException.class, () -> new Position(0, -1), "Column -1 should throw an exception");
+        assertThrows(OutOfBoundsException.class, () -> new Position(-1, -1), "Negative row and column should throw an exception");
+    }
+
 }
