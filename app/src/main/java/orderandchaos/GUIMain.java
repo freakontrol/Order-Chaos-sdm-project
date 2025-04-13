@@ -117,7 +117,7 @@ public class GUIMain extends OrderAndChaos {
 
     @Override
     public void startGame() {
-        initializeGame();
+        setMoveListener(new MoveListener());
     }
 
     @Override
@@ -166,8 +166,6 @@ public class GUIMain extends OrderAndChaos {
 
         frame.add(mainPanel);
         frame.setVisible(true);
-
-        setMoveListener(new MoveListener());
     }
 
     private JPanel createGridPanel() {
@@ -235,6 +233,7 @@ public class GUIMain extends OrderAndChaos {
 
     public static void main(String[] args) {
         GUIMain guiMain = new GUIMain();
+        guiMain.initializeGame();
         guiMain.startGame();
     }
 }
