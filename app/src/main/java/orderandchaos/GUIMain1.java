@@ -7,18 +7,104 @@ import orderandchaos.core.*;
 
 public class GUIMain1 extends OrderAndChaos {
     private static final int BOARD_SIZE = 6;
-
     private JFrame frame;
     private JButton[][] buttons;
     private JLabel playerLabel;
+    
+    // Input Handler
+    private class InputHandler {
+        public String askForSymbol() {
+            String[] options = {"X", "O"};
+            return (String) JOptionPane.showInputDialog(frame,
+                    "Do you place X or O? :", "Move",
+                    JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        }
 
-    public GUIMain1() {
-        super();
+        public Position getButtonPosition(ActionEvent e) {
+            JButton button = (JButton) e.getSource();
+            Integer row = (Integer) button.getClientProperty("row");
+            Integer col = (Integer) button.getClientProperty("col");
+            return new Position(row, col);
+        }
     }
 
-    public static void main(String[] args) {
-        GUIMain1 guiMain = new GUIMain1();
-        guiMain.startGame();
+    // Output Handler
+    private class OutputHandler {
+        public void updateButton(int row, int col, String symbol) {
+            if (buttons[row][col].getText().isEmpty()) {
+                buttons[row][col].setText(symbol);
+                buttons[row][col].setEnabled(false);
+            }
+        }
+
+        public void showWinnerMessage(String message) {
+            JOptionPane.showMessageDialog(frame, message);
+        }
+
+        public boolean askForNewGame() {
+            int restart = JOptionPane.showConfirmDialog(frame, "Do you want to play a new game?", "NEW GAME",
+                    JOptionPane.YES_NO_OPTION);
+            return restart == JOptionPane.YES_OPTION;
+        }
+
+        public void updatePlayerLabel() {
+            playerLabel.setText("Current turn: " + currentPlayer.getName());
+        }
+
+        public void resetBoardDisplay() {
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                for (int col = 0; col < BOARD_SIZE; col++) {
+                    buttons[row][col].setText("");
+                    buttons[row][col].setEnabled(true);
+                }
+            }
+        }
+    }
+
+    // Listener
+    private class MoveListener implements ActionListener {
+        private InputHandler inputHandler = new InputHandler();
+        private OutputHandler outputHandler = new OutputHandler();
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Position position = inputHandler.getButtonPosition(e);
+
+            if (!board.isOccupied(position)) {
+                String choice = inputHandler.askForSymbol();
+
+                if (choice != null) {
+                    Type markType = choice.equals("X") ? Type.X : Type.O;
+                    addMove(position, markType);
+                    outputHandler.updateButton(position.getRow(), position.getColumn(), markType.getName());
+
+                    if (checkWinCondition()) {
+                        String message = board.isFiveInLineFound() ? "Player ORDER wins!" : "Player CHAOS wins!";
+                        outputHandler.showWinnerMessage(message);
+                        if (outputHandler.askForNewGame()) restartGame();
+                        else exitGame();
+                        return;
+                    }
+
+                    currentPlayer = (currentPlayer.getRole() == Role.ORDER) ? playerChaos : playerOrder;
+                    outputHandler.updatePlayerLabel();
+                }
+            }
+        }
+    }
+
+    // Eventi
+    private void restartGame() {
+        board.clearBoard();
+        isGameOver = false;
+        new OutputHandler().resetBoardDisplay();
+        currentPlayer = playerOrder;
+        new OutputHandler().updatePlayerLabel();
+    }
+
+    public void exitGame() {
+        frame.dispose();
+        System.exit(0);
     }
 
     @Override
@@ -42,7 +128,7 @@ public class GUIMain1 extends OrderAndChaos {
                     "Enter name for " + role + " player:",
                     "Player Name Input",
                     JOptionPane.QUESTION_MESSAGE);
-    
+
             if (name == null || name.trim().isEmpty()) {
                 int confirm = JOptionPane.showConfirmDialog(null,
                         "Do you want to quit the game?",
@@ -109,90 +195,17 @@ public class GUIMain1 extends OrderAndChaos {
     }
 
     @Override
-    protected void exitGame() {
-        frame.dispose();
-        System.exit(0);
+    protected Position getPlayerMove() {
+        throw new UnsupportedOperationException("getPlayerMove() is not used in GUI mode.");
     }
 
     @Override
-protected Position getPlayerMove() {
-    throw new UnsupportedOperationException("getPlayerMove() is not used in GUI mode.");
-}
+    protected Type getMarkType() {
+        throw new UnsupportedOperationException("getMarkType() is not used in GUI mode.");
+    }
 
-@Override
-protected Type getMarkType() {
-    throw new UnsupportedOperationException("getMarkType() is not used in GUI mode.");
-}
-
-    private class MoveListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Position position = getButtonPosition(e);
-        
-            if (!board.isOccupied(position)) {
-                String choice = askForSymbol();
-
-                if (choice != null) {
-                    Type markType = choice.equals("X") ? Type.X : Type.O;
-                    addMove(position, markType);
-                    updateButton(position.getRow(), position.getColumn(), markType.getName());
-
-                    if (checkWinCondition()) {
-                        String message = board.isFiveInLineFound() ? "Player ORDER wins!" : "Player CHAOS wins!";
-                        showWinnerMessage(message);
-                        if (askForNewGame()) restartGame();
-                        else exitGame();
-                        return;
-                    }
-
-                    currentPlayer = (currentPlayer.getRole() == Role.ORDER) ? playerChaos : playerOrder;
-                    playerLabel.setText("Current turn: " + currentPlayer.getName());
-                }
-            }
-        }
-
-        private Position getButtonPosition(ActionEvent e) {
-            JButton button = (JButton) e.getSource();
-            Integer row = (Integer) button.getClientProperty("row");
-            Integer col = (Integer) button.getClientProperty("col");
-            return new Position(row, col);
-        }
-
-        private String askForSymbol() {
-            String[] options = {"X", "O"};
-            return (String) JOptionPane.showInputDialog(frame,
-                    "Do you place X or O? :", "Move",
-                    JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-        }
-
-        private void updateButton(int row, int col, String symbol) {
-            if (buttons[row][col].getText().isEmpty()) {
-                buttons[row][col].setText(symbol);
-                buttons[row][col].setEnabled(false);
-            }
-        }
-
-        private void showWinnerMessage(String message) {
-            JOptionPane.showMessageDialog(frame, message);
-        }
-
-        private boolean askForNewGame() {
-            int restart = JOptionPane.showConfirmDialog(frame, "Do you want to play a new game?", "NEW GAME",
-                    JOptionPane.YES_NO_OPTION);
-            return restart == JOptionPane.YES_OPTION;
-        }
-
-        private void restartGame() {
-            board.clearBoard();
-            isGameOver = false;
-            for (int row = 0; row < BOARD_SIZE; row++) {
-                for (int col = 0; col < BOARD_SIZE; col++) {
-                    buttons[row][col].setText("");
-                    buttons[row][col].setEnabled(true);
-                }
-            }
-            currentPlayer = playerOrder;
-            playerLabel.setText("Current turn: " + currentPlayer.getName());
-        }
+    public static void main(String[] args) {
+        GUIMain1 guiMain = new GUIMain1();
+        guiMain.startGame();
     }
 }
