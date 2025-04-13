@@ -25,9 +25,11 @@ public class ConsoleMain extends OrderAndChaos {
     protected void preInitializeGame() {
         reader = new BufferedReader(new InputStreamReader(System.in));
 
+        String orderPlayerName = initializePlayer(Role.ORDER);
+        String chaosPlayerName;
+
         do{
-            String orderPlayerName = initializePlayer(Role.ORDER);
-            String chaosPlayerName = initializePlayer(Role.CHAOS);
+            chaosPlayerName = initializePlayer(Role.CHAOS);
 
             if(orderPlayerName.equals(chaosPlayerName)) {
                 System.out.println("Name is already taken. Choose another.");
