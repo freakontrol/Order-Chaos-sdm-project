@@ -7,58 +7,82 @@ import java.awt.event.*;
 import orderandchaos.exceptions.OutOfBoundsException;
 
 public class BoardGUI {
+    private static final int BOARD_SIZE = 6;
+    
     private JFrame frame;
     private JButton[][] buttons;
     private JLabel playerLabel;
 
     public BoardGUI(Board board) {
-        
+        setLookAndFeel();
+        initializeFrame();
+        initializeUIComponents();
+    }
+
+    private void setLookAndFeel() {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private void initializeFrame() {
         frame = new JFrame("Order & Chaos Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(550, 600);
         frame.setResizable(false);
-        
+    }
+
+    private void initializeUIComponents() {
         JPanel mainPanel = new JPanel(new BorderLayout());
-        JPanel gridPanel = new JPanel(new GridLayout(6, 6));
+        JPanel gridPanel = createGridPanel();
+        playerLabel = createPlayerLabel();
 
-        buttons = new JButton[6][6];
-
-        for (int row = 0; row < 6; row++) {
-            for (int col = 0; col < 6; col++) {
-                buttons[row][col] = new JButton("");                
-                buttons[row][col].setFont(new Font("Ubuntu", Font.BOLD, 40));
-                buttons[row][col].putClientProperty("row", row);
-                buttons[row][col].putClientProperty("col", col);
-                buttons[row][col].setBackground(Color.WHITE);
-                buttons[row][col].setForeground(Color.BLACK);
-                buttons[row][col].setFocusPainted(false); 
-                gridPanel.add(buttons[row][col]);
-            }
-        }
-
-       playerLabel = new JLabel("shift of: ", SwingConstants.CENTER);
-       playerLabel.setFont(new Font("Ubuntu", Font.BOLD, 18));
-       mainPanel.add(playerLabel, BorderLayout.NORTH);
-       mainPanel.add(gridPanel, BorderLayout.CENTER);
-        
+        mainPanel.add(playerLabel, BorderLayout.NORTH);
+        mainPanel.add(gridPanel, BorderLayout.CENTER);
 
         frame.add(mainPanel);
         frame.setVisible(true);
     }
 
+    private JButton createGridButton(int row, int col) {
+        JButton button = new JButton("");
+        button.setFont(new Font("Ubuntu", Font.BOLD, 40));
+        button.putClientProperty("row", row);
+        button.putClientProperty("col", col);
+        button.setBackground(Color.WHITE);
+        button.setForeground(Color.BLACK);
+        button.setFocusPainted(false);
+        return button;
+    }
+
+    private JPanel createGridPanel() {
+        JPanel gridPanel = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
+        buttons = new JButton[BOARD_SIZE][BOARD_SIZE];
+
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                buttons[row][col] = createGridButton(row, col);
+                gridPanel.add(buttons[row][col]);                
+            }
+        }
+        return gridPanel;
+    }
+
+    private JLabel createPlayerLabel() {
+        JLabel label = new JLabel("Current turn: ", SwingConstants.CENTER);
+        label.setFont(new Font("Ubuntu", Font.BOLD, 18));
+        return label;
+    }
+
     public void setCurrentPlayer(Player player) {
-        playerLabel.setText("shift of: " + player.getName());
+        playerLabel.setText("Current turn: " + player.getName());
     }
 
     public void setMoveListener(ActionListener listener) {
-        for (int row = 0; row < 6; row++) {
-            for (int col = 0; col < 6; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 buttons[row][col].addActionListener(listener);
             }
         }
@@ -87,7 +111,7 @@ public class BoardGUI {
     }
 
     public JButton getButton(int row, int col) {
-        if (row < 0 || row >= 6 || col < 0 || col >= 6) {
+        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
             throw new OutOfBoundsException("Coordinates are outside the grid limits.");
         }
         return buttons[row][col];
