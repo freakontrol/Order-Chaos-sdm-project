@@ -22,7 +22,7 @@ public class ConsoleMain extends OrderAndChaos {
     }
 
     @Override
-    protected void initializeGame() {
+    protected void preInitializeGame() {
         reader = new BufferedReader(new InputStreamReader(System.in));
 
         do{
@@ -37,8 +37,6 @@ public class ConsoleMain extends OrderAndChaos {
                 break;
             }
         } while(true);
-
-        this.currentPlayer = this.playerOrder;
     }
 
     private String initializePlayer(Role role) {
