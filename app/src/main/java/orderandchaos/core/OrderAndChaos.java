@@ -14,7 +14,12 @@ public abstract class OrderAndChaos {
         isGameOver = false;
     }
 
-    protected abstract void initializeGame();
+    protected void initializeGame(){
+        preInitializeGame();
+        this.currentPlayer = this.playerOrder;
+    }
+
+    protected abstract void preInitializeGame();
 
     public abstract void startGame();
 
