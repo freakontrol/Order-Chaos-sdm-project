@@ -12,6 +12,7 @@ public class GUIMain extends OrderAndChaos {
     private JFrame frame;
     private JButton[][] buttons;
     private JLabel playerLabel;
+
     private void setLookAndFeel() {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -82,21 +83,23 @@ public class GUIMain extends OrderAndChaos {
             if (!board.isOccupied(position)) {
                 Type markType = getMarkType();
 
-                if (markType != null) {
-                    addMove(position, markType);
-                    outputHandler.updateButton(position.getRow(), position.getColumn(), markType.getName());
-
-                    if (checkWinCondition()) {
-                        String message = board.isFiveInLineFound() ? "Player ORDER wins!" : "Player CHAOS wins!";
-                        outputHandler.showWinnerMessage(message);
-                        if (outputHandler.askForNewGame()) restartGame();
-                        else exitGame();
-                        return;
-                    }
-
-                    currentPlayer = (currentPlayer.getRole() == Role.ORDER) ? playerChaos : playerOrder;
-                    outputHandler.updatePlayerLabel();
+                if (markType == null) {
+                    return;
                 }
+
+                addMove(position, markType);
+                outputHandler.updateButton(position.getRow(), position.getColumn(), markType.getName());
+
+                if (checkWinCondition()) {
+                    String message = board.isFiveInLineFound() ? "Player ORDER wins!" : "Player CHAOS wins!";
+                    outputHandler.showWinnerMessage(message);
+                    if (outputHandler.askForNewGame()) restartGame();
+                    else exitGame();
+                    return;
+                }
+
+                currentPlayer = (currentPlayer.getRole() == Role.ORDER) ? playerChaos : playerOrder;
+                outputHandler.updatePlayerLabel();
             }
         }
     }
@@ -203,8 +206,6 @@ public class GUIMain extends OrderAndChaos {
     // Wrapper method to satisfy the superclass method signature
     @Override
     protected Position getPlayerMove() throws IOException {
-        // This method is called from the superclass or other parts of the code
-        // We need to provide a default implementation or throw an exception
         throw new UnsupportedOperationException("This method should not be called directly");
     }
 
@@ -218,14 +219,7 @@ public class GUIMain extends OrderAndChaos {
         String choice = inputHandler.askForSymbol();
 
         if (choice == null) {
-            int confirm = JOptionPane.showConfirmDialog(frame,
-                    "Do you want to quit the game?", "Exit Confirmation",
-                    JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            } else {
-                return getMarkType();
-            }
+            return null;
         }
 
         return choice.equals("X") ? Type.X : Type.O;
