@@ -6,48 +6,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ConsoleMain {
+public class ConsoleMain extends OrderAndChaos {
+
+    private BufferedReader reader;
 
     public static void main(String[] args) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        Player playerOrder = initializePlayer(reader, Role.ORDER);
-        Player playerChaos = initializePlayer(reader, Role.CHAOS);
-        Board board = new Board();
-
-        boolean isGameOver = false;
-        Player currentPlayer = playerOrder; // Start with Order's turn
-
-        while (!isGameOver) {
-            printBoard(board);
-            Position position = null;
-            Type markType = null;
-
-            do {
-                try {
-                    position = getPlayerMove(reader, currentPlayer);
-                    markType = getMarkType(reader, currentPlayer);
-                    Mark mark = new Mark(position, markType);
-                    Move move = new Move(mark, currentPlayer);
-                    board.addMove(move); // Add to the board
-                    break; // Valid move processed successfully
-                } catch (IOException e) {
-                    System.out.println("Error reading input: " + e.getMessage());
-                    return; // Exit on any other I/O error
-                }
-            } while (true);
-
-            // Check win condition after move is added
-            isGameOver = checkWinCondition(board, currentPlayer);
-
-            // Switch to other player for next turn
-            currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
-        }
-
-        closeReader(reader);
+        ConsoleMain game = new ConsoleMain();
+        game.initializePlayers();
+        game.startGame();
+        game.closeReader();
     }
 
-    private static Player initializePlayer(BufferedReader reader, Role role) {
+    public void initializePlayers() {
+        reader = new BufferedReader(new InputStreamReader(System.in));
+        playerOrder = initializePlayer(Role.ORDER);
+        playerChaos = initializePlayer(Role.CHAOS);
+    }
+
+    @Override
+    protected Player initializePlayer(Role role) {
         String name = "";
         while (name.isEmpty()) {
             System.out.print("Enter name for " + role + " player: ");
@@ -61,12 +38,14 @@ public class ConsoleMain {
         return new Player(role, name);
     }
 
-    private static void printBoard(Board board) {
+    @Override
+    protected void printBoard() {
         System.out.println("\nCurrent Board:");
         board.printBoard();
     }
 
-    private static Position getPlayerMove(BufferedReader reader, Player currentPlayer) throws IOException {
+    @Override
+    protected Position getPlayerMove(Player currentPlayer) throws IOException {
         Position position = null;
         while (position == null) {
             System.out.print(currentPlayer.getName() + ", enter your move (row column): ");
@@ -107,7 +86,8 @@ public class ConsoleMain {
         return position;
     }
 
-    private static Type getMarkType(BufferedReader reader, Player currentPlayer) throws IOException {
+    @Override
+    protected Type getMarkType(Player currentPlayer) throws IOException {
         Type markType = null;
         while (markType == null) {
             System.out.print(currentPlayer.getName() + ", enter your mark (X or O): ");
@@ -135,7 +115,8 @@ public class ConsoleMain {
         return markType;
     }
 
-    private static boolean checkWinCondition(Board board, Player currentPlayer) {
+    @Override
+    protected boolean checkWinCondition(Player currentPlayer) {
         boolean isGameOver = false;
         if (board.isFiveInLineFound()) {
             isGameOver = true;
@@ -147,7 +128,7 @@ public class ConsoleMain {
         return isGameOver;
     }
 
-    private static void closeReader(BufferedReader reader) {
+    public void closeReader() {
         try {
             reader.close();
         } catch (IOException e) {
