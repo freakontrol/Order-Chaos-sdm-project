@@ -2,6 +2,8 @@ package orderandchaos.core;
 
 import java.io.IOException;
 
+import orderandchaos.exceptions.OrderAndChaosException;
+
 public abstract class OrderAndChaos {
 
     protected Player playerOrder;
@@ -14,11 +16,17 @@ public abstract class OrderAndChaos {
         isGameOver = false;
     }
 
-    protected abstract void initializeGame();
+    public void initializeGame(){
+        preInitializeGame();
+        this.currentPlayer = this.playerOrder;
+    }
 
-    public abstract void startGame();
+    public abstract void startGame() throws OrderAndChaosException;
 
-    protected abstract void exitGame();
+    public abstract void exitGame();
+
+    protected abstract void preInitializeGame();
+
 
     protected abstract Position getPlayerMove() throws IOException;
 
@@ -32,5 +40,9 @@ public abstract class OrderAndChaos {
     protected boolean checkWinCondition() {
         if (board.isFiveInLineFound() || board.isBoardFull()) isGameOver = true;
         return isGameOver;
+    }
+
+    protected boolean checkFreePosition(Position position) {
+        return board.checkFreePosition(position);
     }
 }

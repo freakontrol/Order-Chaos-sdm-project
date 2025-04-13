@@ -22,16 +22,23 @@ public class ConsoleMain extends OrderAndChaos {
     }
 
     @Override
-    protected void initializeGame() {
+    protected void preInitializeGame() {
         reader = new BufferedReader(new InputStreamReader(System.in));
 
         String orderPlayerName = initializePlayer(Role.ORDER);
-        String chaosPlayerName = initializePlayer(Role.CHAOS);
+        String chaosPlayerName;
 
-        this.playerOrder = new Player(Role.ORDER, orderPlayerName);
-        this.playerChaos = new Player(Role.CHAOS, chaosPlayerName);
+        do{
+            chaosPlayerName = initializePlayer(Role.CHAOS);
 
-        this.currentPlayer = this.playerOrder;
+            if(orderPlayerName.equals(chaosPlayerName)) {
+                System.out.println("Name is already taken. Choose another.");
+            } else {
+                this.playerOrder = new Player(Role.ORDER, orderPlayerName);
+                this.playerChaos = new Player(Role.CHAOS, chaosPlayerName);
+                break;
+            }
+        } while(true);
     }
 
     private String initializePlayer(Role role) {
@@ -108,6 +115,11 @@ public class ConsoleMain extends OrderAndChaos {
 
             position = new Position(row, col);
 
+            if (!checkFreePosition(position)) {
+                System.out.println("Position is occupied. Choose another.");
+                position = null;
+            }
+
             // Validate coordinates within 0-5
             if (row < 0 || row >= 6 || col < 0 || col >= 6) {
                 System.out.println("Row and column must be between 0 and 5. Try again.");
@@ -159,7 +171,7 @@ public class ConsoleMain extends OrderAndChaos {
     }
 
     @Override
-    protected void exitGame() {
+    public void exitGame() {
         closeReader();
     }
 

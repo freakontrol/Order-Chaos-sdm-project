@@ -232,4 +232,17 @@ class BoardTest {
         assertThrows(OutOfBoundsException.class, () -> new Position(-1, -1), "Negative row and column should throw an exception");
     }
 
+    @Test
+    void testCheckFreePosition() {
+        Position freePosition = new Position(0, 0);
+        Position occupiedPosition = new Position(0, 2);
+
+        assertTrue(board.checkFreePosition(freePosition));
+        assertTrue(board.checkFreePosition(occupiedPosition));
+
+        safeAddMove(moveX); // Add a move to the occupied position
+        assertFalse(board.checkFreePosition(occupiedPosition));// The occupied position should now be occupied
+        assertTrue(board.checkFreePosition(freePosition));// The free position should still be free
+    }
+
 }
