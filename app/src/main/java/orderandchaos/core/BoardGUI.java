@@ -21,11 +21,13 @@ public class BoardGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(550, 600);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel gridPanel = new JPanel(new GridLayout(6, 6));
 
         buttons = new JButton[6][6];
+        
 
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
