@@ -10,13 +10,23 @@ public class GUIMain1 extends OrderAndChaos {
     private JFrame frame;
     private JButton[][] buttons;
     private JLabel playerLabel;
+    private void setLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
+    private InputHandler inputHandler = new InputHandler();
+    private OutputHandler outputHandler = new OutputHandler();
+
     // Input Handler
     private class InputHandler {
         public String askForSymbol() {
             String[] options = {"X", "O"};
             return (String) JOptionPane.showInputDialog(frame,
-                    "Do you place X or O? :", "Move",
+                    "Do you place X or O?", "Move",
                     JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
         }
 
@@ -63,18 +73,14 @@ public class GUIMain1 extends OrderAndChaos {
 
     // Listener
     private class MoveListener implements ActionListener {
-        private InputHandler inputHandler = new InputHandler();
-        private OutputHandler outputHandler = new OutputHandler();
-
         @Override
         public void actionPerformed(ActionEvent e) {
             Position position = inputHandler.getButtonPosition(e);
 
             if (!board.isOccupied(position)) {
-                String choice = inputHandler.askForSymbol();
+                Type markType = getMarkType();
 
-                if (choice != null) {
-                    Type markType = choice.equals("X") ? Type.X : Type.O;
+                if (markType != null) {
                     addMove(position, markType);
                     outputHandler.updateButton(position.getRow(), position.getColumn(), markType.getName());
 
@@ -93,13 +99,12 @@ public class GUIMain1 extends OrderAndChaos {
         }
     }
 
-    // Eventi
     private void restartGame() {
         board.clearBoard();
         isGameOver = false;
-        new OutputHandler().resetBoardDisplay();
+        outputHandler.resetBoardDisplay();
         currentPlayer = playerOrder;
-        new OutputHandler().updatePlayerLabel();
+        outputHandler.updatePlayerLabel();
     }
 
     public void exitGame() {
@@ -115,6 +120,7 @@ public class GUIMain1 extends OrderAndChaos {
     @Override
     protected void initializeGame() {
         isGameOver = false;
+        setLookAndFeel();
         playerOrder = initializePlayer(Role.ORDER);
         playerChaos = initializePlayer(Role.CHAOS);
         currentPlayer = playerOrder;
@@ -135,7 +141,6 @@ public class GUIMain1 extends OrderAndChaos {
                         "Exit Confirmation",
                         JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) System.exit(0);
-                else name = null;
             }
         }
         return new Player(role, name.trim());
@@ -201,7 +206,20 @@ public class GUIMain1 extends OrderAndChaos {
 
     @Override
     protected Type getMarkType() {
-        throw new UnsupportedOperationException("getMarkType() is not used in GUI mode.");
+        String choice = inputHandler.askForSymbol();
+
+        if (choice == null) {
+            int confirm = JOptionPane.showConfirmDialog(frame,
+                    "Do you want to quit the game?", "Exit Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            } else {
+                return getMarkType(); // Richiama finché non sceglie X o O
+            }
+        }
+
+        return choice.equals("X") ? Type.X : Type.O;
     }
 
     public static void main(String[] args) {
