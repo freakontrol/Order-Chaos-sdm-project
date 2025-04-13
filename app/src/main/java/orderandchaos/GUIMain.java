@@ -121,7 +121,7 @@ public class GUIMain extends OrderAndChaos {
     }
 
     @Override
-    protected void initializeGame() {
+    public void preInitializeGame() {
         isGameOver = false;
         setLookAndFeel();
         playerOrder = initializePlayer(Role.ORDER);
