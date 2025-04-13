@@ -115,4 +115,14 @@ public class BoardGUI {
     public void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
+    
+    public void resetGrid() {
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 6; col++) {
+                JButton button = buttons[row][col];
+                button.setText("");
+                button.setEnabled(true);
+            }
+        }
+    }
 }

@@ -75,8 +75,11 @@ public class GUIMain {
         }
 
         private static void restartGame() {
-            gui.dispose();
-            initializeGame();
+            board.clearBoard();       
+            gui.resetGrid();         
+            currentPlayer = playerOrder;
+            gui.setCurrentPlayer(currentPlayer);
         }
+        
     }
 }
