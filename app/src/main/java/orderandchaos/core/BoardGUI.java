@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import orderandchaos.exceptions.OutOfBoundsException;
+
 public class BoardGUI {
     private JFrame frame;
     private JButton[][] buttons;
@@ -86,7 +88,7 @@ public class BoardGUI {
 
     public JButton getButton(int row, int col) {
         if (row < 0 || row >= 6 || col < 0 || col >= 6) {
-            throw new IllegalArgumentException("Coordinates are outside the grid limits.");
+            throw new OutOfBoundsException("Coordinates are outside the grid limits.");
         }
         return buttons[row][col];
     }
