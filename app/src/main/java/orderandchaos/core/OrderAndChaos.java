@@ -9,18 +9,28 @@ public abstract class OrderAndChaos {
     protected Board board;
     protected boolean isGameOver;
     protected Player currentPlayer;
-
-    public void initializeGame() {
+    protected OrderAndChaos() {
         board = new Board();
         isGameOver = false;
-        currentPlayer = playerOrder; // Start with Order's turn
     }
+
+    protected abstract void initializeGame();
 
     public abstract void startGame();
 
-    protected abstract Player initializePlayer(Role role);
-    protected abstract void printBoard();
-    protected abstract Position getPlayerMove(Player currentPlayer) throws IOException;
-    protected abstract Type getMarkType(Player currentPlayer) throws IOException;
-    protected abstract boolean checkWinCondition(Player currentPlayer);
+    protected abstract void exitGame();
+
+    protected abstract Position getPlayerMove() throws IOException;
+
+    protected abstract Type getMarkType() throws IOException;
+
+    protected void addMove(Position position, Type markType){
+        Mark mark = new Mark(position, markType);
+        Move move = new Move(mark, currentPlayer);
+        board.addMove(move); // Add to the board
+    }
+    protected boolean checkWinCondition() {
+        if (board.isFiveInLineFound() || board.isBoardFull()) isGameOver = true;
+        return isGameOver;
+    }
 }

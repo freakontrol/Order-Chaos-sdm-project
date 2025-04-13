@@ -10,18 +10,42 @@ public class ConsoleMain extends OrderAndChaos {
 
     private BufferedReader reader;
 
-    public static void main(String[] args) {
-        ConsoleMain game = new ConsoleMain();
-        game.initializePlayers();
-        game.initializeGame();
-        game.startGame();
-        game.closeReader();
+    public ConsoleMain() {
+        super();
     }
 
-    public void initializePlayers() {
+    public static void main(String[] args) {
+        ConsoleMain game = new ConsoleMain();
+        game.initializeGame();
+        game.startGame();
+        game.exitGame();
+    }
+
+    @Override
+    protected void initializeGame() {
         reader = new BufferedReader(new InputStreamReader(System.in));
-        playerOrder = initializePlayer(Role.ORDER);
-        playerChaos = initializePlayer(Role.CHAOS);
+
+        String orderPlayerName = initializePlayer(Role.ORDER);
+        String chaosPlayerName = initializePlayer(Role.CHAOS);
+
+        this.playerOrder = new Player(Role.ORDER, orderPlayerName);
+        this.playerChaos = new Player(Role.CHAOS, chaosPlayerName);
+
+        this.currentPlayer = this.playerOrder;
+    }
+
+    private String initializePlayer(Role role) {
+        String name = "";
+        while (name.isEmpty()) {
+            System.out.print("Enter name for " + role + " player: ");
+            try {
+                name = reader.readLine();
+            } catch (IOException e) {
+                System.out.println("Error reading input: " + e.getMessage());
+                System.exit(0);
+            }
+        }
+        return name;
     }
 
     @Override
@@ -33,11 +57,9 @@ public class ConsoleMain extends OrderAndChaos {
 
             do {
                 try {
-                    position = getPlayerMove(currentPlayer);
-                    markType = getMarkType(currentPlayer);
-                    Mark mark = new Mark(position, markType);
-                    Move move = new Move(mark, currentPlayer);
-                    board.addMove(move); // Add to the board
+                    position = getPlayerMove();
+                    markType = getMarkType();
+                    addMove(position, markType);
                     break; // Valid move processed successfully
                 } catch (IOException e) {
                     System.out.println("Error reading input: " + e.getMessage());
@@ -46,7 +68,7 @@ public class ConsoleMain extends OrderAndChaos {
             } while (true);
 
             // Check win condition after move is added
-            isGameOver = checkWinCondition(currentPlayer);
+            isGameOver = checkWinCondition();
 
             // Switch to other player for next turn
             currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
@@ -54,28 +76,7 @@ public class ConsoleMain extends OrderAndChaos {
     }
 
     @Override
-    protected Player initializePlayer(Role role) {
-        String name = "";
-        while (name.isEmpty()) {
-            System.out.print("Enter name for " + role + " player: ");
-            try {
-                name = reader.readLine();
-            } catch (IOException e) {
-                System.out.println("Error reading input: " + e.getMessage());
-                System.exit(0);
-            }
-        }
-        return new Player(role, name);
-    }
-
-    @Override
-    protected void printBoard() {
-        System.out.println("\nCurrent Board:");
-        board.printBoard();
-    }
-
-    @Override
-    protected Position getPlayerMove(Player currentPlayer) throws IOException {
+    protected Position getPlayerMove() throws IOException {
         Position position = null;
         while (position == null) {
             System.out.print(currentPlayer.getName() + ", enter your move (row column): ");
@@ -117,7 +118,7 @@ public class ConsoleMain extends OrderAndChaos {
     }
 
     @Override
-    protected Type getMarkType(Player currentPlayer) throws IOException {
+    protected Type getMarkType() throws IOException {
         Type markType = null;
         while (markType == null) {
             System.out.print(currentPlayer.getName() + ", enter your mark (X or O): ");
@@ -144,9 +145,8 @@ public class ConsoleMain extends OrderAndChaos {
         }
         return markType;
     }
-
     @Override
-    protected boolean checkWinCondition(Player currentPlayer) {
+    protected boolean checkWinCondition() {
         boolean isGameOver = false;
         if (board.isFiveInLineFound()) {
             isGameOver = true;
@@ -158,9 +158,21 @@ public class ConsoleMain extends OrderAndChaos {
         return isGameOver;
     }
 
+    @Override
+    protected void exitGame() {
+        closeReader();
+    }
+
+    protected void printBoard() {
+        System.out.println("\nCurrent Board:");
+        board.printBoard();
+    }
+
     public void closeReader() {
         try {
-            reader.close();
+            if (reader != null) {
+                reader.close();
+            }
         } catch (IOException e) {
             System.out.println("Error closing input stream: " + e.getMessage());
         }
