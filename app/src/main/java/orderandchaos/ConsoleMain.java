@@ -13,6 +13,7 @@ public class ConsoleMain extends OrderAndChaos {
     public static void main(String[] args) {
         ConsoleMain game = new ConsoleMain();
         game.initializePlayers();
+        game.initializeGame();
         game.startGame();
         game.closeReader();
     }
@@ -21,6 +22,35 @@ public class ConsoleMain extends OrderAndChaos {
         reader = new BufferedReader(new InputStreamReader(System.in));
         playerOrder = initializePlayer(Role.ORDER);
         playerChaos = initializePlayer(Role.CHAOS);
+    }
+
+    @Override
+    public void startGame() {
+        while (!isGameOver) {
+            printBoard();
+            Position position = null;
+            Type markType = null;
+
+            do {
+                try {
+                    position = getPlayerMove(currentPlayer);
+                    markType = getMarkType(currentPlayer);
+                    Mark mark = new Mark(position, markType);
+                    Move move = new Move(mark, currentPlayer);
+                    board.addMove(move); // Add to the board
+                    break; // Valid move processed successfully
+                } catch (IOException e) {
+                    System.out.println("Error reading input: " + e.getMessage());
+                    return; // Exit on any other I/O error
+                }
+            } while (true);
+
+            // Check win condition after move is added
+            isGameOver = checkWinCondition(currentPlayer);
+
+            // Switch to other player for next turn
+            currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
+        }
     }
 
     @Override
