@@ -7,7 +7,8 @@
 
 ## How to play
 Open a terminal in the project folder and run:
-- `./gradlew run --console=plain` for the Console version
+- `./gradlew runConsole` for the Console version
+- `./gradlew runGUI` for the GUI version
 
 If you are using Windows then instead of `./gradlew`, type `gradlew.bat`
 
