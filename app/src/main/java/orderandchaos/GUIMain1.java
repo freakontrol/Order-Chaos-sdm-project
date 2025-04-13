@@ -28,6 +28,7 @@ public class GUIMain1 extends OrderAndChaos {
 
     @Override
     protected void initializeGame() {
+        isGameOver = false;
         playerOrder = initializePlayer(Role.ORDER);
         playerChaos = initializePlayer(Role.CHAOS);
         currentPlayer = playerOrder;
@@ -183,6 +184,7 @@ protected Type getMarkType() {
 
         private void restartGame() {
             board.clearBoard();
+            isGameOver = false;
             for (int row = 0; row < BOARD_SIZE; row++) {
                 for (int col = 0; col < BOARD_SIZE; col++) {
                     buttons[row][col].setText("");
