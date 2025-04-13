@@ -169,7 +169,7 @@ public class ConsoleMain extends OrderAndChaos {
     }
 
     @Override
-    protected void exitGame() {
+    public void exitGame() {
         closeReader();
     }
 

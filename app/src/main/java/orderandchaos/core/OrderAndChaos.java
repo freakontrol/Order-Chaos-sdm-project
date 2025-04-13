@@ -2,6 +2,8 @@ package orderandchaos.core;
 
 import java.io.IOException;
 
+import orderandchaos.exceptions.OrderAndChaosException;
+
 public abstract class OrderAndChaos {
 
     protected Player playerOrder;
@@ -14,16 +16,17 @@ public abstract class OrderAndChaos {
         isGameOver = false;
     }
 
-    protected void initializeGame(){
+    public void initializeGame(){
         preInitializeGame();
         this.currentPlayer = this.playerOrder;
     }
 
+    public abstract void startGame() throws OrderAndChaosException;
+
+    public abstract void exitGame();
+
     protected abstract void preInitializeGame();
 
-    public abstract void startGame();
-
-    protected abstract void exitGame();
 
     protected abstract Position getPlayerMove() throws IOException;
 
