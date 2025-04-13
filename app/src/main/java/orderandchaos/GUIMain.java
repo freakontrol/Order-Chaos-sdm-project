@@ -3,6 +3,8 @@ package orderandchaos;
 
 import java.awt.event.*;
 
+import javax.swing.JOptionPane;
+
 import orderandchaos.core.*;
 
 public class GUIMain {
@@ -16,13 +18,36 @@ public class GUIMain {
         initializeGame();
     }
 
+    private static Player initializePlayer(Role role) {
+    String name = null;
+
+    while (name == null || name.trim().isEmpty()) {
+        name = JOptionPane.showInputDialog(null,
+                "Enter name for " + role + " player:",
+                "Player Name Input",
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (name == null) { 
+            int confirm = JOptionPane.showConfirmDialog(null,
+                    "Do you want to quit the game?",
+                    "Exit Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+        }
+    }
+
+    return new Player(role, name.trim());
+}
+
     private static void initializeGame() {
        
         board = new Board();
         gui = new BoardGUI(board);
 
-        playerOrder = new Player(Role.ORDER, "ORDER");
-        playerChaos = new Player(Role.CHAOS, "CHAOS");
+        playerOrder = initializePlayer(Role.ORDER);
+        playerChaos = initializePlayer(Role.CHAOS);
         currentPlayer = playerOrder;
         gui.setCurrentPlayer(currentPlayer);
 
