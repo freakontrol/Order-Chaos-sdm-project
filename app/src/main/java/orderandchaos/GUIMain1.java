@@ -17,7 +17,7 @@ public class GUIMain1 extends OrderAndChaos {
             e.printStackTrace();
         }
     }
-    
+
     private InputHandler inputHandler = new InputHandler();
     private OutputHandler outputHandler = new OutputHandler();
 
@@ -75,7 +75,7 @@ public class GUIMain1 extends OrderAndChaos {
     private class MoveListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Position position = inputHandler.getButtonPosition(e);
+            Position position = getPlayerMove();
 
             if (!board.isOccupied(position)) {
                 Type markType = getMarkType();
@@ -107,6 +107,7 @@ public class GUIMain1 extends OrderAndChaos {
         outputHandler.updatePlayerLabel();
     }
 
+    @Override
     public void exitGame() {
         frame.dispose();
         System.exit(0);
@@ -201,7 +202,8 @@ public class GUIMain1 extends OrderAndChaos {
 
     @Override
     protected Position getPlayerMove() {
-        throw new UnsupportedOperationException("getPlayerMove() is not used in GUI mode.");
+        Position position = inputHandler.getButtonPosition(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+        return position;
     }
 
     @Override
@@ -215,7 +217,7 @@ public class GUIMain1 extends OrderAndChaos {
             if (confirm == JOptionPane.YES_OPTION) {
                 System.exit(0);
             } else {
-                return getMarkType(); // Richiama finché non sceglie X o O
+                return getMarkType();
             }
         }
 
