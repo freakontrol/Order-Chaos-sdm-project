@@ -108,6 +108,11 @@ public class ConsoleMain extends OrderAndChaos {
 
             position = new Position(row, col);
 
+            if (!checkFreePosition(position)) {
+                System.out.println("Position is occupied. Choose another.");
+                position = null;
+            }
+
             // Validate coordinates within 0-5
             if (row < 0 || row >= 6 || col < 0 || col >= 6) {
                 System.out.println("Row and column must be between 0 and 5. Try again.");

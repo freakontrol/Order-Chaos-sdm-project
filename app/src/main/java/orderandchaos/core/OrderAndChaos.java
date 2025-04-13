@@ -33,4 +33,8 @@ public abstract class OrderAndChaos {
         if (board.isFiveInLineFound() || board.isBoardFull()) isGameOver = true;
         return isGameOver;
     }
+
+    protected boolean checkFreePosition(Position position) {
+        return board.checkFreePosition(position);
+    }
 }

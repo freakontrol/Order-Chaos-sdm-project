@@ -28,7 +28,7 @@ public class Board {
             throw new InvalidPlayerException();
         }
 
-        if (!positionMoves.containsKey(position)) {
+        if (checkFreePosition(position)) {
             moves.add(move);
             positionMoves.put(position, move);
 
@@ -42,6 +42,10 @@ public class Board {
         } else {
             throw new OccupiedPositionException();
         }
+    }
+
+    public boolean checkFreePosition(Position position) {
+        return !positionMoves.containsKey(position);
     }
     
     // Checks a specific direction for 5 consecutive moves
