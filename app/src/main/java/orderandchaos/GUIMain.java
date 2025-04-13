@@ -19,7 +19,7 @@ public class GUIMain {
     }
 
     private static Player initializePlayer(Role role) {
-        String name = "";
+        String name = null;
         while (name == null || name.trim().isEmpty()) {
             name = JOptionPane.showInputDialog(null,
                     "Enter name for " + role + " player:",
@@ -34,7 +34,7 @@ public class GUIMain {
                 if (confirm == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 } else {
-                    name = ""; // Resta nel ciclo
+                    name = null;
                 }
             }
         }
