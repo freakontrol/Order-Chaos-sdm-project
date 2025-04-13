@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import orderandchaos.exceptions.InvalidPlayerException;
 import orderandchaos.exceptions.OccupiedPositionException;
 import orderandchaos.exceptions.OutOfBoundsException;
+import orderandchaos.testutils.DisabledIfHeadless;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -30,6 +31,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testFrameInitialization() {
         JFrame frame = gui.getFrame();
         assertNotNull(frame);
@@ -38,6 +40,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testGridButtonInitialization() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
@@ -50,6 +53,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testInvalidButtonAccessThrows() {
         assertThrows(OutOfBoundsException.class, () -> gui.getButton(-1, 5));
         assertThrows(OutOfBoundsException.class, () -> gui.getButton(6, 0));
@@ -57,6 +61,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testPlayerLabelInitialization() {
         JLabel label = gui.getPlayerLabel();
         assertNotNull(label);
@@ -64,6 +69,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testSetCurrentPlayerUpdatesLabel() {
         Player player = new Player(Role.ORDER, "Alice");
         gui.setCurrentPlayer(player);
@@ -71,6 +77,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testUpdateButtonSetsSymbolAndDisables() {
         gui.updateButton(1, 1, "O");
         JButton btn = gui.getButton(1, 1);
@@ -79,6 +86,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testGetButtonPositionReturnsCorrectPos() {
         JButton btn = gui.getButton(2, 4);
         ActionEvent event = new ActionEvent(btn, ActionEvent.ACTION_PERFORMED, "");
@@ -89,6 +97,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testAskForSymbolReturnsValidValue() {
         BoardGUI testGui = new BoardGUI(board) {
             @Override
@@ -101,6 +110,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testShowWinnerMessageMocked() {
         final String[] receivedMessage = new String[1];
         BoardGUI testGui = new BoardGUI(board) {
@@ -114,6 +124,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testAskForNewGameReturnsTrueMocked() {
         BoardGUI testGui = new BoardGUI(board) {
             @Override
@@ -125,6 +136,7 @@ class BoardGUITest {
     }
 
     @Test
+    @DisabledIfHeadless
     void testSimulatedClickPlacesMark() throws Exception {
         TestBoardGUI testGui = new TestBoardGUI(new Board(), "X");
         Player order = new Player(Role.ORDER, "ORDER");
