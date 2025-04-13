@@ -14,6 +14,11 @@ public class GUIMain {
     private static Player playerChaos;
     private static Player currentPlayer;
 
+    
+    public GUIMain() {
+        super();
+    }
+    
     public static void main(String[] args) {
         initializeGame();
     }
@@ -105,6 +110,8 @@ public class GUIMain {
             currentPlayer = playerOrder;
             gui.setCurrentPlayer(currentPlayer);
         }
+
+        
         
     }
 }
