@@ -45,7 +45,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
                     outputHandler.updateButton(position.getRow(), position.getColumn(), markType.getName());
 
                     if (checkWinCondition() != GameOutcome.GAME_NOT_OVER) {
-                        String message = board.isFiveInLineFound() ? "Player "+ playerOrder.getName() + " wins!" : "Player "+ playerChaos.getName()+" wins!";
+                        String message = board.isFiveInLineFound() ? "Player "+ playerOrder.getName() + " wins with five in a row! Game Over." : "Player "+ playerChaos.getName()+" wins with full board! Game Over.";
                         outputHandler.showWinnerMessage(message);
                         if (outputHandler.askForNewGame()) restartGame();
                         else exitGame();
