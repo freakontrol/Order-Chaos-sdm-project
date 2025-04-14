@@ -29,8 +29,6 @@ public abstract class OrderAndChaos<IH extends InputHandler, OH extends OutputHa
 
     public abstract void exitGame();
 
-    protected abstract void gameWelcome();
-
     protected abstract void preInitializeGame();
 
     protected void addMove(Position position, Type markType){

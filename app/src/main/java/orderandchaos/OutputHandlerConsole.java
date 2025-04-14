@@ -49,4 +49,16 @@ public class OutputHandlerConsole implements OutputHandler {
         System.out.println("\nCurrent Board:");
         board.printBoard();
     }
+
+    @Override
+    public void gameWelcome(){
+        System.out.println("\nWelcome to Order and Chaos.\nGet ready for an exciting battle of strategy and wit on a 6x6 board.\nColumns and rows are numbered from 1 to 6, making it easy to plan your moves.");
+        System.out.println("Choose your player name and let the game begin!\nIf you need to brush up on the rules, you can find them " + createHyperlink("here", "https://en.wikipedia.org/wiki/Order_and_Chaos") + ".");
+        System.out.println("Have fun and may the best player win!\n");
+    }
+
+    private String createHyperlink(String text, String url) {
+        return "\033]8;;" + url + "\033\\" + text + "\033]8;;\033\\";
+    }
+
 }

@@ -3,10 +3,8 @@ package orderandchaos;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
 
 import orderandchaos.core.*;
-import java.net.URI;
 
 import java.io.IOException;
 
@@ -90,7 +88,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
     protected void preInitializeGame() {
         isGameOver = false;
         setLookAndFeel();
-        gameWelcome();
+        outputHandler.gameWelcome();
 
         String nameOrder = null;
         String nameChaos = null;
@@ -124,34 +122,6 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
         setupGUI();
     }
 
-    protected void gameWelcome() {
-    String html = "<html><body style='font-family:sans-serif; font-size:12px;'>"
-            + "Welcome to Order and Chaos!<br>"
-            + "Get ready for an exciting battle of strategy and wit on a 6x6 board.<br>"
-            + "Columns and rows are numbered from 1 to 6, making it easy to plan your moves.<br>"
-            + "Choose your player name and let the game begin!<br>"
-            + "If you need to brush up on the rules, you can find them "
-            + "<a href='https://en.wikipedia.org/wiki/Order_and_Chaos'>here</a>.<br>"
-            + "Have fun and may the best player win!"
-            + "</body></html>";
-
-    JEditorPane editorPane = new JEditorPane("text/html", html);// Create a JEditorPane to display the HTML content, JOptionPane doesn't work for the purpouse
-    editorPane.setEditable(false); //Non editable text
-    editorPane.setOpaque(false);
-    editorPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE); // Use native font
-
-    editorPane.addHyperlinkListener(e -> {
-        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-            try {
-                Desktop.getDesktop().browse(new URI(e.getURL().toString()));
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    });
-
-    JOptionPane.showMessageDialog(frame, editorPane, "Welcome", JOptionPane.INFORMATION_MESSAGE);
-}
 
     private Player initializePlayer(Role role) {
         String name = null;
