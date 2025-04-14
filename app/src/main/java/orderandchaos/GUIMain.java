@@ -13,9 +13,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
     private static final int BOARD_SIZE = 6;
     private static JFrame frame;
     private static JButton[][] buttons;
-    private static JLabel playerLabel;
-    private OutputHandlerGUI outputHandler;
-
+    
     public GUIMain(InputHandlerGUI inputHandler, OutputHandlerGUI outputHandler) {
         super(inputHandler, outputHandler);
         this.outputHandler = outputHandler;
@@ -124,6 +122,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
     }
 
     private void setupGUI() {
+        JLabel playerLabel;
         frame = new JFrame("Order & Chaos Game");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Prevent auto-close
     
