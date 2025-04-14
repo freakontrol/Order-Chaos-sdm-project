@@ -25,6 +25,26 @@ public class GUIMain extends OrderAndChaos {
     private OutputHandler outputHandler = new OutputHandler();
 
     // Input Handler
+    
+    private String askPlayerName(Role role, String existingName) {
+        String name = null;
+        while (name == null || name.trim().isEmpty()) {
+            name = JOptionPane.showInputDialog(null,
+                    "Enter name for " + role + " player:",
+                    "Player Name Input",
+                    JOptionPane.QUESTION_MESSAGE);
+    
+            if (name == null || name.trim().isEmpty()) {
+                int confirm = JOptionPane.showConfirmDialog(null,
+                        "Do you want to quit the game?",
+                        "Exit Confirmation",
+                        JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+            }
+        }
+        return name.trim();
+    }
+
     private class InputHandler {
         public String askForSymbol() {
             String[] options = {"X", "O"};
@@ -125,32 +145,30 @@ public class GUIMain extends OrderAndChaos {
 
     @Override
     public void preInitializeGame() {
-        isGameOver = false;
-        setLookAndFeel();
-        playerOrder = initializePlayer(Role.ORDER);
-        playerChaos = initializePlayer(Role.CHAOS);
-        currentPlayer = playerOrder;
-        setupGUI();
-    }
+    isGameOver = false;
+    setLookAndFeel();
 
-    private Player initializePlayer(Role role) {
-        String name = null;
-        while (name == null || name.trim().isEmpty()) {
-            name = JOptionPane.showInputDialog(null,
-                    "Enter name for " + role + " player:",
-                    "Player Name Input",
-                    JOptionPane.QUESTION_MESSAGE);
+    String nameOrder = null;
+    String nameChaos = null;
 
-            if (name == null || name.trim().isEmpty()) {
-                int confirm = JOptionPane.showConfirmDialog(null,
-                        "Do you want to quit the game?",
-                        "Exit Confirmation",
-                        JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) System.exit(0);
-            }
+    nameOrder = askPlayerName(Role.ORDER, null);
+
+    do {
+        nameChaos = askPlayerName(Role.CHAOS, nameOrder);
+        if (nameChaos.equalsIgnoreCase(nameOrder)) {
+            JOptionPane.showMessageDialog(null,
+                    "Name already taken by ORDER player. Please choose another name.",
+                    "Name Conflict",
+                    JOptionPane.WARNING_MESSAGE);
         }
-        return new Player(role, name.trim());
-    }
+    } while (nameChaos.equalsIgnoreCase(nameOrder));
+
+    playerOrder = new Player(Role.ORDER, nameOrder);
+    playerChaos = new Player(Role.CHAOS, nameChaos);
+    currentPlayer = playerOrder;
+
+    setupGUI();
+}
 
     private void setupGUI() {
         frame = new JFrame("Order & Chaos Game");
