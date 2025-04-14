@@ -4,16 +4,22 @@ import java.io.IOException;
 
 import orderandchaos.exceptions.OrderAndChaosException;
 
-public abstract class OrderAndChaos {
+public abstract class OrderAndChaos<IH extends InputHandler, OH extends OutputHandler> {
 
     protected Player playerOrder;
     protected Player playerChaos;
     protected Board board;
     protected boolean isGameOver;
-    protected Player currentPlayer;
-    protected OrderAndChaos() {
-        board = new Board();
-        isGameOver = false;
+    protected static Player currentPlayer;
+
+    protected IH inputHandler;
+    protected OH outputHandler;
+
+    protected OrderAndChaos(IH inputHandler, OH outputHandler) {
+        this.inputHandler = inputHandler;
+        this.outputHandler = outputHandler;
+        this.board = new Board();
+        this.isGameOver = false;
     }
 
     public void initializeGame(){
@@ -27,7 +33,6 @@ public abstract class OrderAndChaos {
 
     protected abstract void preInitializeGame();
 
-
     protected abstract Position getPlayerMove() throws IOException;
 
     protected abstract Type getMarkType() throws IOException;
@@ -37,6 +42,7 @@ public abstract class OrderAndChaos {
         Move move = new Move(mark, currentPlayer);
         board.addMove(move); // Add to the board
     }
+
     protected boolean checkWinCondition() {
         if (board.isFiveInLineFound() || board.isBoardFull()) isGameOver = true;
         return isGameOver;

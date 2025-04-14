@@ -10,12 +10,14 @@ public class ConsoleMain extends OrderAndChaos {
 
     private BufferedReader reader;
 
-    public ConsoleMain() {
-        super();
+    public ConsoleMain(InputHandler inputHandler, OutputHandler outputHandler) {
+        super(inputHandler, outputHandler);
     }
 
     public static void main(String[] args) {
-        ConsoleMain game = new ConsoleMain();
+        InputHandler inputHandler = new InputHandlerConsole();
+        OutputHandler outputHandler = new OutputHandlerConsole(currentPlayer);
+        ConsoleMain game = new ConsoleMain(inputHandler, outputHandler);
         game.initializeGame();
         game.startGame();
         game.exitGame();
