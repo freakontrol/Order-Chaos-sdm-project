@@ -3,7 +3,6 @@ package orderandchaos;
 import orderandchaos.core.*;
 import orderandchaos.ui.console.*;
 
-
 import java.io.IOException;
 
 public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandlerConsole> {
@@ -56,50 +55,69 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
     @Override
     public void startGame() {
         while (true) {
-            while (checkWinCondition() == GameOutcome.GAME_NOT_OVER) {
-                outputHandler.printBoard(board);
-                Position position = null;
-                Type markType = null;
-
-                do {
-                    try {
-                        while (position == null){
-                            position = inputHandler.getPlayerMove(currentPlayer);
-                            if (!checkFreePosition(position)) {
-                                outputHandler.showErrorMessage("Position is occupied. Choose another.");
-                                position = null;
-                            }
-                        }
-                        markType = inputHandler.getMarkType(currentPlayer);
-                        addMove(position, markType);
-                        break; // Valid move processed successfully
-                    } catch (IOException e) {
-                        outputHandler.showErrorMessage("Error reading input: " + e.getMessage());
-                        return; // Exit on any other I/O error
-                    }
-                } while (true);
-
-                // Switch to other player for next turn
-                currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
-            }
-
-            if (checkWinCondition() == GameOutcome.FIVE_IN_A_ROW) {
-                outputHandler.showWinnerMessage("\n" + currentPlayer.getName() + " wins with five in a row! Game Over.");
-            } else if (checkWinCondition() == GameOutcome.BOARD_FULL) {
-                outputHandler.showWinnerMessage("\nPlayer Chaos wins! Game Over.");
-            }
-
-            // Ask if players want to play a new game
+            playGameUntilWinCondition();
+            handleGameEnd();
             if (!outputHandler.askForNewGame()) {
                 break;
             }
+            handleNewGame();
+        }
+    }
 
-            // Ask if players want to switch roles and restart the game
-            if (inputHandler.askToSwitchRoles()) {
-                restartGame();
-            } else {
-                resetGame();
+    private void playGameUntilWinCondition() {
+        while (checkWinCondition() == GameOutcome.GAME_NOT_OVER) {
+            outputHandler.printBoard(board);
+            handlePlayerMove();
+            switchCurrentPlayer();
+        }
+    }
+
+    private void handlePlayerMove() {
+        Position position = null;
+        Type markType = null;
+
+        do {
+            try {
+                position = getValidPlayerMove();
+                markType = inputHandler.getMarkType(currentPlayer);
+                addMove(position, markType);
+                break; // Valid move processed successfully
+            } catch (IOException e) {
+                outputHandler.showErrorMessage("Error reading input: " + e.getMessage());
+                return; // Exit on any other I/O error
             }
+        } while (true);
+    }
+
+    private Position getValidPlayerMove() throws IOException {
+        Position position = null;
+        while (position == null) {
+            position = inputHandler.getPlayerMove(currentPlayer);
+            if (!checkFreePosition(position)) {
+                outputHandler.showErrorMessage("Position is occupied. Choose another.");
+                position = null;
+            }
+        }
+        return position;
+    }
+
+    private void switchCurrentPlayer() {
+        currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
+    }
+
+    private void handleGameEnd() {
+        if (checkWinCondition() == GameOutcome.FIVE_IN_A_ROW) {
+            outputHandler.showWinnerMessage("\n" + playerOrder.getName() + " wins with five in a row! Game Over.");
+        } else if (checkWinCondition() == GameOutcome.BOARD_FULL) {
+            outputHandler.showWinnerMessage("\n" + playerChaos.getName() + " wins with full board! Game Over.");
+        }
+    }
+
+    private void handleNewGame() {
+        if (inputHandler.askToSwitchRoles()) {
+            restartGame();
+        } else {
+            resetGame();
         }
     }
 
