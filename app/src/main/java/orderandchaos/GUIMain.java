@@ -175,11 +175,7 @@ public class GUIMain extends OrderAndChaos {
                     JOptionPane.QUESTION_MESSAGE);
 
             if (name == null || name.trim().isEmpty()) {
-                int confirm = JOptionPane.showConfirmDialog(null,
-                        "Do you want to quit the game?",
-                        "Exit Confirmation",
-                        JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+                if (confirmExit()) System.exit(0);
             }
         }
         return new Player(role, name.trim());
@@ -187,23 +183,43 @@ public class GUIMain extends OrderAndChaos {
 
     private void setupGUI() {
         frame = new JFrame("Order & Chaos Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Prevent auto-close
+    
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (confirmExit()) {
+                    exitGame();
+                }
+            }
+        });
+    
         frame.setSize(550, 600);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-
+    
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel gridPanel = createGridPanel();
         playerLabel = new JLabel("Current turn: " + currentPlayer.getName(), SwingConstants.CENTER);
         playerLabel.setFont(new Font("Ubuntu", Font.BOLD, 18));
-
+    
         mainPanel.add(playerLabel, BorderLayout.NORTH);
         mainPanel.add(gridPanel, BorderLayout.CENTER);
-
+    
         frame.add(mainPanel);
         frame.setVisible(true);
     }
 
+    private boolean confirmExit() {
+        int confirm = JOptionPane.showConfirmDialog(
+                frame,
+                "Do you want to quit the game?",
+                "Exit Confirmation",
+                JOptionPane.YES_NO_OPTION);
+        return confirm == JOptionPane.YES_OPTION;
+    }
+    
+    
     private JPanel createGridPanel() {
         JPanel gridPanel = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
         buttons = new JButton[BOARD_SIZE][BOARD_SIZE];
