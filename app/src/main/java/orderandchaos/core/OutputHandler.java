@@ -6,5 +6,4 @@ public interface OutputHandler {
     void updatePlayerLabel(Player currentPlayer);
     void resetBoardDisplay();
     void gameWelcome();
-
 }

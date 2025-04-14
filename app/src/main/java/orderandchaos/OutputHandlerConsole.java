@@ -49,7 +49,7 @@ public class OutputHandlerConsole implements OutputHandler {
 
     public void printBoard(Board board) { // Implement the printBoard method
         System.out.println("\nCurrent Board:");
-        board.printBoard();
+        System.out.println(board.toString());
     }
 
     @Override

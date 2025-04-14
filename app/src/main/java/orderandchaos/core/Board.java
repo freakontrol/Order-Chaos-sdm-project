@@ -131,10 +131,6 @@ public class Board {
         return Collections.unmodifiableList(moves);
     }
 
-    public void printBoard() {
-        System.out.println(this.toString());
-    }
-
     @FunctionalInterface
     private interface GetPosition {
         Position get(Position position) throws IllegalArgumentException;
