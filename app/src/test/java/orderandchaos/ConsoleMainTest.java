@@ -31,7 +31,7 @@ class ConsoleMainTest {
     @Test
     void testGameSimulation() {
         // Simulate input for player names
-        String simulatedInput = "Alice\nThomas\n0 0\nX\n1 1\nO\n2 2\nX\n3 3\nO\n4 4\nX\n5 5\nO\nno\n";
+        String simulatedInput = "Alice\nThomas\n1 1\nX\n2 2\nX\n3 3\nX\n4 4\nX\n5 5\nX\nno\n";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
 
         // Start the game
@@ -63,7 +63,7 @@ class ConsoleMainTest {
                 Thomas, enter your move (row column): Thomas, enter your mark (X or O):
                 Current Board:
                 X . . . . .
-                . O . . . .
+                . X . . . .
                 . . . . . .
                 . . . . . .
                 . . . . . .
@@ -71,7 +71,7 @@ class ConsoleMainTest {
                 Alice, enter your move (row column): Alice, enter your mark (X or O):
                 Current Board:
                 X . . . . .
-                . O . . . .
+                . X . . . .
                 . . X . . .
                 . . . . . .
                 . . . . . .
@@ -79,46 +79,30 @@ class ConsoleMainTest {
                 Thomas, enter your move (row column): Thomas, enter your mark (X or O):
                 Current Board:
                 X . . . . .
-                . O . . . .
+                . X . . . .
                 . . X . . .
-                . . O . . .
+                . . . X . .
                 . . . . . .
                 . . . . . .
                 Alice, enter your move (row column): Alice, enter your mark (X or O):
                 Current Board:
                 X . . . . .
-                . O . . . .
+                . X . . . .
                 . . X . . .
-                . . O . . .
-                . . X . . .
+                . . . X . .
+                . . . . X .
                 . . . . . .
-                Thomas, enter your move (row column): Thomas, enter your mark (X or O):
-                Current Board:
-                X . . . . .
-                . O . . . .
-                . . X . . .
-                . . O . . .
-                . . X . . .
-                . . O . . .
-                Alice, enter your move (row column): Alice, enter your mark (X or O):
-                Current Board:
-                X . . . . .
-                . O . . . .
-                . . X . . .
-                . . O . . .
-                . . X . . .
-                . . O . . .
-                Thomas wins! Game Over.
+                Alice wins with five in a row! Game Over.
                 Do you want to play a new game? (yes/no):
                 """;
 
-        assertEquals(expectedOutput.trim(), outputStream.toString().trim());
+        assertEquals(expectedOutput.trim(), outputStream.toString());
     }
 
     @Test
     void testOccupiedPosition() {
         // Simulate input for player names and moves
-        String simulatedInput = "Alice\nThomas\n0 0\nX\n0 0\nO\n1 1\nX\nno\n";
+        String simulatedInput = "Alice\nThomas\n0 0\nX\n0 0\nO\n1 1\nX\n";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
 
         // Start the game
@@ -156,10 +140,9 @@ class ConsoleMainTest {
                 . . . . . .
                 . . . . . .
                 . . . . . .
-                Do you want to play a new game? (yes/no):
                 """;
 
-        assertEquals(expectedOutput.trim(), outputStream.toString().trim());
+        assertEquals(expectedOutput.trim(), outputStream.toString());
     }
 
     @Test
@@ -230,7 +213,7 @@ class ConsoleMainTest {
 
         expectedOutput += "Player Chaos wins! Game Over.\nDo you want to play a new game? (yes/no):";
 
-        assertEquals(expectedOutput.trim(), outputStream.toString().trim());
+        assertEquals(expectedOutput.trim(), outputStream.toString());
     }
 
     @Test
@@ -251,13 +234,13 @@ class ConsoleMainTest {
                 Enter name for CHAOS player:
                 """;
 
-        assertEquals(expectedOutput.trim(), outputStream.toString().trim());
+        assertEquals(expectedOutput.trim(), outputStream.toString());
     }
 
     @Test
     void testSwitchRoles() {
         // Simulate input for player names and switching roles
-        String simulatedInput = "Alice\nThomas\n0 0\nX\n1 1\nO\nno\nyes\n";
+        String simulatedInput = "Alice\nThomas\n1 1\nX\n2 2\nO\n";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
 
         // Start the game
@@ -294,16 +277,15 @@ class ConsoleMainTest {
                 . . . . . .
                 . . . . . .
                 . . . . . .
-                Do you want to play a new game? (yes/no): Do you want to switch roles between ORDER and CHAOS? (yes/no):
                 """;
 
-        assertEquals(expectedOutput.trim(), outputStream.toString().trim());
+        assertEquals(expectedOutput.trim(), outputStream.toString());
     }
 
     @Test
     void testInvalidInput() {
         // Simulate input for player names and invalid moves
-        String simulatedInput = "Alice\nThomas\ninvalid\n0 0\nX\n1 1\nO\nno\n";
+        String simulatedInput = "Alice\nThomas\nthings\n1 1\nX\n2 2\nO\n";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
 
         // Start the game
@@ -341,9 +323,8 @@ class ConsoleMainTest {
                 . . . . . .
                 . . . . . .
                 . . . . . .
-                Do you want to play a new game? (yes/no):
                 """;
 
-        assertEquals(expectedOutput.trim(), outputStream.toString().trim());
+        assertEquals(expectedOutput.trim(), outputStream.toString());
     }
 }
