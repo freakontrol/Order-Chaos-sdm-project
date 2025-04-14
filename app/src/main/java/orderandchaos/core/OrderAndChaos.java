@@ -11,6 +11,7 @@ public abstract class OrderAndChaos {
     protected Board board;
     protected boolean isGameOver;
     protected Player currentPlayer;
+
     protected OrderAndChaos() {
         board = new Board();
         isGameOver = false;
@@ -25,8 +26,9 @@ public abstract class OrderAndChaos {
 
     public abstract void exitGame();
 
-    protected abstract void preInitializeGame();
+    protected abstract void gameWelcome();
 
+    protected abstract void preInitializeGame();
 
     protected abstract Position getPlayerMove() throws IOException;
 

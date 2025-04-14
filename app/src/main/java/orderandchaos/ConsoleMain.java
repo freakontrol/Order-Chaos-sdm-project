@@ -22,7 +22,16 @@ public class ConsoleMain extends OrderAndChaos {
     }
 
     @Override
+    protected void gameWelcome(){
+
+        System.out.println("Welcome to Order and Chaos.\nThe game is played on a 6x6 board.\nColumns and rows of the board go from 1 to 6.");
+        System.out.println("Choose your player name and begin.\nFor rules go to https://en.wikipedia.org/wiki/Order_and_Chaos\nHave fun!");
+    }
+
+    @Override
     protected void preInitializeGame() {
+        gameWelcome();
+
         reader = new BufferedReader(new InputStreamReader(System.in));
 
         String orderPlayerName = initializePlayer(Role.ORDER);
