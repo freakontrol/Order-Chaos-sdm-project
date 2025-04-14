@@ -2,7 +2,7 @@ package orderandchaos.core;
 
 import orderandchaos.exceptions.OrderAndChaosException;
 
-public abstract class OrderAndChaos<IH extends InputHandler, OH extends OutputHandler> {
+public abstract class OrderAndChaos<I extends InputHandler, O extends OutputHandler> {
 
     protected Player playerOrder;
     protected Player playerChaos;
@@ -10,10 +10,10 @@ public abstract class OrderAndChaos<IH extends InputHandler, OH extends OutputHa
     protected boolean isGameOver;
     protected Player currentPlayer;
 
-    protected IH inputHandler;
-    protected OH outputHandler;
+    protected I inputHandler;
+    protected O outputHandler;
 
-    protected OrderAndChaos(IH inputHandler, OH outputHandler) {
+    protected OrderAndChaos(I inputHandler, O outputHandler) {
         this.inputHandler = inputHandler;
         this.outputHandler = outputHandler;
         this.board = new Board();
