@@ -3,8 +3,9 @@ package orderandchaos.ui.console;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import orderandchaos.core.OutputHandler;
+
 import orderandchaos.core.Player;
+import orderandchaos.ui.OutputHandler;
 import orderandchaos.core.Board;
 
 public class OutputHandlerConsole implements OutputHandler {

@@ -1,6 +1,8 @@
 package orderandchaos.core;
 
 import orderandchaos.exceptions.OrderAndChaosException;
+import orderandchaos.ui.InputHandler;
+import orderandchaos.ui.OutputHandler;
 
 public abstract class OrderAndChaos<I extends InputHandler, O extends OutputHandler> {
 
