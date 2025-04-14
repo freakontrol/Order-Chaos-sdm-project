@@ -122,22 +122,6 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
         setupGUI();
     }
 
-
-    private Player initializePlayer(Role role) {
-        String name = null;
-        while (name == null || name.trim().isEmpty()) {
-            name = JOptionPane.showInputDialog(null,
-                    "Enter name for " + role + " player:",
-                    "Player Name Input",
-                    JOptionPane.QUESTION_MESSAGE);
-
-            if (name == null || name.trim().isEmpty()) {
-                if (confirmExit()) System.exit(0);
-            }
-        }
-        return new Player(role, name.trim());
-    }
-
     private void setupGUI() {
         frame = new JFrame("Order & Chaos Game");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Prevent auto-close
