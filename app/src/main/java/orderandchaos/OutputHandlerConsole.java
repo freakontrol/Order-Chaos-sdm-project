@@ -45,7 +45,6 @@ public class OutputHandlerConsole implements OutputHandler {
         System.out.println("Board has been reset.");
     }
 
-    @Override
     public void printBoard(Board board) { // Implement the printBoard method
         System.out.println("\nCurrent Board:");
         board.printBoard();

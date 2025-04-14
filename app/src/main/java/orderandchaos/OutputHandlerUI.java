@@ -61,8 +61,4 @@ public class OutputHandlerUI implements OutputHandler {
             }
         }
     }
-
-    @Override
-    public void printBoard(Board board) { // Implement the printBoard method
-    }
 }

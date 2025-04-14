@@ -8,5 +8,4 @@ public interface OutputHandler {
     boolean askForNewGame();
     void updatePlayerLabel(Player currentPlayer);
     void resetBoardDisplay();
-    void printBoard(Board board);
 }
