@@ -28,17 +28,17 @@ public class ConsoleMain extends OrderAndChaos {
         String orderPlayerName = initializePlayer(Role.ORDER);
         String chaosPlayerName;
 
-        do{
+        do {
             chaosPlayerName = initializePlayer(Role.CHAOS);
 
-            if(orderPlayerName.equals(chaosPlayerName)) {
+            if (orderPlayerName.equals(chaosPlayerName)) {
                 System.out.println("Name is already taken. Choose another.");
             } else {
                 this.playerOrder = new Player(Role.ORDER, orderPlayerName);
                 this.playerChaos = new Player(Role.CHAOS, chaosPlayerName);
                 break;
             }
-        } while(true);
+        } while (true);
     }
 
     private String initializePlayer(Role role) {
@@ -89,10 +89,12 @@ public class ConsoleMain extends OrderAndChaos {
                 currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
             }
 
+            // Ask if players want to play a new game
             if (!askToPlayNewGame()) {
                 break;
             }
 
+            // Ask if players want to switch roles and restart the game
             if (askToSwitchRoles()) {
                 restartGame();
             } else {
@@ -185,7 +187,7 @@ public class ConsoleMain extends OrderAndChaos {
             System.out.println("\n" + currentPlayer.getName() + " wins with five in a row! Game Over.");
         } else if (board.isBoardFull()) {
             isGameOver = true;
-            System.out.println("\nPlayer Chaos wins! Game Over.");
+            System.out.println("\nThe board is full! It's a draw. Game Over.");
         }
         return isGameOver;
     }
@@ -211,24 +213,38 @@ public class ConsoleMain extends OrderAndChaos {
     }
 
     private boolean askToSwitchRoles() {
-        System.out.print("Do you want to switch roles between ORDER and CHAOS? (yes/no): ");
-        try {
-            String input = reader.readLine();
-            return input.equalsIgnoreCase("yes");
-        } catch (IOException e) {
-            System.out.println("Error reading input: " + e.getMessage());
-            return false;
+        while (true) {
+            System.out.print("Do you want to switch roles between ORDER and CHAOS? (yes/no): ");
+            try {
+                String input = reader.readLine();
+                if (input.equalsIgnoreCase("yes")) {
+                    return true;
+                } else if (input.equalsIgnoreCase("no")) {
+                    return false;
+                } else {
+                    System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+                }
+            } catch (IOException e) {
+                System.out.println("Error reading input: " + e.getMessage());
+            }
         }
     }
 
     private boolean askToPlayNewGame() {
-        System.out.print("Do you want to play a new game? (yes/no): ");
-        try {
-            String input = reader.readLine();
-            return input.equalsIgnoreCase("yes");
-        } catch (IOException e) {
-            System.out.println("Error reading input: " + e.getMessage());
-            return false;
+        while (true) {
+            System.out.print("Do you want to play a new game? (yes/no): ");
+            try {
+                String input = reader.readLine();
+                if (input.equalsIgnoreCase("yes")) {
+                    return true;
+                } else if (input.equalsIgnoreCase("no")) {
+                    return false;
+                } else {
+                    System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+                }
+            } catch (IOException e) {
+                System.out.println("Error reading input: " + e.getMessage());
+            }
         }
     }
 
