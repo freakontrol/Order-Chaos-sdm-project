@@ -1,4 +1,4 @@
-package orderandchaos;
+package orderandchaos.ui.console;
 
 import java.io.BufferedReader;
 import java.io.IOException;

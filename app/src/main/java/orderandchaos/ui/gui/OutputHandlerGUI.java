@@ -1,4 +1,4 @@
-package orderandchaos;
+package orderandchaos.ui.gui;
 
 import java.awt.Desktop;
 import java.net.URI;

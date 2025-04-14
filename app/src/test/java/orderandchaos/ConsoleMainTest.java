@@ -10,6 +10,9 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import orderandchaos.ui.console.*;
+
+
 class ConsoleMainTest {
 
     private ConsoleMain game;

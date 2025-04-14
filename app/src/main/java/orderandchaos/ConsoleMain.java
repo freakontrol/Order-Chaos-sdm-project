@@ -1,6 +1,8 @@
 package orderandchaos;
 
 import orderandchaos.core.*;
+import orderandchaos.ui.console.*;
+
 
 import java.io.IOException;
 

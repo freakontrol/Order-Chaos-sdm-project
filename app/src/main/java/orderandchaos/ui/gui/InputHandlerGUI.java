@@ -1,4 +1,4 @@
-package orderandchaos;
+package orderandchaos.ui.gui;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;

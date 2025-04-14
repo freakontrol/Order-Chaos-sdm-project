@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import orderandchaos.core.*;
+import orderandchaos.ui.gui.*;
 
 import java.io.IOException;
 
