@@ -7,13 +7,14 @@ import orderandchaos.ui.console.*;
 import java.io.IOException;
 
 public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandlerConsole> {
+
     public ConsoleMain(InputHandlerConsole inputHandler, OutputHandlerConsole outputHandler) {
         super(inputHandler, outputHandler);
     }
 
     public static void main(String[] args) {
         InputHandlerConsole inputHandler = new InputHandlerConsole();
-        OutputHandlerConsole outputHandler = new OutputHandlerConsole(); // Initialize with null, will be set later
+        OutputHandlerConsole outputHandler = new OutputHandlerConsole();
         ConsoleMain game = new ConsoleMain(inputHandler, outputHandler);
         game.initializeGame();
         game.startGame();
@@ -55,8 +56,8 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
     @Override
     public void startGame() {
         while (true) {
-            while (!isGameOver) {
-                outputHandler.printBoard(board); // Call the printBoard method from OutputHandler
+            while (checkWinCondition() == GameOutcome.GAME_NOT_OVER) {
+                outputHandler.printBoard(board);
                 Position position = null;
                 Type markType = null;
 
@@ -78,11 +79,15 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
                 }
             } while (true);
 
-                // Check win condition after move is added
-                isGameOver = checkWinCondition();
 
                 // Switch to other player for next turn
                 currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
+            }
+
+            if (checkWinCondition() == GameOutcome.FIVE_IN_A_ROW) {
+                outputHandler.showWinnerMessage("\n" + currentPlayer.getName() + " wins with five in a row! Game Over.");
+            } else if (checkWinCondition() == GameOutcome.BOARD_FULL) {
+                outputHandler.showWinnerMessage("\nPlayer Chaos wins! Game Over.");
             }
 
             // Ask if players want to play a new game
@@ -99,20 +104,6 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
         }
     }
 
-
-    @Override
-    protected boolean checkWinCondition() {
-        boolean isGameOver = false;
-        if (board.isFiveInLineFound()) {
-            isGameOver = true;
-            outputHandler.showWinnerMessage("\n" + currentPlayer.getName() + " wins with five in a row! Game Over.");
-        } else if (board.isBoardFull()) {
-            isGameOver = true;
-            outputHandler.showWinnerMessage("\nPlayer Chaos wins! Game Over.");
-        }
-        return isGameOver;
-    }
-
     private void restartGame() {
         Player temp = playerOrder;
         playerOrder = new Player(Role.ORDER, playerChaos.getName());
@@ -122,7 +113,6 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
 
     private void resetGame() {
         board.clearBoard();
-        isGameOver = false;
         currentPlayer = playerOrder;
     }
 }

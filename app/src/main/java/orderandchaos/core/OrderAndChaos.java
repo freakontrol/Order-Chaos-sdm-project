@@ -7,7 +7,6 @@ public abstract class OrderAndChaos<I extends InputHandler, O extends OutputHand
     protected Player playerOrder;
     protected Player playerChaos;
     protected Board board;
-    protected boolean isGameOver;
     protected Player currentPlayer;
 
     protected I inputHandler;
@@ -17,7 +16,6 @@ public abstract class OrderAndChaos<I extends InputHandler, O extends OutputHand
         this.inputHandler = inputHandler;
         this.outputHandler = outputHandler;
         this.board = new Board();
-        this.isGameOver = false;
     }
 
     public void initializeGame(){
@@ -35,10 +33,22 @@ public abstract class OrderAndChaos<I extends InputHandler, O extends OutputHand
         board.addMove(move); // Add to the board
     }
 
-    protected boolean checkWinCondition() {
-        if (board.isFiveInLineFound() || board.isBoardFull()) isGameOver = true;
-        return isGameOver;
+    public enum GameOutcome {
+        FIVE_IN_A_ROW,
+        BOARD_FULL,
+        GAME_NOT_OVER
     }
+
+    protected GameOutcome checkWinCondition() {
+        if (board.isFiveInLineFound()) {
+            return GameOutcome.FIVE_IN_A_ROW;
+        }
+        if (board.isBoardFull()) {
+            return GameOutcome.BOARD_FULL;
+        }
+        return GameOutcome.GAME_NOT_OVER;
+    }
+
 
     protected boolean checkFreePosition(Position position) {
         return board.checkFreePosition(position);
