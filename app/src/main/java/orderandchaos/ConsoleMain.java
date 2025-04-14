@@ -17,7 +17,6 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
         ConsoleMain game = new ConsoleMain(inputHandler, outputHandler);
         game.initializeGame();
         game.startGame();
-        game.exitGame();
     }
 
     @Override
@@ -112,10 +111,6 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
             outputHandler.showWinnerMessage("\nPlayer Chaos wins! Game Over.");
         }
         return isGameOver;
-    }
-
-    @Override
-    public void exitGame() {
     }
 
     private void restartGame() {
