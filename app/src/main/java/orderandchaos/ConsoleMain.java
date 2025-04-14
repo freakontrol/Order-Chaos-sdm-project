@@ -63,8 +63,8 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
 
             do {
                 try {
-                    position = inputHandler.getPlayerMove();
-                    markType = inputHandler.getMarkType();
+                    position = inputHandler.getPlayerMove(currentPlayer);
+                    markType = inputHandler.getMarkType(currentPlayer);
                     addMove(position, markType);
                     break; // Valid move processed successfully
                 } catch (IOException e) {
@@ -78,7 +78,7 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
 
             // Switch to other player for next turn
             currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
-            outputHandler.updatePlayerLabel(currentPlayer); // Update the player label
+            //outputHandler.updatePlayerLabel(currentPlayer); // Update the player label
         }
     }
 

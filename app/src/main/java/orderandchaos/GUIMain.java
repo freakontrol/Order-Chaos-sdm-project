@@ -35,7 +35,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
                 Position position = inputHandler.getButtonPosition(e);
 
                 if (!board.isOccupied(position)) {
-                    Type markType = inputHandler.getMarkType();
+                    Type markType = inputHandler.getMarkType(currentPlayer);
 
                     if (markType == null) {
                         return;

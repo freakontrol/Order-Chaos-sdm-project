@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import orderandchaos.core.InputHandler;
 import orderandchaos.core.Position;
+import orderandchaos.core.Player;
 import orderandchaos.core.Role;
 import orderandchaos.core.Type;
 
@@ -27,8 +28,8 @@ public class InputHandlerConsole implements InputHandler {
     }
 
     @Override
-    public Position getPlayerMove() throws IOException {
-        System.out.print("Enter row and column (e.g., 1 2): ");
+    public Position getPlayerMove(Player currentPlayer) throws IOException {
+        System.out.print(currentPlayer.getName() + ", enter your move (row column): ");
         String input = reader.readLine();
         String[] parts = input.split("\\s+");
         if (parts.length != 2) {
@@ -48,10 +49,10 @@ public class InputHandlerConsole implements InputHandler {
         return name;
     }
 
-    public Type getMarkType() throws IOException {
+    public Type getMarkType(Player currentPlayer) throws IOException {
         Type markType = null;
         while (markType == null) {
-            System.out.print("Enter your mark (X or O): ");
+            System.out.print(currentPlayer.getName() + ", enter your mark (X or O): ");
             String inputLine = reader.readLine();
 
             if (inputLine == null) {

@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import orderandchaos.core.InputHandler;
+import orderandchaos.core.Player;
 import orderandchaos.core.Position;
 import orderandchaos.core.Role;
 import orderandchaos.core.Type;
@@ -27,7 +28,7 @@ public class InputHandlerUI implements InputHandler {
     }
 
     @Override
-    public Position getPlayerMove() throws IOException {
+    public Position getPlayerMove(Player actualPlayer) throws IOException {
         // This method will be called with an ActionEvent in the listener
         throw new UnsupportedOperationException("This method should not be called directly");
     }
@@ -40,7 +41,7 @@ public class InputHandlerUI implements InputHandler {
     }
 
     @Override
-    public Type getMarkType() throws IOException {
+    public Type getMarkType(Player currentPlayer) throws IOException {
         String choice = askForSymbol();
 
         if (choice == null) {

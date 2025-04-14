@@ -19,7 +19,9 @@ class ConsoleMainTest {
 
     @BeforeEach
     void setUp() {
-        game = new ConsoleMain();
+        InputHandlerConsole inputHandler = new InputHandlerConsole();
+        OutputHandlerConsole outputHandler = new OutputHandlerConsole(); // Initialize with null, will be set later
+        game = new ConsoleMain(inputHandler, outputHandler);
         System.setOut(new PrintStream(outputStream));
     }
 
