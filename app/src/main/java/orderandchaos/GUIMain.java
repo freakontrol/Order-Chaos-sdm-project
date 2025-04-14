@@ -29,6 +29,43 @@ public class GUIMain extends OrderAndChaos {
 
     // Input Handler
     private class InputHandler {
+
+        private String askPlayerName(Role role, String existingName) {
+            String name = null;
+            while (true) {
+                name = JOptionPane.showInputDialog(null,
+                        "Enter name for " + role + " player:",
+                        "Player Name Input",
+                        JOptionPane.QUESTION_MESSAGE);
+
+                if (name == null) {
+                    int confirm = JOptionPane.showConfirmDialog(null,
+                            "Do you want to quit the game?",
+                            "Exit Confirmation",
+                            JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+                    else continue;
+                }
+
+                if (name.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null,
+                            "The " + role + " name can't be empty",
+                            "Choose your name",
+                            JOptionPane.WARNING_MESSAGE);
+                } else {
+                    return name.trim();
+                }
+            }
+        }
+
+        public boolean askToSwitchRoles() {
+            int choice = JOptionPane.showConfirmDialog(frame,
+                    "Do you want to switch roles between ORDER and CHAOS?",
+                    "Switch Roles",
+                    JOptionPane.YES_NO_OPTION);
+            return choice == JOptionPane.YES_OPTION;
+        }
+
         public String askForSymbol() {
             String[] options = {"X", "O"};
             return (String) JOptionPane.showInputDialog(frame,
@@ -81,7 +118,7 @@ public class GUIMain extends OrderAndChaos {
     private class MoveListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Position position = getPlayerMove(e);
+            Position position = inputHandler.getButtonPosition(e);
 
             if (!board.isOccupied(position)) {
                 Type markType = getMarkType();
@@ -108,6 +145,11 @@ public class GUIMain extends OrderAndChaos {
     }
 
     private void restartGame() {
+        if (inputHandler.askToSwitchRoles()) {
+            Player temp = playerOrder;
+            playerOrder = new Player(Role.ORDER, playerChaos.getName());
+            playerChaos = new Player(Role.CHAOS, temp.getName());
+        }
         board.clearBoard();
         isGameOver = false;
         outputHandler.resetBoardDisplay();
@@ -131,9 +173,26 @@ public class GUIMain extends OrderAndChaos {
         isGameOver = false;
         setLookAndFeel();
         gameWelcome();
-        playerOrder = initializePlayer(Role.ORDER);
-        playerChaos = initializePlayer(Role.CHAOS);
+
+        String nameOrder = null;
+        String nameChaos = null;
+        
+        nameOrder = inputHandler.askPlayerName(Role.ORDER, null);
+
+        do {
+            nameChaos = inputHandler.askPlayerName(Role.CHAOS, nameOrder);
+            if (nameChaos.equalsIgnoreCase(nameOrder)) {
+                JOptionPane.showMessageDialog(null,
+                        "Name already taken by ORDER player. Please choose another name.",
+                        "Name Conflict",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        } while (nameChaos.equalsIgnoreCase(nameOrder));
+
+        playerOrder = new Player(Role.ORDER, nameOrder);
+        playerChaos = new Player(Role.CHAOS, nameChaos);
         currentPlayer = playerOrder;
+
         setupGUI();
     }
 
