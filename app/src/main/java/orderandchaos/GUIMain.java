@@ -35,11 +35,10 @@ public class GUIMain extends OrderAndChaos {
                     JOptionPane.QUESTION_MESSAGE);
     
             if (name == null || name.trim().isEmpty()) {
-                int confirm = JOptionPane.showConfirmDialog(null,
-                        "Do you want to quit the game?",
-                        "Exit Confirmation",
-                        JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+                JOptionPane.showMessageDialog(null,
+                        "The " + role + " name can't be empty",
+                        "Choose your name",
+                        JOptionPane.WARNING_MESSAGE);
             }
         }
         return name.trim();

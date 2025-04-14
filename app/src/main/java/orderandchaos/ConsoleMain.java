@@ -47,6 +47,13 @@ public class ConsoleMain extends OrderAndChaos {
             System.out.print("Enter name for " + role + " player: ");
             try {
                 name = reader.readLine();
+                name = name.trim();
+
+            if (name.isEmpty()) {
+                System.out.println("The " + role + " name can't be empty.");
+                continue;
+            }
+
             } catch (IOException e) {
                 System.out.println("Error reading input: " + e.getMessage());
                 System.exit(0);
