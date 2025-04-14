@@ -8,14 +8,14 @@ import orderandchaos.core.*;
 
 import java.io.IOException;
 
-public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
+public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
     private static final int BOARD_SIZE = 6;
     private static JFrame frame;
     private static JButton[][] buttons;
     private static JLabel playerLabel;
-    private OutputHandlerUI outputHandler;
+    private OutputHandlerGUI outputHandler;
 
-    public GUIMain(InputHandlerUI inputHandler, OutputHandlerUI outputHandler) {
+    public GUIMain(InputHandlerGUI inputHandler, OutputHandlerGUI outputHandler) {
         super(inputHandler, outputHandler);
         this.outputHandler = outputHandler;
     }
@@ -149,7 +149,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
     
         frame.add(mainPanel);
         frame.setVisible(true);
-        // Initialize OutputHandlerUI after buttons and playerLabel are set up
+
         outputHandler.setButtons(buttons);
         outputHandler.setPlayerLabel(playerLabel);
     }
@@ -201,8 +201,8 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
     }
 
     public static void main(String[] args) {
-        InputHandlerUI inputHandler = new InputHandlerUI(frame);
-        OutputHandlerUI outputHandler = new OutputHandlerUI(frame, null, null); // Initialize with null, will be set later
+        InputHandlerGUI inputHandler = new InputHandlerGUI(frame);
+        OutputHandlerGUI outputHandler = new OutputHandlerGUI(frame, null, null); // Initialize with null, will be set later
         GUIMain guiMain = new GUIMain(inputHandler, outputHandler);
         guiMain.initializeGame();
         guiMain.startGame();

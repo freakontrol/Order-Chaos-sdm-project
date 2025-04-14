@@ -12,12 +12,12 @@ import javax.swing.JLabel;
 import orderandchaos.core.OutputHandler;
 import orderandchaos.core.Player;
 
-public class OutputHandlerUI implements OutputHandler {
+public class OutputHandlerGUI implements OutputHandler {
     private JFrame frame;
     private JButton[][] buttons;
     private JLabel playerLabel;
 
-    public OutputHandlerUI(JFrame frame, JButton[][] buttons, JLabel playerLabel) {
+    public OutputHandlerGUI(JFrame frame, JButton[][] buttons, JLabel playerLabel) {
         this.frame = frame;
         this.buttons = buttons;
         this.playerLabel = playerLabel;

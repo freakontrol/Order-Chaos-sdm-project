@@ -12,10 +12,10 @@ import orderandchaos.core.Type;
 
 import java.io.IOException;
 
-public class InputHandlerUI implements InputHandler {
+public class InputHandlerGUI implements InputHandler {
     private JFrame frame;
 
-    public InputHandlerUI(JFrame frame) {
+    public InputHandlerGUI(JFrame frame) {
         this.frame = frame;
     }
 
