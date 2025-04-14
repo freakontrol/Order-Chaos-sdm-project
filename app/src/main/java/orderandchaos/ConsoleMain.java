@@ -6,17 +6,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ConsoleMain extends OrderAndChaos {
+public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandlerConsole> {
 
     private BufferedReader reader;
 
-    public ConsoleMain(InputHandler inputHandler, OutputHandler outputHandler) {
+    public ConsoleMain(InputHandlerConsole inputHandler, OutputHandlerConsole outputHandler) {
         super(inputHandler, outputHandler);
     }
 
     public static void main(String[] args) {
-        InputHandler inputHandler = new InputHandlerConsole();
-        OutputHandler outputHandler = new OutputHandlerConsole(currentPlayer);
+        InputHandlerConsole inputHandler = new InputHandlerConsole();
+        OutputHandlerConsole outputHandler = new OutputHandlerConsole(); // Initialize with null, will be set later
         ConsoleMain game = new ConsoleMain(inputHandler, outputHandler);
         game.initializeGame();
         game.startGame();
@@ -30,17 +30,17 @@ public class ConsoleMain extends OrderAndChaos {
         String orderPlayerName = initializePlayer(Role.ORDER);
         String chaosPlayerName;
 
-        do{
+        do {
             chaosPlayerName = initializePlayer(Role.CHAOS);
 
-            if(orderPlayerName.equals(chaosPlayerName)) {
+            if (orderPlayerName.equals(chaosPlayerName)) {
                 System.out.println("Name is already taken. Choose another.");
             } else {
                 this.playerOrder = new Player(Role.ORDER, orderPlayerName);
                 this.playerChaos = new Player(Role.CHAOS, chaosPlayerName);
                 break;
             }
-        } while(true);
+        } while (true);
     }
 
     private String initializePlayer(Role role) {
@@ -66,7 +66,7 @@ public class ConsoleMain extends OrderAndChaos {
 
             do {
                 try {
-                    position = getPlayerMove();
+                    position = inputHandler.getPlayerMove();
                     markType = getMarkType();
                     addMove(position, markType);
                     break; // Valid move processed successfully
@@ -81,6 +81,7 @@ public class ConsoleMain extends OrderAndChaos {
 
             // Switch to other player for next turn
             currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
+            outputHandler.updatePlayerLabel(currentPlayer); // Update the player label
         }
     }
 
@@ -159,6 +160,7 @@ public class ConsoleMain extends OrderAndChaos {
         }
         return markType;
     }
+
     @Override
     protected boolean checkWinCondition() {
         boolean isGameOver = false;

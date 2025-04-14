@@ -51,7 +51,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
                                                 }
                                 
                                                 currentPlayer = (currentPlayer.getRole() == Role.ORDER) ? playerChaos : playerOrder;
-                                                outputHandler.updatePlayerLabel();
+                                                outputHandler.updatePlayerLabel(currentPlayer);
                                             }
                                         } catch (IOException ex) {
                                             ex.printStackTrace();
@@ -65,7 +65,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
                                     isGameOver = false;
                                     outputHandler.resetBoardDisplay();
                                     currentPlayer = playerOrder;
-                                    outputHandler.updatePlayerLabel();
+                                    outputHandler.updatePlayerLabel(currentPlayer);
                                 }
                             
                                 @Override
@@ -125,9 +125,6 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
                             
                                     frame.add(mainPanel);
                                     frame.setVisible(true);
-                            
-                                    // Pass currentPlayer to OutputHandlerUI
-                                    outputHandler = new OutputHandlerUI(frame, buttons, playerLabel, currentPlayer);
                                 }
                             
                                 private JPanel createGridPanel() {
@@ -181,7 +178,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
                             
                                 public static void main(String[] args) {
                                     InputHandlerUI inputHandler = new InputHandlerUI(frame);
-                                OutputHandlerUI outputHandler = new OutputHandlerUI(frame, buttons, playerLabel, currentPlayer);
+                                OutputHandlerUI outputHandler = new OutputHandlerUI(frame, buttons, playerLabel);
         GUIMain guiMain = new GUIMain(inputHandler, outputHandler);
         guiMain.initializeGame();
         guiMain.startGame();

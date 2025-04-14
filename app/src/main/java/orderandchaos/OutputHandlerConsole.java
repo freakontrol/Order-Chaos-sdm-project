@@ -8,11 +8,8 @@ import orderandchaos.core.Player;
 
 public class OutputHandlerConsole implements OutputHandler {
     private BufferedReader reader;
-    private Player currentPlayer;
-
-    public OutputHandlerConsole(Player currentPlayer) {
+    public OutputHandlerConsole() {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
-        this.currentPlayer = currentPlayer;
     }
 
     @Override
@@ -38,7 +35,7 @@ public class OutputHandlerConsole implements OutputHandler {
     }
 
     @Override
-    public void updatePlayerLabel() {
+    public void updatePlayerLabel(Player currentPlayer) {
         System.out.println("Current turn: " + currentPlayer.getName());
     }
 

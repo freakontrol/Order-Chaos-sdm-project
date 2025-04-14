@@ -11,13 +11,10 @@ public class OutputHandlerUI implements OutputHandler {
     private JFrame frame;
     private JButton[][] buttons;
     private JLabel playerLabel;
-    private Player currentPlayer;
-
-    public OutputHandlerUI(JFrame frame, JButton[][] buttons, JLabel playerLabel, Player currentPlayer) {
+    public OutputHandlerUI(JFrame frame, JButton[][] buttons, JLabel playerLabel) {
         this.frame = frame;
         this.buttons = buttons;
         this.playerLabel = playerLabel;
-        this.currentPlayer = currentPlayer;
     }
 
     @Override
@@ -41,7 +38,7 @@ public class OutputHandlerUI implements OutputHandler {
     }
 
     @Override
-    public void updatePlayerLabel() {
+    public void updatePlayerLabel(Player currentPlayer) {
         playerLabel.setText("Current turn: " + currentPlayer.getName());
     }
 
