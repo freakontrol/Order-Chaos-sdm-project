@@ -2,14 +2,9 @@ package orderandchaos;
 
 import orderandchaos.core.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandlerConsole> {
-
-    private BufferedReader reader;
-
     public ConsoleMain(InputHandlerConsole inputHandler, OutputHandlerConsole outputHandler) {
         super(inputHandler, outputHandler);
     }
@@ -57,7 +52,7 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
     @Override
     public void startGame() {
         while (!isGameOver) {
-            printBoard();
+            outputHandler.printBoard(board); // Call the printBoard method from OutputHandler
             Position position = null;
             Type markType = null;
 
@@ -97,11 +92,5 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
 
     @Override
     public void exitGame() {
-        // No need to close reader as it's handled by InputHandlerConsole
-    }
-
-    protected void printBoard() {
-        System.out.println("\nCurrent Board:");
-        board.printBoard();
     }
 }

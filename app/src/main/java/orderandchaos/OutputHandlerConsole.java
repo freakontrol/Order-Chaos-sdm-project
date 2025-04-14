@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import orderandchaos.core.OutputHandler;
 import orderandchaos.core.Player;
+import orderandchaos.core.Board;
 
 public class OutputHandlerConsole implements OutputHandler {
     private BufferedReader reader;
@@ -42,5 +43,11 @@ public class OutputHandlerConsole implements OutputHandler {
     @Override
     public void resetBoardDisplay() {
         System.out.println("Board has been reset.");
+    }
+
+    @Override
+    public void printBoard(Board board) { // Implement the printBoard method
+        System.out.println("\nCurrent Board:");
+        board.printBoard();
     }
 }

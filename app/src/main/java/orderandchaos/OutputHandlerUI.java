@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import orderandchaos.core.OutputHandler;
 import orderandchaos.core.Player;
+import orderandchaos.core.Board;
 
 public class OutputHandlerUI implements OutputHandler {
     private JFrame frame;
@@ -59,5 +60,9 @@ public class OutputHandlerUI implements OutputHandler {
                 buttons[row][col].setEnabled(true);
             }
         }
+    }
+
+    @Override
+    public void printBoard(Board board) { // Implement the printBoard method
     }
 }
