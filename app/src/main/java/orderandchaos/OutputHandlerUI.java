@@ -11,9 +11,18 @@ public class OutputHandlerUI implements OutputHandler {
     private JFrame frame;
     private JButton[][] buttons;
     private JLabel playerLabel;
+
     public OutputHandlerUI(JFrame frame, JButton[][] buttons, JLabel playerLabel) {
         this.frame = frame;
         this.buttons = buttons;
+        this.playerLabel = playerLabel;
+    }
+
+    public void setButtons(JButton[][] buttons) {
+        this.buttons = buttons;
+    }
+
+    public void setPlayerLabel(JLabel playerLabel) {
         this.playerLabel = playerLabel;
     }
 

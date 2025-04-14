@@ -1,7 +1,5 @@
 package orderandchaos.core;
 
-import java.io.IOException;
-
 import orderandchaos.exceptions.OrderAndChaosException;
 
 public abstract class OrderAndChaos<IH extends InputHandler, OH extends OutputHandler> {
@@ -32,10 +30,6 @@ public abstract class OrderAndChaos<IH extends InputHandler, OH extends OutputHa
     public abstract void exitGame();
 
     protected abstract void preInitializeGame();
-
-    protected abstract Position getPlayerMove() throws IOException;
-
-    protected abstract Type getMarkType() throws IOException;
 
     protected void addMove(Position position, Type markType){
         Mark mark = new Mark(position, markType);

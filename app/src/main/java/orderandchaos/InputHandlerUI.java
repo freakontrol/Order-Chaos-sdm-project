@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import orderandchaos.core.InputHandler;
 import orderandchaos.core.Position;
+import orderandchaos.core.Role;
+import orderandchaos.core.Type;
 
 import java.io.IOException;
 
@@ -35,5 +37,21 @@ public class InputHandlerUI implements InputHandler {
         Integer row = (Integer) button.getClientProperty("row");
         Integer col = (Integer) button.getClientProperty("col");
         return new Position(row, col);
+    }
+
+    @Override
+    public Type getMarkType() throws IOException {
+        String choice = askForSymbol();
+
+        if (choice == null) {
+            return null;
+        }
+
+        return choice.equals("X") ? Type.X : Type.O;
+    }
+
+    @Override
+    public String askForPlayerName(Role role) throws IOException {
+        throw new UnsupportedOperationException("Unimplemented method 'askForPlayerName'");
     }
 }
