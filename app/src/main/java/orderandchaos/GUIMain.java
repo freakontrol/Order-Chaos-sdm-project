@@ -28,20 +28,30 @@ public class GUIMain extends OrderAndChaos {
     
     private String askPlayerName(Role role, String existingName) {
         String name = null;
-        while (name == null || name.trim().isEmpty()) {
+        while (true) {
             name = JOptionPane.showInputDialog(null,
                     "Enter name for " + role + " player:",
                     "Player Name Input",
                     JOptionPane.QUESTION_MESSAGE);
     
-            if (name == null || name.trim().isEmpty()) {
+            if (name == null) {
+                int confirm = JOptionPane.showConfirmDialog(null,
+                        "Do you want to quit the game?",
+                        "Exit Confirmation",
+                        JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+                else continue;
+            }
+    
+            if (name.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(null,
                         "The " + role + " name can't be empty",
                         "Choose your name",
                         JOptionPane.WARNING_MESSAGE);
+            } else {
+                return name.trim();
             }
         }
-        return name.trim();
     }
 
     private class InputHandler {
