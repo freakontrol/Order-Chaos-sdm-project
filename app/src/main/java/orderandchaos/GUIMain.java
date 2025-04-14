@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import orderandchaos.core.*;
+import java.net.URI;
 
 import java.io.IOException;
 
@@ -127,12 +128,30 @@ public class GUIMain extends OrderAndChaos {
     public void preInitializeGame() {
         isGameOver = false;
         setLookAndFeel();
+        gameWelcome();
         playerOrder = initializePlayer(Role.ORDER);
         playerChaos = initializePlayer(Role.CHAOS);
         currentPlayer = playerOrder;
         setupGUI();
     }
 
+    protected void gameWelcome() {
+        String message = "<html>Welcome to Order and Chaos!<br>"
+                + "Get ready for an exciting battle of strategy and wit on a 6x6 board.<br>"
+                + "Columns and rows are numbered from 1 to 6, making it easy to plan your moves.<br>"
+                + "Choose your player name and let the game begin!<br>"
+                + "If you need to brush up on the rules, you can find them "
+                + createHyperlink("here", "https://en.wikipedia.org/wiki/Order_and_Chaos") + ".<br>"
+                + "Have fun and may the best player win!</html>";
+
+        JOptionPane.showMessageDialog(frame, message, "Welcome", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    //Use hyperlink to keep the link hidden
+    private String createHyperlink(String text, String url) {
+        return "<a href='" + url + "'>" + text + "</a>";
+    }
+    
     private Player initializePlayer(Role role) {
         String name = null;
         while (name == null || name.trim().isEmpty()) {
