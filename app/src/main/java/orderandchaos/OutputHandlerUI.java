@@ -11,7 +11,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.JLabel;
 import orderandchaos.core.OutputHandler;
 import orderandchaos.core.Player;
-import orderandchaos.core.Board;
 
 public class OutputHandlerUI implements OutputHandler {
     private JFrame frame;
@@ -32,7 +31,6 @@ public class OutputHandlerUI implements OutputHandler {
         this.playerLabel = playerLabel;
     }
 
-    @Override
     public void updateButton(int row, int col, String symbol) {
         if (buttons[row][col].getText().isEmpty()) {
             buttons[row][col].setText(symbol);

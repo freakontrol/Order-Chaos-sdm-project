@@ -14,11 +14,6 @@ public class OutputHandlerConsole implements OutputHandler {
     }
 
     @Override
-    public void updateButton(int row, int col, String symbol) {
-        System.out.println("Updated button at (" + row + ", " + col + ") with symbol: " + symbol);
-    }
-
-    @Override
     public void showWinnerMessage(String message) {
         System.out.println(message);
     }
