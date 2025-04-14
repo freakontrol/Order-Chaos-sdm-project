@@ -37,7 +37,6 @@ class ConsoleMainTest {
         // Start the game
         game.initializeGame();
         game.startGame();
-        game.exitGame();
 
         // Reset the system input and output
         System.setIn(originalIn);
@@ -125,7 +124,6 @@ class ConsoleMainTest {
         // Start the game
         game.initializeGame();
         game.startGame();
-        game.exitGame();
 
         // Reset the system input and output
         System.setIn(originalIn);
@@ -184,7 +182,6 @@ class ConsoleMainTest {
         // Start the game
         game.initializeGame();
         game.startGame();
-        game.exitGame();
 
         // Reset the system input and output
         System.setIn(originalIn);
@@ -266,7 +263,6 @@ class ConsoleMainTest {
         // Start the game
         game.initializeGame();
         game.startGame();
-        game.exitGame();
 
         // Reset the system input and output
         System.setIn(originalIn);
@@ -313,7 +309,6 @@ class ConsoleMainTest {
         // Start the game
         game.initializeGame();
         game.startGame();
-        game.exitGame();
 
         // Reset the system input and output
         System.setIn(originalIn);
