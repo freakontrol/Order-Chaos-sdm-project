@@ -107,9 +107,9 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
 
     private void handleGameEnd() {
         if (checkWinCondition() == GameOutcome.FIVE_IN_A_ROW) {
-            outputHandler.showWinnerMessage("\n" + playerOrder.getName() + " wins with five in a row! Game Over.");
+            outputHandler.showWinnerMessage("\nPlayer " + playerOrder.getName() + " wins with five in a row! Game Over.");
         } else if (checkWinCondition() == GameOutcome.BOARD_FULL) {
-            outputHandler.showWinnerMessage("\n" + playerChaos.getName() + " wins with full board! Game Over.");
+            outputHandler.showWinnerMessage("\nPlayer " + playerChaos.getName() + " wins with full board! Game Over.");
         }
     }
 
