@@ -59,11 +59,10 @@ public class InputHandlerConsole implements InputHandler {
             }
 
             position = new Position(row, col);
-
         }
         return position;
     }
-    
+
     public String askForPlayerName(Role role) throws IOException {
         String name = "";
         while (name.isEmpty()) {

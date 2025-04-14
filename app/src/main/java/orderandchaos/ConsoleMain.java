@@ -31,7 +31,7 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
             chaosPlayerName = initializePlayer(Role.CHAOS);
 
             if (orderPlayerName.equals(chaosPlayerName)) {
-                outputHandler.showWinnerMessage("Name is already taken. Choose another.");
+                outputHandler.showErrorMessage("Name is already taken. Choose another.");
             } else {
                 this.playerOrder = new Player(Role.ORDER, orderPlayerName);
                 this.playerChaos = new Player(Role.CHAOS, chaosPlayerName);
@@ -46,7 +46,7 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
             try {
                 name = inputHandler.askForPlayerName(role);
             } catch (IOException e) {
-                outputHandler.showWinnerMessage("Error reading input: " + e.getMessage());
+                outputHandler.showErrorMessage("Error reading input: " + e.getMessage());
                 System.exit(0);
             }
         }
@@ -61,24 +61,23 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
                 Position position = null;
                 Type markType = null;
 
-            do {
-                try {
-                    while (position == null){
-                        position = inputHandler.getPlayerMove(currentPlayer);
-                        if (!checkFreePosition(position)) {
-                            System.out.println("Position is occupied. Choose another.");
-                            position = null;
+                do {
+                    try {
+                        while (position == null){
+                            position = inputHandler.getPlayerMove(currentPlayer);
+                            if (!checkFreePosition(position)) {
+                                outputHandler.showErrorMessage("Position is occupied. Choose another.");
+                                position = null;
+                            }
                         }
+                        markType = inputHandler.getMarkType(currentPlayer);
+                        addMove(position, markType);
+                        break; // Valid move processed successfully
+                    } catch (IOException e) {
+                        outputHandler.showErrorMessage("Error reading input: " + e.getMessage());
+                        return; // Exit on any other I/O error
                     }
-                    markType = inputHandler.getMarkType(currentPlayer);
-                    addMove(position, markType);
-                    break; // Valid move processed successfully
-                } catch (IOException e) {
-                    outputHandler.showWinnerMessage("Error reading input: " + e.getMessage());
-                    return; // Exit on any other I/O error
-                }
-            } while (true);
-
+                } while (true);
 
                 // Switch to other player for next turn
                 currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;

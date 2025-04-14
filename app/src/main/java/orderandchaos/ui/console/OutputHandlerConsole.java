@@ -10,6 +10,7 @@ import orderandchaos.core.Board;
 
 public class OutputHandlerConsole implements OutputHandler {
     private BufferedReader reader;
+
     public OutputHandlerConsole() {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
     }
@@ -48,7 +49,7 @@ public class OutputHandlerConsole implements OutputHandler {
         System.out.println("Board has been reset.");
     }
 
-    public void printBoard(Board board) { // Implement the printBoard method
+    public void printBoard(Board board) {
         System.out.println("\nCurrent Board:");
         System.out.println(board.toString());
     }
@@ -64,4 +65,7 @@ public class OutputHandlerConsole implements OutputHandler {
         return "\033]8;;" + url + "\033\\" + text + "\033]8;;\033\\";
     }
 
+    public void showErrorMessage(String message) {
+        System.out.println(message);
+    }
 }
