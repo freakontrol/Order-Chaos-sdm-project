@@ -205,7 +205,7 @@ public class ConsoleMain extends OrderAndChaos {
             System.out.println("\n" + currentPlayer.getName() + " wins with five in a row! Game Over.");
         } else if (board.isBoardFull()) {
             isGameOver = true;
-            System.out.println("\nThe board is full! It's a draw. Game Over.");
+            System.out.println("\nPlayer Chaos wins! Game Over.");
         }
         return isGameOver;
     }
