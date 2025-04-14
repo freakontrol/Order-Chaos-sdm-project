@@ -17,17 +17,6 @@ public class InputHandlerConsole implements InputHandler {
     }
 
     @Override
-    public String askForSymbol() throws IOException {
-        System.out.print("Do you place X or O? ");
-        String choice = reader.readLine();
-        while (!choice.equalsIgnoreCase("X") && !choice.equalsIgnoreCase("O")) {
-            System.out.print("Invalid choice. Do you place X or O? ");
-            choice = reader.readLine();
-        }
-        return choice;
-    }
-
-    @Override
     public Position getPlayerMove(Player currentPlayer) throws IOException {
         System.out.print(currentPlayer.getName() + ", enter your move (row column): ");
         String input = reader.readLine();
@@ -39,7 +28,7 @@ public class InputHandlerConsole implements InputHandler {
         int col = Integer.parseInt(parts[1]);
         return new Position(row, col);
     }
-
+    
     public String askForPlayerName(Role role) throws IOException {
         String name = "";
         while (name.isEmpty()) {

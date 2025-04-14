@@ -20,14 +20,6 @@ public class InputHandlerUI implements InputHandler {
     }
 
     @Override
-    public String askForSymbol() throws IOException {
-        String[] options = {"X", "O"};
-        return (String) JOptionPane.showInputDialog(frame,
-                "Do you place X or O?", "Move",
-                JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-    }
-
-    @Override
     public Position getPlayerMove(Player actualPlayer) throws IOException {
         // This method will be called with an ActionEvent in the listener
         throw new UnsupportedOperationException("This method should not be called directly");
@@ -42,7 +34,8 @@ public class InputHandlerUI implements InputHandler {
 
     @Override
     public Type getMarkType(Player currentPlayer) throws IOException {
-        String choice = askForSymbol();
+        String[] options = {"X", "O"};
+        String choice = (String)  JOptionPane.showInputDialog(frame, "Do you place X or O?", "Move", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
         if (choice == null) {
             return null;
@@ -50,7 +43,7 @@ public class InputHandlerUI implements InputHandler {
 
         return choice.equals("X") ? Type.X : Type.O;
     }
-
+    
     @Override
     public String askForPlayerName(Role role) throws IOException {
         throw new UnsupportedOperationException("Unimplemented method 'askForPlayerName'");
