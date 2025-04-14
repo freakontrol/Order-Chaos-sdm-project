@@ -22,6 +22,6 @@ If you are using Windows then instead of `./gradlew`, type `gradlew.bat`
 - [Joseph Deponte](https://github.com/)
 
 ## Game Rules
-To understand the game's rules, please refer to the official Order and Chaos game documentation: https://example.com/order-and-chaos-rules
+To understand the game's rules, please refer to the official Order and Chaos game documentation: https://en.wikipedia.org/wiki/Order_and_Chaos
 
 [![Workflow Status](https://github.com/freakontrol/Order-Chaos-sdm-project/actions/workflows/ci.yml/badge.svg)](https://github.com/freakontrol/Order-Chaos-sdm-project/actions/workflows/ci.yml)

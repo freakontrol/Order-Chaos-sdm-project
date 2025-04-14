@@ -8,7 +8,7 @@ public abstract class OrderAndChaos<IH extends InputHandler, OH extends OutputHa
     protected Player playerChaos;
     protected Board board;
     protected boolean isGameOver;
-    protected static Player currentPlayer;
+    protected Player currentPlayer;
 
     protected IH inputHandler;
     protected OH outputHandler;
@@ -28,6 +28,8 @@ public abstract class OrderAndChaos<IH extends InputHandler, OH extends OutputHa
     public abstract void startGame() throws OrderAndChaosException;
 
     public abstract void exitGame();
+
+    protected abstract void gameWelcome();
 
     protected abstract void preInitializeGame();
 

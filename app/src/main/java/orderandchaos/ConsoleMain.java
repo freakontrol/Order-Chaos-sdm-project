@@ -20,6 +20,8 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
 
     @Override
     protected void preInitializeGame() {
+        gameWelcome();
+
         String orderPlayerName = initializePlayer(Role.ORDER);
         String chaosPlayerName;
 
@@ -34,6 +36,18 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
                 break;
             }
         } while (true);
+    }
+
+    @Override
+    protected void gameWelcome(){
+        System.out.println("\nWelcome to Order and Chaos.\nGet ready for an exciting battle of strategy and wit on a 6x6 board.\nColumns and rows are numbered from 1 to 6, making it easy to plan your moves.");
+        System.out.println("Choose your player name and let the game begin!\nIf you need to brush up on the rules, you can find them " + createHyperlink("here", "https://en.wikipedia.org/wiki/Order_and_Chaos") + ".");
+        System.out.println("Have fun and may the best player win!\n");
+    }
+
+    //Use hyperlink to keep the link hidden
+    private String createHyperlink(String text, String url) {
+        return "\033]8;;" + url + "\033\\" + text + "\033]8;;\033\\";
     }
 
     private String initializePlayer(Role role) {
@@ -51,14 +65,21 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
 
     @Override
     public void startGame() {
-        while (!isGameOver) {
-            outputHandler.printBoard(board); // Call the printBoard method from OutputHandler
-            Position position = null;
-            Type markType = null;
+        while (true) {
+            while (!isGameOver) {
+                outputHandler.printBoard(board); // Call the printBoard method from OutputHandler
+                Position position = null;
+                Type markType = null;
 
             do {
                 try {
-                    position = inputHandler.getPlayerMove(currentPlayer);
+                    while (position == null){
+                        position = inputHandler.getPlayerMove(currentPlayer);
+                        if (!checkFreePosition(position)) {
+                            System.out.println("Position is occupied. Choose another.");
+                            position = null;
+                        }
+                    }
                     markType = inputHandler.getMarkType(currentPlayer);
                     addMove(position, markType);
                     break; // Valid move processed successfully
@@ -68,14 +89,27 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
                 }
             } while (true);
 
-            // Check win condition after move is added
-            isGameOver = checkWinCondition();
+                // Check win condition after move is added
+                isGameOver = checkWinCondition();
 
-            // Switch to other player for next turn
-            currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
-            //outputHandler.updatePlayerLabel(currentPlayer); // Update the player label
+                // Switch to other player for next turn
+                currentPlayer = (currentPlayer == playerOrder) ? playerChaos : playerOrder;
+            }
+
+            // Ask if players want to play a new game
+            if (!inputHandler.askToPlayNewGame()) {
+                break;
+            }
+
+            // Ask if players want to switch roles and restart the game
+            if (inputHandler.askToSwitchRoles()) {
+                restartGame();
+            } else {
+                resetGame();
+            }
         }
     }
+
 
     @Override
     protected boolean checkWinCondition() {
@@ -92,5 +126,18 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
 
     @Override
     public void exitGame() {
+    }
+
+    private void restartGame() {
+        Player temp = playerOrder;
+        playerOrder = new Player(Role.ORDER, playerChaos.getName());
+        playerChaos = new Player(Role.CHAOS, temp.getName());
+        resetGame();
+    }
+
+    private void resetGame() {
+        board.clearBoard();
+        isGameOver = false;
+        currentPlayer = playerOrder;
     }
 }

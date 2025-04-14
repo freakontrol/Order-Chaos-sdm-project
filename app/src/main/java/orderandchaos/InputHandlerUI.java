@@ -43,9 +43,40 @@ public class InputHandlerUI implements InputHandler {
 
         return choice.equals("X") ? Type.X : Type.O;
     }
+    public boolean askToSwitchRoles() {
+        int choice = JOptionPane.showConfirmDialog(frame,
+                "Do you want to switch roles between ORDER and CHAOS?",
+                "Switch Roles",
+                JOptionPane.YES_NO_OPTION);
+        return choice == JOptionPane.YES_OPTION;
+    }
     
     @Override
     public String askForPlayerName(Role role) throws IOException {
-        throw new UnsupportedOperationException("Unimplemented method 'askForPlayerName'");
+        String name = null;
+        while (true) {
+            name = JOptionPane.showInputDialog(null,
+                    "Enter name for " + role + " player:",
+                    "Player Name Input",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (name == null) {
+                int confirm = JOptionPane.showConfirmDialog(null,
+                        "Do you want to quit the game?",
+                        "Exit Confirmation",
+                        JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+                else continue;
+            }
+
+            if (name.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null,
+                        "The " + role + " name can't be empty",
+                        "Choose your name",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                return name.trim();
+            }
+        }
     }
 }

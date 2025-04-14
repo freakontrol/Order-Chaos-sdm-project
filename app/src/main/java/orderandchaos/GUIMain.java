@@ -3,7 +3,10 @@ package orderandchaos;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+
 import orderandchaos.core.*;
+import java.net.URI;
 
 import java.io.IOException;
 
@@ -45,7 +48,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
                     outputHandler.updateButton(position.getRow(), position.getColumn(), markType.getName());
 
                     if (checkWinCondition()) {
-                        String message = board.isFiveInLineFound() ? "Player ORDER wins!" : "Player CHAOS wins!";
+                        String message = board.isFiveInLineFound() ? "Player "+ playerOrder.getName() + " wins!" : "Player "+ playerChaos.getName()+" wins!";
                         outputHandler.showWinnerMessage(message);
                         if (outputHandler.askForNewGame()) restartGame();
                         else exitGame();
@@ -63,6 +66,11 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
     }
 
     private void restartGame() {
+        if (inputHandler.askToSwitchRoles()) {
+            Player temp = playerOrder;
+            playerOrder = new Player(Role.ORDER, playerChaos.getName());
+            playerChaos = new Player(Role.CHAOS, temp.getName());
+        }
         board.clearBoard();
         isGameOver = false;
         outputHandler.resetBoardDisplay();
@@ -82,11 +90,68 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
     protected void preInitializeGame() {
         isGameOver = false;
         setLookAndFeel();
-        playerOrder = initializePlayer(Role.ORDER);
-        playerChaos = initializePlayer(Role.CHAOS);
+        gameWelcome();
+
+        String nameOrder = null;
+        String nameChaos = null;
+        
+        try {
+            nameOrder = inputHandler.askForPlayerName(Role.ORDER);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        do {
+            try {
+                nameChaos = inputHandler.askForPlayerName(Role.CHAOS);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (nameChaos.equalsIgnoreCase(nameOrder)) {
+                JOptionPane.showMessageDialog(null,
+                        "Name already taken by ORDER player. Please choose another name.",
+                        "Name Conflict",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        } while (nameChaos.equalsIgnoreCase(nameOrder));
+
+        playerOrder = new Player(Role.ORDER, nameOrder);
+        playerChaos = new Player(Role.CHAOS, nameChaos);
         currentPlayer = playerOrder;
+
         setupGUI();
     }
+
+    protected void gameWelcome() {
+    String html = "<html><body style='font-family:sans-serif; font-size:12px;'>"
+            + "Welcome to Order and Chaos!<br>"
+            + "Get ready for an exciting battle of strategy and wit on a 6x6 board.<br>"
+            + "Columns and rows are numbered from 1 to 6, making it easy to plan your moves.<br>"
+            + "Choose your player name and let the game begin!<br>"
+            + "If you need to brush up on the rules, you can find them "
+            + "<a href='https://en.wikipedia.org/wiki/Order_and_Chaos'>here</a>.<br>"
+            + "Have fun and may the best player win!"
+            + "</body></html>";
+
+    JEditorPane editorPane = new JEditorPane("text/html", html);// Create a JEditorPane to display the HTML content, JOptionPane doesn't work for the purpouse
+    editorPane.setEditable(false); //Non editable text
+    editorPane.setOpaque(false);
+    editorPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE); // Use native font
+
+    editorPane.addHyperlinkListener(e -> {
+        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+            try {
+                Desktop.getDesktop().browse(new URI(e.getURL().toString()));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    });
+
+    JOptionPane.showMessageDialog(frame, editorPane, "Welcome", JOptionPane.INFORMATION_MESSAGE);
+}
 
     private Player initializePlayer(Role role) {
         String name = null;
@@ -97,11 +162,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
                     JOptionPane.QUESTION_MESSAGE);
 
             if (name == null || name.trim().isEmpty()) {
-                int confirm = JOptionPane.showConfirmDialog(null,
-                        "Do you want to quit the game?",
-                        "Exit Confirmation",
-                        JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) System.exit(0);
+                if (confirmExit()) System.exit(0);
             }
         }
         return new Player(role, name.trim());
@@ -109,25 +170,43 @@ public class GUIMain extends OrderAndChaos<InputHandlerUI, OutputHandlerUI> {
 
     private void setupGUI() {
         frame = new JFrame("Order & Chaos Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Prevent auto-close
+    
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (confirmExit()) {
+                    exitGame();
+                }
+            }
+        });
+    
         frame.setSize(550, 600);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-
+    
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel gridPanel = createGridPanel();
         playerLabel = new JLabel("Current turn: " + currentPlayer.getName(), SwingConstants.CENTER);
         playerLabel.setFont(new Font("Ubuntu", Font.BOLD, 18));
-
+    
         mainPanel.add(playerLabel, BorderLayout.NORTH);
         mainPanel.add(gridPanel, BorderLayout.CENTER);
-
+    
         frame.add(mainPanel);
         frame.setVisible(true);
-
         // Initialize OutputHandlerUI after buttons and playerLabel are set up
         outputHandler.setButtons(buttons);
         outputHandler.setPlayerLabel(playerLabel);
+    }
+
+    private boolean confirmExit() {
+        int confirm = JOptionPane.showConfirmDialog(
+                frame,
+                "Do you want to quit the game?",
+                "Exit Confirmation",
+                JOptionPane.YES_NO_OPTION);
+        return confirm == JOptionPane.YES_OPTION;
     }
 
     private JPanel createGridPanel() {
