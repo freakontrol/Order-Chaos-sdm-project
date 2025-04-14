@@ -1,4 +1,6 @@
-package orderandchaos.core;
+package orderandchaos.ui;
+
+import orderandchaos.core.Player;
 
 public interface OutputHandler {
     void showWinnerMessage(String message);

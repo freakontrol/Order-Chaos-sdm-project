@@ -3,11 +3,12 @@ package orderandchaos.ui.console;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import orderandchaos.core.InputHandler;
+
 import orderandchaos.core.Position;
 import orderandchaos.core.Player;
 import orderandchaos.core.Role;
 import orderandchaos.core.Type;
+import orderandchaos.ui.InputHandler;
 
 public class InputHandlerConsole implements InputHandler {
     private BufferedReader reader;

@@ -9,8 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.JLabel;
-import orderandchaos.core.OutputHandler;
+
 import orderandchaos.core.Player;
+import orderandchaos.ui.OutputHandler;
 
 public class OutputHandlerGUI implements OutputHandler {
     private JFrame frame;

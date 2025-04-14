@@ -4,11 +4,12 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import orderandchaos.core.InputHandler;
+
 import orderandchaos.core.Player;
 import orderandchaos.core.Position;
 import orderandchaos.core.Role;
 import orderandchaos.core.Type;
+import orderandchaos.ui.InputHandler;
 
 import java.io.IOException;
 

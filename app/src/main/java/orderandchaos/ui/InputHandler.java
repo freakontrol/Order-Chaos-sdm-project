@@ -1,6 +1,11 @@
-package orderandchaos.core;
+package orderandchaos.ui;
 
 import java.io.IOException;
+
+import orderandchaos.core.Player;
+import orderandchaos.core.Position;
+import orderandchaos.core.Role;
+import orderandchaos.core.Type;
 
 public interface InputHandler {
     Position getPlayerMove(Player actualPlayer) throws IOException;

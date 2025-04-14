@@ -13,7 +13,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
     private static final int BOARD_SIZE = 6;
     private static JFrame frame;
     private static JButton[][] buttons;
-    
+
     public GUIMain(InputHandlerGUI inputHandler, OutputHandlerGUI outputHandler) {
         super(inputHandler, outputHandler);
         this.outputHandler = outputHandler;
@@ -44,7 +44,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
                     addMove(position, markType);
                     outputHandler.updateButton(position.getRow(), position.getColumn(), markType.getName());
 
-                    if (checkWinCondition()) {
+                    if (checkWinCondition() != GameOutcome.GAME_NOT_OVER) {
                         String message = board.isFiveInLineFound() ? "Player "+ playerOrder.getName() + " wins!" : "Player "+ playerChaos.getName()+" wins!";
                         outputHandler.showWinnerMessage(message);
                         if (outputHandler.askForNewGame()) restartGame();
@@ -69,7 +69,6 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
             playerChaos = new Player(Role.CHAOS, temp.getName());
         }
         board.clearBoard();
-        isGameOver = false;
         outputHandler.resetBoardDisplay();
         currentPlayer = playerOrder;
         outputHandler.updatePlayerLabel(currentPlayer);
@@ -85,13 +84,12 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
     }
 
     protected void preInitializeGame() {
-        isGameOver = false;
         setLookAndFeel();
         outputHandler.gameWelcome();
 
         String nameOrder = null;
         String nameChaos = null;
-        
+
         try {
             nameOrder = inputHandler.askForPlayerName(Role.ORDER);
         } catch (IOException e) {
@@ -125,7 +123,7 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
         JLabel playerLabel;
         frame = new JFrame("Order & Chaos Game");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Prevent auto-close
-    
+
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -134,19 +132,19 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
                 }
             }
         });
-    
+
         frame.setSize(550, 600);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-    
+
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel gridPanel = createGridPanel();
         playerLabel = new JLabel("Current turn: " + currentPlayer.getName(), SwingConstants.CENTER);
         playerLabel.setFont(new Font("Ubuntu", Font.BOLD, 18));
-    
+
         mainPanel.add(playerLabel, BorderLayout.NORTH);
         mainPanel.add(gridPanel, BorderLayout.CENTER);
-    
+
         frame.add(mainPanel);
         frame.setVisible(true);
 
@@ -193,11 +191,6 @@ public class GUIMain extends OrderAndChaos<InputHandlerGUI, OutputHandlerGUI> {
                 buttons[row][col].addActionListener(listener);
             }
         }
-    }
-
-    // Wrapper method to satisfy the superclass method signature
-    protected Position getPlayerMove() throws IOException {
-        throw new UnsupportedOperationException("This method should not be called directly");
     }
 
     public static void main(String[] args) {
