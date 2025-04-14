@@ -85,7 +85,7 @@ public class ConsoleMain extends OrderAndChaos<InputHandlerConsole, OutputHandle
             }
 
             // Ask if players want to play a new game
-            if (!inputHandler.askToPlayNewGame()) {
+            if (!outputHandler.askForNewGame()) {
                 break;
             }
 

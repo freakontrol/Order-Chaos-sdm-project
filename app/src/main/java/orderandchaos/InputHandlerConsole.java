@@ -58,7 +58,7 @@ public class InputHandlerConsole implements InputHandler {
             }
 
             position = new Position(row, col);
-            
+
         }
         return position;
     }
@@ -103,23 +103,6 @@ public class InputHandlerConsole implements InputHandler {
     public boolean askToSwitchRoles() {
         while (true) {
             System.out.print("Do you want to switch roles between ORDER and CHAOS? (yes/no): ");
-            try {
-                String input = reader.readLine();
-                if (input.equalsIgnoreCase("yes")) {
-                    return true;
-                } else if (input.equalsIgnoreCase("no")) {
-                    return false;
-                } else {
-                    System.out.println("Invalid input. Please enter 'yes' or 'no'.");
-                }
-            } catch (IOException e) {
-                System.out.println("Error reading input: " + e.getMessage());
-            }
-        }
-    }
-    public boolean askToPlayNewGame() {
-        while (true) {
-            System.out.print("Do you want to play a new game? (yes/no): ");
             try {
                 String input = reader.readLine();
                 if (input.equalsIgnoreCase("yes")) {

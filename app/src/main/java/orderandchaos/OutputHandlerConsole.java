@@ -20,13 +20,20 @@ public class OutputHandlerConsole implements OutputHandler {
 
     @Override
     public boolean askForNewGame() {
-        System.out.print("Do you want to play a new game? (yes/no): ");
-        try {
-            String response = reader.readLine();
-            return response.equalsIgnoreCase("yes");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+        while (true) {
+            System.out.print("Do you want to play a new game? (yes/no): ");
+            try {
+                String input = reader.readLine();
+                if (input.equalsIgnoreCase("yes")) {
+                    return true;
+                } else if (input.equalsIgnoreCase("no")) {
+                    return false;
+                } else {
+                    System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+                }
+            } catch (IOException e) {
+                System.out.println("Error reading input: " + e.getMessage());
+            }
         }
     }
 
