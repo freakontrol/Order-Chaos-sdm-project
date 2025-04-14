@@ -26,7 +26,7 @@ class ConsoleMainTest {
     @Test
     void testGameSimulation() {
         // Simulate input for player names
-        String simulatedInput = "Alice\nThomas\n0 0\nX\n1 1\nO\n2 2\nX\n3 3\nO\n4 4\nX\n5 5\nO\n";
+        String simulatedInput = "Alice\nThomas\n0 0\nX\n1 1\nO\n2 2\nX\n3 3\nO\n4 4\nX\n5 5\nO\nno\n";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
 
         // Start the game
@@ -105,6 +105,7 @@ class ConsoleMainTest {
                 . . X . . .
                 . . O . . .
                 Thomas wins! Game Over.
+                Do you want to play a new game? (yes/no):
                 """;
 
         assertEquals(expectedOutput.trim(), outputStream.toString().trim());
@@ -113,7 +114,7 @@ class ConsoleMainTest {
     @Test
     void testOccupiedPosition() {
         // Simulate input for player names and moves
-        String simulatedInput = "Alice\nThomas\n0 0\nX\n0 0\nO\n1 1\nX\n";
+        String simulatedInput = "Alice\nThomas\n0 0\nX\n0 0\nO\n1 1\nX\nno\n";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
 
         // Start the game
@@ -152,6 +153,7 @@ class ConsoleMainTest {
                 . . . . . .
                 . . . . . .
                 . . . . . .
+                Do you want to play a new game? (yes/no):
                 """;
 
         assertEquals(expectedOutput.trim(), outputStream.toString().trim());
@@ -170,6 +172,7 @@ class ConsoleMainTest {
                 simulatedInput.append((i + j) % 2 == 0 ? "X\n" : "O\n");
             }
         }
+        simulatedInput.append("no\n");
 
         System.setIn(new ByteArrayInputStream(simulatedInput.toString().getBytes()));
 
@@ -223,7 +226,7 @@ class ConsoleMainTest {
             }
         }
 
-        expectedOutput += "Player Chaos wins! Game Over.";
+        expectedOutput += "Player Chaos wins! Game Over.\nDo you want to play a new game? (yes/no):";
 
         assertEquals(expectedOutput.trim(), outputStream.toString().trim());
     }
@@ -249,4 +252,98 @@ class ConsoleMainTest {
         assertEquals(expectedOutput.trim(), outputStream.toString().trim());
     }
 
+    @Test
+    void testSwitchRoles() {
+        // Simulate input for player names and switching roles
+        String simulatedInput = "Alice\nThomas\n0 0\nX\n1 1\nO\nno\nyes\n";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+
+        // Start the game
+        game.initializeGame();
+        game.startGame();
+        game.exitGame();
+
+        // Reset the system input and output
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+
+        // Verify the output
+        String expectedOutput = """
+                Enter name for ORDER player: Enter name for CHAOS player:
+                Current Board:
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                Alice, enter your move (row column): Alice, enter your mark (X or O):
+                Current Board:
+                X . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                Thomas, enter your move (row column): Thomas, enter your mark (X or O):
+                Current Board:
+                X . . . . .
+                . O . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                Do you want to play a new game? (yes/no): Do you want to switch roles between ORDER and CHAOS? (yes/no):
+                """;
+
+        assertEquals(expectedOutput.trim(), outputStream.toString().trim());
+    }
+
+    @Test
+    void testInvalidInput() {
+        // Simulate input for player names and invalid moves
+        String simulatedInput = "Alice\nThomas\ninvalid\n0 0\nX\n1 1\nO\nno\n";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+
+        // Start the game
+        game.initializeGame();
+        game.startGame();
+        game.exitGame();
+
+        // Reset the system input and output
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+
+        // Verify the output
+        String expectedOutput = """
+                Enter name for ORDER player: Enter name for CHAOS player:
+                Current Board:
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                Alice, enter your move (row column): Please provide exactly two values separated by space: row and column.
+                Alice, enter your move (row column): Alice, enter your mark (X or O):
+                Current Board:
+                X . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                Thomas, enter your move (row column): Thomas, enter your mark (X or O):
+                Current Board:
+                X . . . . .
+                . O . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                . . . . . .
+                Do you want to play a new game? (yes/no):
+                """;
+
+        assertEquals(expectedOutput.trim(), outputStream.toString().trim());
+    }
 }
