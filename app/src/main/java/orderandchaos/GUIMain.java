@@ -131,7 +131,7 @@ public class GUIMain extends OrderAndChaos {
                 outputHandler.updateButton(position.getRow(), position.getColumn(), markType.getName());
 
                 if (checkWinCondition()) {
-                    String message = board.isFiveInLineFound() ? "Player ORDER wins!" : "Player CHAOS wins!";
+                    String message = board.isFiveInLineFound() ? "Player "+ playerOrder.getName() + " wins!" : "Player "+ playerChaos.getName()+" wins!";
                     outputHandler.showWinnerMessage(message);
                     if (outputHandler.askForNewGame()) restartGame();
                     else exitGame();
